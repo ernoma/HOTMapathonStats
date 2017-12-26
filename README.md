@@ -9,6 +9,7 @@ Mapathon statistics and visualization, and few scripts to create the data.
   * `pip3 install dateutil`
   * `pip3 install lxml`
   * `pip3 install shapely==1.6b4`
+  * `pip3 install requests`
 * Install ogr2ogr, see http://www.sarasafavi.com/installing-gdalogr-on-ubuntu.html
 * `sudo apt-get install wget`
 * `sudo apt-get install gzip`
@@ -17,7 +18,7 @@ Mapathon statistics and visualization, and few scripts to create the data.
 
 Basic process for data preparation via command line (run `python create_mapathon_changes.py -h` to see explanation for it's parameters):
 
-1. wget http://tasks.hotosm.org/project/2261/tasks.json
+1. python get_project_data.py 2261
 2. ogr2ogr -f GeoJSON -explodecollections output.geojson tasks.json -dialect sqlite -sql "SELECT ST_Union(geometry) as geometry FROM OGRGeoJSON"
 3. wget http://download.geofabrik.de/africa/tanzania-updates/000/001/415.osc.gz
 4. gunzip 415.osc.gz
