@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <link rel="stylesheet" href="../lib/awesomplete/awesomplete.css">
+    <link rel="stylesheet" href="admin.css">
+    <title>HOT-OSM Mapathon Statistics Admin UI</title>
+</head>
+<body>
+    <main role="main" class="container">
+
+        <div class="hot-osm">
+            <h1>HOT-OSM Mapathon Statistics Admin UI</h1>
+
+            <p>Admin UI to create HOT-OSM mapathon statistics for a specific project.</p>
+
+            <form>
+                <div class="form-group row">
+                    <label for="mapathonDate" class="col-md-6 col-form-label">Mapathon was held on</label>
+                    <div class="col-md-6">
+                        <input type="date" id="mapathonDate" placeholder="2018/11/21">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="mapathonTime" class="col-md-6 col-form-label">Mapathon started at the hour (UTC)</label>
+                    <div class="col-md-6">
+                        <input type="number" id="mapathonTime" placeholder="16">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="projectNumber" class="col-md-6 col-form-label">Project number</label>
+                    <div class="col-md-6">
+                        <input id="projectNumber" placeholder="3567">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-6 col-form-label">Type(s) of mapping</label>
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="mappingBuildingsCheckbox" checked>
+                            <label class="form-check-label" for="mappingBuildingsCheckbox">
+                                Buildings
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="mappingResidentialCheckbox" checked>
+                            <label class="form-check-label" for="mappingResidentialCheckbox">
+                                Residential areas
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="mappingRoadsCheckbox" checked>
+                            <label class="form-check-label" for="mappingRoadsCheckbox">
+                                Roads
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Create statistics</button>
+            </form>
+        </div>
+    </main>
+    <script src="../lib/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+    <script src="../lib/awesomplete/awesomplete.min.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
