@@ -20,26 +20,28 @@ def alive():
 @app.route('/create/stats', methods=['POST'])
 def create_mapathon_stats():
     project_number = request.form['projectNumber']
-    project_date = request.form['mapathonDate']
-    project_time_utc = request.form['mapathonTime']
+    mapathon_date = request.form['mapathonDate']
+    mapathon_time_utc = request.form['mapathonTime']
     types_of_mapping = request.form.getlist('typesOfMapping')
     print(types_of_mapping)
+
+    client_data = {
+        'project_number': project_number,
+        'mapathon_date': mapathon_date,
+        'mapathon_time_utc': mapathon_time_utc,
+        'types_of_mapping': types_of_mapping
+    }
 
     # Uniquely dentifies the statistics creation task
     stat_task_uuid = uuid.uuid1()
 
-    new_stats_task = stats_task.MapathonStatistics()
-    new_stats_task.start_task(stat_task_uuid)
+    new_stats_task = stats_task.MapathonStatistics(stat_task_uuid, client_data)
+    new_stats_task.start_task()
 
     result = {
         'status': 'OK',
         'stat_task_uuid': stat_task_uuid,
-        'data': {
-            'project_number': project_number,
-            'project_date': project_date,
-            'project_time_utc': project_time_utc,
-            'types_of_mapping': types_of_mapping
-        }
+        'client_data': client_data
     }
     
     return jsonify(result);
