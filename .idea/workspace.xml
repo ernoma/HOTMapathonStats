@@ -2,388 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e446d9bd-4aac-49ae-80b1-168cbd2f0673" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/HOTMapathonStats.iml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/ui/admin/admin.css" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/ui/admin/admin.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/ui/admin/index.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/ui/favicon.ico" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/ui/lib/jquery-3.2.1.min.js" />
-      <change beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/ui/index.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.OpacityControls/Control.Opacity.css" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.OpacityControls/Control.Opacity.css" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.OpacityControls/Control.Opacity.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.OpacityControls/Control.Opacity.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.OpacityControls/LICENSE.md" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.OpacityControls/LICENSE.md" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.OpacityControls/images/higherOpacity.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.OpacityControls/images/higherOpacity.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.OpacityControls/images/higherOpacity64.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.OpacityControls/images/higherOpacity64.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.OpacityControls/images/lowerOpacity.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.OpacityControls/images/lowerOpacity.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.OpacityControls/images/lowerOpacity64.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.OpacityControls/images/lowerOpacity64.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/.gitignore" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/.gitignore" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/LICENSE" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/LICENSE" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/README.md" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/README.md" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/bower.json" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/bower.json" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/dist/images/markers-matte.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/dist/images/markers-matte.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/dist/images/markers-matte@2x.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/dist/images/markers-matte@2x.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/dist/images/markers-plain.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/dist/images/markers-plain.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/dist/images/markers-shadow.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/dist/images/markers-shadow.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/dist/images/markers-shadow@2x.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/dist/images/markers-shadow@2x.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/dist/images/markers-soft.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/dist/images/markers-soft.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/dist/images/markers-soft@2x.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/dist/images/markers-soft@2x.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/dist/leaflet.awesome-markers.css" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/dist/leaflet.awesome-markers.css" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/dist/leaflet.awesome-markers.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/dist/leaflet.awesome-markers.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/dist/leaflet.awesome-markers.min.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/dist/leaflet.awesome-markers.min.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/examples/basic-example.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/examples/basic-example.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/examples/css/font-awesome-ie7.min.css" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/examples/css/font-awesome-ie7.min.css" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/examples/css/font-awesome.min.css" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/examples/css/font-awesome.min.css" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/examples/font/FontAwesome.otf" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/examples/font/FontAwesome.otf" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/examples/font/fontawesome-webfont.eot" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/examples/font/fontawesome-webfont.eot" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/examples/font/fontawesome-webfont.svg" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/examples/font/fontawesome-webfont.svg" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/examples/font/fontawesome-webfont.ttf" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/examples/font/fontawesome-webfont.ttf" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/examples/font/fontawesome-webfont.woff" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/examples/font/fontawesome-webfont.woff" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/examples/random-markers.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/examples/random-markers.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/examples/with-bootstrap.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/examples/with-bootstrap.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/screenshots/screenshot-matte.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/screenshots/screenshot-matte.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.awesome-markers-2.0.2/screenshots/screenshot-soft.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.awesome-markers-2.0.2/screenshots/screenshot-soft.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/BREAKINGCHANGES.md" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/BREAKINGCHANGES.md" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/CHANGELOG.md" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/CHANGELOG.md" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/ISSUE_TEMPLATE.md" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/ISSUE_TEMPLATE.md" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/Jakefile.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/Jakefile.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/Leaflet.draw.iml" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/Leaflet.draw.iml" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/MIT-LICENSE.md" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/MIT-LICENSE.md" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/README.md" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/README.md" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/TODO.md" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/TODO.md" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/bower.json" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/bower.json" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/build.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/build.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/build.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/build.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/deps.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/deps.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/docs-index.leafdoc" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/docs-index.leafdoc" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/docs-misc.leafdoc" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/docs-misc.leafdoc" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/docs.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/docs.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/hintrc.json" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/hintrc.json" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/comments.hbs" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/comments.hbs" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/constructor.hbs" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/constructor.hbs" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/crs.hbs" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/crs.hbs" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/destructor.hbs" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/destructor.hbs" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/event.hbs" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/event.hbs" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/example.hbs" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/example.hbs" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/factory.hbs" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/factory.hbs" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/function.hbs" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/function.hbs" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/html.hbs" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/html.hbs" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/inherited.hbs" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/inherited.hbs" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/method.hbs" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/method.hbs" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/namespace.hbs" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/namespace.hbs" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/option.hbs" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/option.hbs" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/pane.hbs" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/pane.hbs" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/projection.hbs" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/projection.hbs" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/property.hbs" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/property.hbs" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/section.hbs" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/section.hbs" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/supersection.hbs" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/leafdoc-templates/supersection.hbs" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/leaflet.draw-include.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/leaflet.draw-include.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/build/publish.sh" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/build/publish.sh" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/dist/images/layers-2x.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples/libs/images/layers-2x.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/dist/images/layers.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples/libs/images/layers.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/dist/images/marker-icon-2x.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples/libs/images/marker-icon-2x.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/dist/images/marker-icon.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples/libs/images/marker-icon.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/dist/images/marker-shadow.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples/libs/images/marker-shadow.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/dist/images/spritesheet-2x.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/images/spritesheet-2x.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/dist/images/spritesheet.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/images/spritesheet.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/dist/images/spritesheet.svg" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/images/spritesheet.svg" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/dist/leaflet.draw-src.css" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/dist/leaflet.draw-src.css" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/dist/leaflet.draw-src.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/dist/leaflet.draw-src.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/dist/leaflet.draw-src.map" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/dist/leaflet.draw-src.map" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/dist/leaflet.draw.css" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/dist/leaflet.draw.css" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/dist/leaflet.draw.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/dist/leaflet.draw.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/css/main.css" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/css/main.css" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/css/normalize.css" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/css/normalize.css" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/basic.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/basic.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/edithandlers.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/edithandlers.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/full.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples/full.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/Leaflet.draw.drag-src.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples/libs/Leaflet.draw.drag-src.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/images/layers-2x.png" afterPath="$PROJECT_DIR$/ui/lib/leaflet-slider-master/example/leaflet/images/layers-2x.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/images/layers.png" afterPath="$PROJECT_DIR$/ui/lib/leaflet-slider-master/example/leaflet/images/layers.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/images/marker-icon-2x.png" afterPath="$PROJECT_DIR$/ui/lib/leaflet-slider-master/example/leaflet/images/marker-icon-2x.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/images/marker-icon.png" afterPath="$PROJECT_DIR$/ui/lib/leaflet-slider-master/example/leaflet/images/marker-icon.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/images/marker-icon@2x.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/images/marker-icon@2x.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/images/marker-shadow.png" afterPath="$PROJECT_DIR$/ui/lib/leaflet-slider-master/example/leaflet/images/marker-shadow.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/leaflet-src.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/leaflet-src.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/leaflet.css" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/leaflet.css" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/leaflet.geometryutil.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples/libs/leaflet.geometryutil.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/leaflet.snap.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples/libs/leaflet.snap.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/spectrum.css" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples/libs/spectrum.css" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/spectrum.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples/libs/spectrum.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/snapping.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples/snapping.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples/basic.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples/basic.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples/edithandlers.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples/edithandlers.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples/full.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/full.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples/libs/Leaflet.draw.drag-src.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/Leaflet.draw.drag-src.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples/libs/images/layers-2x.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/dist/images/layers-2x.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples/libs/images/layers.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/dist/images/layers.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples/libs/images/marker-icon-2x.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/dist/images/marker-icon-2x.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples/libs/images/marker-icon.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/dist/images/marker-icon.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples/libs/images/marker-shadow.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/dist/images/marker-shadow.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples/libs/leaflet-src.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples/libs/leaflet-src.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples/libs/leaflet-src.map" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples/libs/leaflet-src.map" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples/libs/leaflet.css" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples/libs/leaflet.css" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples/libs/leaflet.geometryutil.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/leaflet.geometryutil.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples/libs/leaflet.snap.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/leaflet.snap.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples/libs/spectrum.css" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/spectrum.css" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples/libs/spectrum.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/spectrum.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples/popup.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples/popup.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/examples/snapping.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/snapping.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/highlight/LICENSE" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/highlight/LICENSE" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/highlight/highlight.pack.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/highlight/highlight.pack.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/highlight/styles/github-gist.css" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/highlight/styles/github-gist.css" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/images/favicon.ico" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/images/favicon.ico" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/images/forum-round.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/images/forum-round.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/images/github-round.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/images/github-round.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/images/sprite.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/images/sprite.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/images/sprite.svg" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/images/sprite.svg" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/images/twitter-round.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/images/twitter-round.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/images/twitter.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/images/twitter.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/js/docs.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/js/docs.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/leaflet-draw-0.4.2.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/leaflet-draw-0.4.2.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/leaflet-draw-0.4.3.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/leaflet-draw-0.4.3.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/leaflet-draw-0.4.4.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/leaflet-draw-0.4.4.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/leaflet-draw-0.4.5.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/leaflet-draw-0.4.5.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/leaflet-draw-0.4.7.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/leaflet-draw-0.4.7.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/leaflet-draw-0.4.9.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/leaflet-draw-0.4.9.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/docs/leaflet-draw-latest.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/leaflet-draw-latest.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/index.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/index.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/package.json" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/package.json" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/spec/after.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/spec/after.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/spec/before.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/spec/before.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/spec/expect.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/spec/expect.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/spec/happen.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/spec/happen.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/spec/index.html" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/spec/index.html" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/spec/karma.conf.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/spec/karma.conf.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/spec/sinon.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/spec/sinon.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/spec/spec.hintrc.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/spec/spec.hintrc.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/spec/suites/DrawControlSpec.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/spec/suites/DrawControlSpec.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/spec/suites/EditSpec.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/spec/suites/EditSpec.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/spec/suites/GeometryUtilSpec.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/spec/suites/GeometryUtilSpec.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/spec/suites/LatLngUtilSpec.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/spec/suites/LatLngUtilSpec.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/spec/suites/SpecHelper.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/spec/suites/SpecHelper.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/Control.Draw.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/Control.Draw.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/Leaflet.Draw.Event.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/Leaflet.Draw.Event.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/Leaflet.draw.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/Leaflet.draw.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/Toolbar.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/Toolbar.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/Tooltip.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/Tooltip.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/copyright.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/copyright.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/draw/DrawToolbar.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/draw/DrawToolbar.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/draw/handler/Draw.Circle.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/draw/handler/Draw.Circle.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/draw/handler/Draw.Feature.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/draw/handler/Draw.Feature.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/draw/handler/Draw.Marker.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/draw/handler/Draw.Marker.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/draw/handler/Draw.Polygon.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/draw/handler/Draw.Polygon.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/draw/handler/Draw.Polyline.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/draw/handler/Draw.Polyline.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/draw/handler/Draw.Rectangle.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/draw/handler/Draw.Rectangle.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/draw/handler/Draw.SimpleShape.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/draw/handler/Draw.SimpleShape.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/edit/EditToolbar.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/edit/EditToolbar.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/edit/handler/Edit.Circle.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/edit/handler/Edit.Circle.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/edit/handler/Edit.Marker.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/edit/handler/Edit.Marker.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/edit/handler/Edit.Poly.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/edit/handler/Edit.Poly.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/edit/handler/Edit.Rectangle.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/edit/handler/Edit.Rectangle.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/edit/handler/Edit.SimpleShape.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/edit/handler/Edit.SimpleShape.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/edit/handler/EditToolbar.Delete.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/edit/handler/EditToolbar.Delete.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/edit/handler/EditToolbar.Edit.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/edit/handler/EditToolbar.Edit.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/ext/GeometryUtil.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/ext/GeometryUtil.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/ext/LatLngUtil.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/ext/LatLngUtil.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/ext/LineUtil.Intersect.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/ext/LineUtil.Intersect.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/ext/Polygon.Intersect.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/ext/Polygon.Intersect.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/ext/Polyline.Intersect.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/ext/Polyline.Intersect.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/ext/TouchEvents.js" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/ext/TouchEvents.js" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/images/spritesheet-2x.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/dist/images/spritesheet-2x.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/images/spritesheet.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/dist/images/spritesheet.png" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/images/spritesheet.svg" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/dist/images/spritesheet.svg" />
-      <change beforePath="$PROJECT_DIR$/lib/Leaflet.draw-0.4.9/src/leaflet.draw.css" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/src/leaflet.draw.css" />
-      <change beforePath="$PROJECT_DIR$/lib/d3/LICENSE" afterPath="$PROJECT_DIR$/ui/lib/d3/LICENSE" />
-      <change beforePath="$PROJECT_DIR$/lib/d3/d3.js" afterPath="$PROJECT_DIR$/ui/lib/d3/d3.js" />
-      <change beforePath="$PROJECT_DIR$/lib/d3/d3.min.js" afterPath="$PROJECT_DIR$/ui/lib/d3/d3.min.js" />
-      <change beforePath="$PROJECT_DIR$/lib/d3/d3.zip" afterPath="$PROJECT_DIR$/ui/lib/d3/d3.zip" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/HELP-US-OUT.txt" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/HELP-US-OUT.txt" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/css/font-awesome.css" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/css/font-awesome.css" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/css/font-awesome.min.css" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/css/font-awesome.min.css" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/fonts/FontAwesome.otf" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/fonts/FontAwesome.otf" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/fonts/fontawesome-webfont.eot" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/fonts/fontawesome-webfont.eot" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/fonts/fontawesome-webfont.svg" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/fonts/fontawesome-webfont.svg" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/fonts/fontawesome-webfont.ttf" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/fonts/fontawesome-webfont.ttf" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/fonts/fontawesome-webfont.woff" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/fonts/fontawesome-webfont.woff" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/fonts/fontawesome-webfont.woff2" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/fonts/fontawesome-webfont.woff2" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/less/animated.less" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/less/animated.less" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/less/bordered-pulled.less" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/less/bordered-pulled.less" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/less/core.less" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/less/core.less" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/less/fixed-width.less" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/less/fixed-width.less" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/less/font-awesome.less" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/less/font-awesome.less" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/less/icons.less" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/less/icons.less" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/less/larger.less" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/less/larger.less" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/less/list.less" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/less/list.less" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/less/mixins.less" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/less/mixins.less" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/less/path.less" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/less/path.less" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/less/rotated-flipped.less" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/less/rotated-flipped.less" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/less/stacked.less" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/less/stacked.less" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/less/variables.less" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/less/variables.less" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/scss/_animated.scss" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/scss/_animated.scss" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/scss/_bordered-pulled.scss" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/scss/_bordered-pulled.scss" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/scss/_core.scss" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/scss/_core.scss" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/scss/_fixed-width.scss" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/scss/_fixed-width.scss" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/scss/_icons.scss" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/scss/_icons.scss" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/scss/_larger.scss" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/scss/_larger.scss" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/scss/_list.scss" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/scss/_list.scss" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/scss/_mixins.scss" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/scss/_mixins.scss" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/scss/_path.scss" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/scss/_path.scss" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/scss/_rotated-flipped.scss" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/scss/_rotated-flipped.scss" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/scss/_stacked.scss" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/scss/_stacked.scss" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/scss/_variables.scss" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/scss/_variables.scss" />
-      <change beforePath="$PROJECT_DIR$/lib/font-awesome-4.5.0/scss/font-awesome.scss" afterPath="$PROJECT_DIR$/ui/lib/font-awesome-4.5.0/scss/font-awesome.scss" />
-      <change beforePath="$PROJECT_DIR$/lib/jqcloud/jqcloud.css" afterPath="$PROJECT_DIR$/ui/lib/jqcloud/jqcloud.css" />
-      <change beforePath="$PROJECT_DIR$/lib/jqcloud/jqcloud.js" afterPath="$PROJECT_DIR$/ui/lib/jqcloud/jqcloud.js" />
-      <change beforePath="$PROJECT_DIR$/lib/jqcloud/jqcloud.min.css" afterPath="$PROJECT_DIR$/ui/lib/jqcloud/jqcloud.min.css" />
-      <change beforePath="$PROJECT_DIR$/lib/jqcloud/jqcloud.min.js" afterPath="$PROJECT_DIR$/ui/lib/jqcloud/jqcloud.min.js" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-2.1.1.min.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/external/jquery/jquery.js" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/external/jquery/jquery.js" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/images/ui-bg_diagonals-thick_18_b81900_40x40.png" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/images/ui-bg_diagonals-thick_18_b81900_40x40.png" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/images/ui-bg_diagonals-thick_20_666666_40x40.png" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/images/ui-bg_diagonals-thick_20_666666_40x40.png" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/images/ui-bg_flat_10_000000_40x100.png" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/images/ui-bg_flat_10_000000_40x100.png" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/images/ui-bg_glass_100_f6f6f6_1x400.png" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/images/ui-bg_glass_100_f6f6f6_1x400.png" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/images/ui-bg_glass_100_fdf5ce_1x400.png" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/images/ui-bg_glass_100_fdf5ce_1x400.png" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/images/ui-bg_glass_65_ffffff_1x400.png" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/images/ui-bg_glass_65_ffffff_1x400.png" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/images/ui-bg_gloss-wave_35_f6a828_500x100.png" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/images/ui-bg_gloss-wave_35_f6a828_500x100.png" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/images/ui-bg_highlight-soft_100_eeeeee_1x100.png" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/images/ui-bg_highlight-soft_100_eeeeee_1x100.png" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/images/ui-bg_highlight-soft_75_ffe45c_1x100.png" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/images/ui-bg_highlight-soft_75_ffe45c_1x100.png" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/images/ui-icons_222222_256x240.png" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/images/ui-icons_222222_256x240.png" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/images/ui-icons_228ef1_256x240.png" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/images/ui-icons_228ef1_256x240.png" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/images/ui-icons_ef8c08_256x240.png" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/images/ui-icons_ef8c08_256x240.png" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/images/ui-icons_ffd27a_256x240.png" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/images/ui-icons_ffd27a_256x240.png" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/images/ui-icons_ffffff_256x240.png" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/images/ui-icons_ffffff_256x240.png" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/index.html" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/index.html" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/jquery-ui.css" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/jquery-ui.css" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/jquery-ui.js" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/jquery-ui.js" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/jquery-ui.min.css" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/jquery-ui.min.css" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/jquery-ui.min.js" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/jquery-ui.min.js" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/jquery-ui.structure.css" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/jquery-ui.structure.css" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/jquery-ui.structure.min.css" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/jquery-ui.structure.min.css" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/jquery-ui.theme.css" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/jquery-ui.theme.css" />
-      <change beforePath="$PROJECT_DIR$/lib/jquery-ui-1.11.4/jquery-ui.theme.min.css" afterPath="$PROJECT_DIR$/ui/lib/jquery-ui-1.11.4/jquery-ui.theme.min.css" />
-      <change beforePath="$PROJECT_DIR$/lib/leaflet-search.min.js" afterPath="$PROJECT_DIR$/ui/lib/leaflet-search.min.js" />
-      <change beforePath="$PROJECT_DIR$/lib/leaflet-slider-master/README.md" afterPath="$PROJECT_DIR$/ui/lib/leaflet-slider-master/README.md" />
-      <change beforePath="$PROJECT_DIR$/lib/leaflet-slider-master/dist/leaflet-slider.css" afterPath="$PROJECT_DIR$/ui/lib/leaflet-slider-master/dist/leaflet-slider.css" />
-      <change beforePath="$PROJECT_DIR$/lib/leaflet-slider-master/dist/leaflet-slider.js" afterPath="$PROJECT_DIR$/ui/lib/leaflet-slider-master/dist/leaflet-slider.js" />
-      <change beforePath="$PROJECT_DIR$/lib/leaflet-slider-master/example/leaflet-slider.html" afterPath="$PROJECT_DIR$/ui/lib/leaflet-slider-master/example/leaflet-slider.html" />
-      <change beforePath="$PROJECT_DIR$/lib/leaflet-slider-master/example/leaflet/images/layers-2x.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/images/layers-2x.png" />
-      <change beforePath="$PROJECT_DIR$/lib/leaflet-slider-master/example/leaflet/images/layers.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/images/layers.png" />
-      <change beforePath="$PROJECT_DIR$/lib/leaflet-slider-master/example/leaflet/images/marker-icon-2x.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/images/marker-icon-2x.png" />
-      <change beforePath="$PROJECT_DIR$/lib/leaflet-slider-master/example/leaflet/images/marker-icon.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/images/marker-icon.png" />
-      <change beforePath="$PROJECT_DIR$/lib/leaflet-slider-master/example/leaflet/images/marker-shadow.png" afterPath="$PROJECT_DIR$/ui/lib/Leaflet.draw-0.4.9/docs/examples-0.7.x/libs/images/marker-shadow.png" />
-      <change beforePath="$PROJECT_DIR$/lib/leaflet-slider-master/example/leaflet/images/toggle.png" afterPath="$PROJECT_DIR$/ui/lib/leaflet-slider-master/example/leaflet/images/toggle.png" />
-      <change beforePath="$PROJECT_DIR$/lib/leaflet-slider-master/example/leaflet/leaflet-src.js" afterPath="$PROJECT_DIR$/ui/lib/leaflet-slider-master/example/leaflet/leaflet-src.js" />
-      <change beforePath="$PROJECT_DIR$/lib/leaflet-slider-master/example/leaflet/leaflet.css" afterPath="$PROJECT_DIR$/ui/lib/leaflet-slider-master/example/leaflet/leaflet.css" />
-      <change beforePath="$PROJECT_DIR$/lib/leaflet-slider-master/example/leaflet/leaflet.js" afterPath="$PROJECT_DIR$/ui/lib/leaflet-slider-master/example/leaflet/leaflet.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/.coverignore" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/.coverignore" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/.gitignore" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/.gitignore" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/.jshintrc" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/.jshintrc" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/.mailmap" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/.mailmap" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/.travis.yml" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/.travis.yml" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/CHANGES.md" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/CHANGES.md" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/CONTRIBUTING.md" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/CONTRIBUTING.md" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/Gruntfile.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/Gruntfile.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/LICENSE" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/LICENSE" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/README.md" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/README.md" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/VERSIONS.md" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/VERSIONS.md" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/benchmark/compare-with-callbacks.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/benchmark/compare-with-callbacks.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/benchmark/scenarios.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/benchmark/scenarios.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/design/README.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/design/README.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/design/q0.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/design/q0.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/design/q1.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/design/q1.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/design/q2.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/design/q2.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/design/q3.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/design/q3.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/design/q4.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/design/q4.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/design/q5.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/design/q5.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/design/q6.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/design/q6.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/design/q7.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/design/q7.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/examples/all.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/examples/all.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/examples/async-generators/0.html" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/examples/async-generators/0.html" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/examples/async-generators/1-return.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/examples/async-generators/1-return.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/examples/async-generators/2-error-propagation.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/examples/async-generators/2-error-propagation.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/examples/async-generators/3-spawn.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/examples/async-generators/3-spawn.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/examples/async-generators/4-flow-control.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/examples/async-generators/4-flow-control.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/examples/async-generators/README.md" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/examples/async-generators/README.md" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/package.json" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/package.json" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/q.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/q.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/q.png" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/q.png" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/q.svg" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/q.svg" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/queue.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/queue.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/ref_send.md" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/ref_send.md" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/spec/aplus-adapter.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/spec/aplus-adapter.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/spec/lib/jasmine-1.2.0/MIT.LICENSE" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/spec/lib/jasmine-1.2.0/MIT.LICENSE" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/spec/lib/jasmine-1.2.0/jasmine-html.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/spec/lib/jasmine-1.2.0/jasmine-html.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/spec/lib/jasmine-1.2.0/jasmine.css" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/spec/lib/jasmine-1.2.0/jasmine.css" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/spec/lib/jasmine-1.2.0/jasmine.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/spec/lib/jasmine-1.2.0/jasmine.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/spec/lib/jasmine-promise.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/spec/lib/jasmine-promise.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/spec/q-spec.html" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/spec/q-spec.html" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/spec/q-spec.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/spec/q-spec.js" />
-      <change beforePath="$PROJECT_DIR$/lib/q-1.4.1/spec/queue-spec.js" afterPath="$PROJECT_DIR$/ui/lib/q-1.4.1/spec/queue-spec.js" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/.jshintrc" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/.jshintrc" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/.mversionrc" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/.mversionrc" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/LICENSE" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/LICENSE" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/README.md" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/README.md" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/bower.json" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/bower.json" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/build/Makefile" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/build/Makefile" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/build/deps.py" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/build/deps.py" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/control/Distance.js" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/control/Distance.js" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/control/Layers.Load.js" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/control/Layers.Load.js" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/control/Permalink.Layer.js" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/control/Permalink.Layer.js" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/control/Permalink.Line.js" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/control/Permalink.Line.js" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/control/Permalink.Marker.js" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/control/Permalink.Marker.js" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/control/Permalink.js" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/control/Permalink.js" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/css/cross.png" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/css/cross.png" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/css/distance.css" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/css/distance.css" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/css/measure.png" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/css/measure.png" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/css/osb.css" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/css/osb.css" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/examples/KML_Samples.kml" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/examples/KML_Samples.kml" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/examples/bing.html" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/examples/bing.html" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/examples/deferred.html" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/examples/deferred.html" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/examples/distance.html" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/examples/distance.html" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/examples/fells_loop.gpx" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/examples/fells_loop.gpx" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/examples/google-custom.html" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/examples/google-custom.html" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/examples/google.html" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/examples/google.html" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/examples/gpx-no-wpt.html" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/examples/gpx-no-wpt.html" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/examples/gpx-speed.html" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/examples/gpx-speed.html" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/examples/gpx.html" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/examples/gpx.html" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/examples/kml.html" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/examples/kml.html" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/examples/marker-canvas.html" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/examples/marker-canvas.html" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/examples/marker-rotate.html" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/examples/marker-rotate.html" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/examples/marker-text.html" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/examples/marker-text.html" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/examples/osb.html" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/examples/osb.html" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/examples/osm.html" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/examples/osm.html" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/examples/permalink.html" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/examples/permalink.html" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/examples/speed.gpx" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/examples/speed.gpx" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/examples/yandex.html" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/examples/yandex.html" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/layer/Icon.Canvas.js" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/layer/Icon.Canvas.js" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/layer/Layer.Deferred.js" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/layer/Layer.Deferred.js" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/layer/Marker.Rotate.js" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/layer/Marker.Rotate.js" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/layer/Marker.Text.js" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/layer/Marker.Text.js" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/layer/OpenStreetBugs.js" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/layer/OpenStreetBugs.js" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/layer/tile/Bing.js" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/layer/tile/Bing.js" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/layer/tile/Google.js" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/layer/tile/Google.js" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/layer/tile/Yandex.js" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/layer/tile/Yandex.js" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/layer/vector/GPX.Speed.js" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/layer/vector/GPX.Speed.js" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/layer/vector/GPX.js" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/layer/vector/GPX.js" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/layer/vector/KML.js" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/layer/vector/KML.js" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/layer/vector/OSM.js" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/layer/vector/OSM.js" />
-      <change beforePath="$PROJECT_DIR$/lib/shramov-leaflet-plugins/package.json" afterPath="$PROJECT_DIR$/ui/lib/shramov-leaflet-plugins/package.json" />
-      <change beforePath="$PROJECT_DIR$/lib/threejs/MTLLoader.js" afterPath="$PROJECT_DIR$/ui/lib/threejs/MTLLoader.js" />
-      <change beforePath="$PROJECT_DIR$/lib/threejs/OBJLoader.js" afterPath="$PROJECT_DIR$/ui/lib/threejs/OBJLoader.js" />
-      <change beforePath="$PROJECT_DIR$/lib/threejs/OBJMTLLoader.js" afterPath="$PROJECT_DIR$/ui/lib/threejs/OBJMTLLoader.js" />
-      <change beforePath="$PROJECT_DIR$/lib/threejs/Projector.js" afterPath="$PROJECT_DIR$/ui/lib/threejs/Projector.js" />
-      <change beforePath="$PROJECT_DIR$/lib/threejs/STLLoader.js" afterPath="$PROJECT_DIR$/ui/lib/threejs/STLLoader.js" />
-      <change beforePath="$PROJECT_DIR$/lib/threejs/TerrainLoader.js" afterPath="$PROJECT_DIR$/ui/lib/threejs/TerrainLoader.js" />
-      <change beforePath="$PROJECT_DIR$/lib/threejs/TrackballControls.js" afterPath="$PROJECT_DIR$/ui/lib/threejs/TrackballControls.js" />
-      <change beforePath="$PROJECT_DIR$/lib/threejs/physijs.zip" afterPath="$PROJECT_DIR$/ui/lib/threejs/physijs.zip" />
-      <change beforePath="$PROJECT_DIR$/lib/threejs/stats.js" afterPath="$PROJECT_DIR$/ui/lib/threejs/stats.js" />
-      <change beforePath="$PROJECT_DIR$/lib/threejs/three.js" afterPath="$PROJECT_DIR$/ui/lib/threejs/three.js" />
-      <change beforePath="$PROJECT_DIR$/lib/threejs/three.min.js" afterPath="$PROJECT_DIR$/ui/lib/threejs/three.min.js" />
-      <change beforePath="$PROJECT_DIR$/mapathon.js" afterPath="$PROJECT_DIR$/ui/mapathon.js" />
-      <change beforePath="$PROJECT_DIR$/style/style.css" afterPath="$PROJECT_DIR$/ui/style/style.css" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/backend/.idea/backend.iml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/backend/.idea/libraries/R_User_Library.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/backend/.idea/misc.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/backend/.idea/modules.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/backend/.idea/workspace.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/backend/requirements.txt" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/backend/server.py" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/backend/stats_task.py" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/create_mapathon_changes.py" afterPath="$PROJECT_DIR$/backend/create_mapathon_changes.py" />
+      <change beforePath="$PROJECT_DIR$/create_users_list.py" afterPath="$PROJECT_DIR$/backend/create_users_list.py" />
+      <change beforePath="$PROJECT_DIR$/get_project_data.py" afterPath="$PROJECT_DIR$/backend/get_project_data.py" />
+      <change beforePath="$PROJECT_DIR$/ui/admin/admin.css" afterPath="$PROJECT_DIR$/ui/admin/admin.css" />
+      <change beforePath="$PROJECT_DIR$/ui/admin/admin.js" afterPath="$PROJECT_DIR$/ui/admin/admin.js" />
+      <change beforePath="$PROJECT_DIR$/ui/admin/index.html" afterPath="$PROJECT_DIR$/ui/admin/index.html" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -396,22 +29,12 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ui/admin/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="6" column="29" lean-forward="false" selection-start-line="6" selection-start-column="29" selection-end-line="6" selection-end-column="29" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="admin.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ui/admin/admin.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="473">
-              <caret line="38" column="28" lean-forward="false" selection-start-line="38" selection-start-column="28" selection-end-line="38" selection-end-column="28" />
+            <state relative-caret-position="639">
+              <caret line="65" column="42" lean-forward="false" selection-start-line="65" selection-start-column="42" selection-end-line="65" selection-end-column="42" />
               <folding />
             </state>
           </provider>
@@ -420,8 +43,18 @@
       <file leaf-file-name="admin.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ui/admin/admin.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+            <state relative-caret-position="180">
+              <caret line="10" column="18" lean-forward="false" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="18" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="admin.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ui/admin/admin.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="630">
+              <caret line="53" column="11" lean-forward="true" selection-start-line="53" selection-start-column="11" selection-end-line="53" selection-end-column="11" />
               <folding />
             </state>
           </provider>
@@ -444,10 +77,10 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/ui/admin/admin.css" />
         <option value="$PROJECT_DIR$/ui/index.html" />
-        <option value="$PROJECT_DIR$/ui/admin/admin.js" />
         <option value="$PROJECT_DIR$/ui/admin/index.html" />
+        <option value="$PROJECT_DIR$/ui/admin/admin.css" />
+        <option value="$PROJECT_DIR$/ui/admin/admin.js" />
       </list>
     </option>
   </component>
@@ -481,12 +114,19 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="HOTMapathonStats" type="b2602c69:ProjectViewProjectNode" />
               <item name="HOTMapathonStats" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="HOTMapathonStats" type="b2602c69:ProjectViewProjectNode" />
+              <item name="HOTMapathonStats" type="462c0819:PsiDirectoryNode" />
+              <item name="backend" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="HOTMapathonStats" type="b2602c69:ProjectViewProjectNode" />
@@ -509,8 +149,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -546,31 +184,33 @@
       <option name="presentableId" value="Default" />
       <updated>1514655867358</updated>
       <workItem from="1514655869475" duration="10719000" />
+      <workItem from="1514818262733" duration="7392000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10719000" />
+    <option name="totallyTimeSpent" value="18111000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1080" y="575" width="1920" height="1084" extended-state="6" />
+    <frame x="1125" y="790" width="1922" height="1092" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13802083" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -585,6 +225,22 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/ui/admin/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ui/admin/admin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="684">
+          <caret line="38" column="28" lean-forward="false" selection-start-line="38" selection-start-column="28" selection-end-line="38" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ui/admin/admin.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
@@ -597,22 +253,37 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="603">
           <caret line="134" column="10" lean-forward="true" selection-start-line="134" selection-start-column="10" selection-end-line="134" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/server.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ui/admin/admin.js">
+    <entry file="file://$PROJECT_DIR$/ui/admin/admin.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="473">
-          <caret line="38" column="28" lean-forward="false" selection-start-line="38" selection-start-column="28" selection-end-line="38" selection-end-column="28" />
+        <state relative-caret-position="180">
+          <caret line="10" column="18" lean-forward="false" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="18" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ui/admin/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" column="29" lean-forward="false" selection-start-line="6" selection-start-column="29" selection-end-line="6" selection-end-column="29" />
+        <state relative-caret-position="639">
+          <caret line="65" column="42" lean-forward="false" selection-start-line="65" selection-start-column="42" selection-end-line="65" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ui/admin/admin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="53" column="11" lean-forward="true" selection-start-line="53" selection-start-column="11" selection-end-line="53" selection-end-column="11" />
           <folding />
         </state>
       </provider>

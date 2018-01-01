@@ -18,42 +18,42 @@
 
             <p>Admin UI to create HOT-OSM mapathon statistics for a specific project.</p>
 
-            <form>
+            <form id="createStatisticsForm">
                 <div class="form-group row">
                     <label for="mapathonDate" class="col-md-6 col-form-label">Mapathon was held on</label>
                     <div class="col-md-6">
-                        <input type="date" id="mapathonDate" placeholder="2018/11/21">
+                        <input type="date" id="mapathonDate" name="mapathonDate" placeholder="2018/11/21">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="mapathonTime" class="col-md-6 col-form-label">Mapathon started at the hour (UTC)</label>
                     <div class="col-md-6">
-                        <input type="number" id="mapathonTime" placeholder="16">
+                        <input type="number" id="mapathonTime" name="mapathonTime" placeholder="16">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="projectNumber" class="col-md-6 col-form-label">Project number</label>
                     <div class="col-md-6">
-                        <input id="projectNumber" placeholder="3567">
+                        <input id="projectNumber" name="projectNumber" placeholder="3567">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-md-6 col-form-label">Type(s) of mapping</label>
                     <div class="col-md-6">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="mappingBuildingsCheckbox" checked>
+                            <input class="form-check-input" type="checkbox" value="building_yes" id="mappingBuildingsCheckbox" name="typesOfMapping" checked>
                             <label class="form-check-label" for="mappingBuildingsCheckbox">
                                 Buildings
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="mappingResidentialCheckbox" checked>
+                            <input class="form-check-input" type="checkbox" value="landuse_residential" id="mappingResidentialCheckbox" name="typesOfMapping" checked>
                             <label class="form-check-label" for="mappingResidentialCheckbox">
                                 Residential areas
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="mappingRoadsCheckbox" checked>
+                            <input class="form-check-input" type="checkbox" value="highway" id="mappingRoadsCheckbox" name="typesOfMapping" checked>
                             <label class="form-check-label" for="mappingRoadsCheckbox">
                                 Roads
                             </label>
@@ -62,6 +62,8 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Create statistics</button>
             </form>
+            <div class="alert alert-success" id="serverSuccessAlert" role="alert"></div>
+            <div class="alert alert-danger" id="serverErrorAlert" role="alert"></div>
         </div>
     </main>
     <script src="../lib/jquery-3.2.1.min.js"></script>
