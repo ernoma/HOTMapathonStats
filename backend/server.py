@@ -4,7 +4,7 @@ export FLASK_APP=server.py
 flask run --host=0.0.0.0
 '''
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, current_app
 from flask_cors import CORS
 import uuid
 
@@ -13,11 +13,13 @@ import stats_task
 app = Flask(__name__)
 CORS(app)
 
+app.config['stat_tasks'] = {}
+
 @app.route('/')
 def alive():
     return 'I am alive! :)'
 
-@app.route('/create/stats', methods=['POST'])
+@app.route('/stats/create', methods=['POST'])
 def create_mapathon_stats():
     project_number = request.form['projectNumber']
     mapathon_date = request.form['mapathonDate']
@@ -35,8 +37,9 @@ def create_mapathon_stats():
     # Uniquely dentifies the statistics creation task
     stat_task_uuid = uuid.uuid1()
 
-    new_stats_task = stats_task.MapathonStatistics(stat_task_uuid, client_data)
-    new_stats_task.start_task()
+    new_stat_task = stats_task.MapathonStatistics(stat_task_uuid, client_data)
+    app.config['stat_tasks'][str(stat_task_uuid)] = new_stat_task
+    new_stat_task.start_task()
 
     result = {
         'status': 'OK',
@@ -46,3 +49,18 @@ def create_mapathon_stats():
     
     return jsonify(result);
 
+@app.route('/stats/state', methods=['GET'])
+def get_stats_state():
+    stat_task_uuid = request.args.get('stat_task_uuid', type=str)
+
+    stat_task = current_app.config['stat_tasks'].get(stat_task_uuid)
+    #print(current_app.config['stat_tasks'])
+
+    result = {
+        'state': None
+    }
+
+    if stats_task is not None:
+        result['state'] = stat_task.get_state()
+
+    return jsonify(result)

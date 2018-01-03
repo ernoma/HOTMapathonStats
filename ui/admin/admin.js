@@ -13,7 +13,7 @@ $(document).ready(function () {
         hideAlerts();
         $("#serverSuccessAlert").text("Sending the data...");
         $("#serverSuccessAlert").show();
-        var method = "/create/stats"
+        var method = "/stats/create"
         $.ajax({
             type: 'POST',
             url: serverURL + method,
@@ -21,13 +21,14 @@ $(document).ready(function () {
             timeout: 10000,
             success: function (data) {
                 console.log(data);
+                hideAlerts();
                 if (data.status == 'OK') {
-                    hideAlerts();
                     $("#serverSuccessAlert").text("Processing the data...");
                     $("#serverSuccessAlert").show();
+
+                    setTimeout(updateStatsCreationState, 5000, data.stat_task_uuid);
                 }
                 else {
-                    hideAlerts();
                     $("#serverErrorAlert").text("Error on starting processing the data");
                     $("#serverErrorAlert").show();
                 }
@@ -54,6 +55,79 @@ $(document).ready(function () {
         });
     });
 });
+
+function updateStatsCreationState(stat_task_uuid) {
+
+    var method = "/stats/state"
+
+    var params = {
+        stat_task_uuid: stat_task_uuid
+    }
+
+    $.ajax({
+        type: 'GET',
+        url: serverURL + method,
+        data: params,
+        timeout: 10000,
+        success: function (data) {
+            console.log(data);
+            hideAlerts();
+            if (data.state != null) {
+                switch (data.state) {
+                    case "initialized":
+                        $("#serverSuccessAlert").text("Processing the data...");
+                        $("#serverSuccessAlert").show();
+                        break;
+                    case "getting_project_data":
+                        $("#serverSuccessAlert").text("Getting the project data...");
+                        $("#serverSuccessAlert").show();
+                        break;
+                    case "finding_project_countries":
+                        $("#serverSuccessAlert").text("Finding the project country or countries...");
+                        $("#serverSuccessAlert").show();
+                        break;
+                    case "error":
+                        // TODO more specific errors
+                        $("#serverErrorAlert").text("An error happened during statics creation... You can try later again / let Erno Mäkinen, ernoma (at) gmail.com know about the problem.");
+                        $("#serverErrorAlert").show();
+                        break;
+                    default:
+                        // Should not be possible to end here
+                        $("#serverErrorAlert").text("Server is in state " + data.state + " that is not recognized... Please, let Erno Mäkinen, ernoma (at) gmail.com know about the (server) problem.");
+                        $("#serverErrorAlert").show();
+                        console.log("unknown state: " + data.state);
+                }
+                // TODO only set timeout if the statistics creation is not finished
+                setTimeout(updateStatsCreationState, 5000, stat_task_uuid);
+            }
+            else {
+                // TODO should maybe just take care of the security issues.
+                $("#serverErrorAlert").text("The statistics creation task cannot be found.");
+                $("#serverErrorAlert").show();
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
+            hideAlerts();
+            if (jqXHR.readyState == 0) {
+                $("#serverErrorAlert").text("Error connecting the server.");
+            }
+            else if (jqXHR.status >= 500 && jqXHR.status < 600) {
+                $("#serverErrorAlert").text("Error happened. Please, let Erno Mäkinen, ernoma (at) gmail.com know about the (server) problem.");
+            }
+            else if (jqXHR.status >=  400 && jqXHR.status < 500) {
+                $("#serverErrorAlert").text("Error happened. Please, let Erno Mäkinen, ernoma (at) gmail.com know about the (client) problem.");
+            }
+            else {
+                $("#serverErrorAlert").text("Error happened. Please, let Erno Mäkinen, ernoma (at) gmail.com know about the problem.");
+            }
+            $("#serverErrorAlert").show();
+        }
+    });
+
+}
 
 function hideAlerts() {
     $("#serverSuccessAlert").hide();

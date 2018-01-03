@@ -16,7 +16,10 @@ class MapathonStatistics(object):
         self.stat_task_uuid = stat_task_uuid
         self.client_data = client_data
 
-        self.state = 'ok'
+        self.state = 'initialized'
+
+    def get_state(self):
+        return self.state
 
     def start_task(self):
 
@@ -25,16 +28,19 @@ class MapathonStatistics(object):
 
         #self.run_stats_creation()
 
-
     def run_stats_creation(self):
         print(self.stat_task_uuid)
         print(self.client_data)
+
+        self.state = 'getting_project_data'
 
         status_code = self.get_project_data()
 
         if status_code != 200:
             self.state = 'error'
             return
+
+        self.state = 'finding_project_countries'
 
         success = self.find_countries()
 
@@ -43,7 +49,6 @@ class MapathonStatistics(object):
             return
 
     def get_project_data(self):
-
         resp = requests.get('https://tasks.hotosm.org/api/v1/project/' + self.client_data['project_number'])
 
         if resp.status_code == 200:
