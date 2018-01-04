@@ -1,3 +1,7 @@
 *~
 #*
 backend/ne_10m_admin_0_countries/
+.idea/
+backend/.idea/
+backend/__pycache__/
+backend/venv/

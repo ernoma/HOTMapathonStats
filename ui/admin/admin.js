@@ -73,7 +73,7 @@ function updateStatsCreationState(stat_task_uuid) {
             console.log(data);
             hideAlerts();
             if (data.state != null) {
-                switch (data.state) {
+                switch (data.state.name) {
                     case "initialized":
                         $("#serverSuccessAlert").text("Processing the data...");
                         $("#serverSuccessAlert").show();
@@ -84,6 +84,23 @@ function updateStatsCreationState(stat_task_uuid) {
                         break;
                     case "finding_project_countries":
                         $("#serverSuccessAlert").text("Finding the project country or countries...");
+                        $("#serverSuccessAlert").show();
+                        break;
+                    case "creating_mapathon_changes":
+                        $("#serverSuccessAlert").text("Extracting mapathon changes... Done " + data.state.state_progress + "%");
+                        $("#serverSuccessAlert").show();
+                        break;
+                    case "creating_users_list":
+                        $("#serverSuccessAlert").text("Finding users who made changes for the mapathon area during the mapathon...");
+                        $("#serverSuccessAlert").show();
+                        break;
+                    case "creating_statistics_web_page":
+                        $("#serverSuccessAlert").text("Creating a web page that visualizes the mapathon statistics...");
+                        $("#serverSuccessAlert").show();
+                        break;
+                    case "storing_to_page_list":
+                        // TODO show a link to the user where the statistics page is located
+                        $("#serverSuccessAlert").text("Page created and can be found at the...");
                         $("#serverSuccessAlert").show();
                         break;
                     case "error":

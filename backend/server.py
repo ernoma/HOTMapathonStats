@@ -47,7 +47,7 @@ def create_mapathon_stats():
         'client_data': client_data
     }
     
-    return jsonify(result);
+    return jsonify(result)
 
 @app.route('/stats/state', methods=['GET'])
 def get_stats_state():
@@ -64,3 +64,9 @@ def get_stats_state():
         result['state'] = stat_task.get_state()
 
     return jsonify(result)
+
+@app.route('/mapathon/list', methods=['GET'])
+def get_mapathon_list():
+    # TODO return list of the created mapathon statistics and pages
+    pass
+
