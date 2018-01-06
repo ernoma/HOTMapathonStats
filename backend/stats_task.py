@@ -3,9 +3,10 @@ from threading import Thread, Condition
 import requests
 import geopandas as gpd
 from geojson import FeatureCollection, MultiPolygon
-from shapely.geometry import shape
+import shapely.geometry as sgeom
 from shapely.ops import unary_union
 import os
+from lxml import html
 
 class MapathonStatistics(object):
     """
@@ -100,7 +101,7 @@ class MapathonStatistics(object):
         project_tasks = gpd.GeoDataFrame.from_features(collection)
         #print(project_tasks.head(1))
         project_multipolygon = MultiPolygon(self.project_data['areaOfInterest']['coordinates'])
-        shapely_multipolygon = shape(project_multipolygon)
+        shapely_multipolygon = sgeom.shape(project_multipolygon)
         project_tasks_shapely_union = unary_union(shapely_multipolygon)
         #print(project_union)
         #project_tasks_union = gpd.GeoSeries(project_tasks_shapely_union)
@@ -114,6 +115,7 @@ class MapathonStatistics(object):
 
         self.countries_of_interest = set()
         for index, project_task in project_tasks.iterrows():
+            country_of_interest = None
             for index2, country in countries.iterrows():
                 if project_task['geometry'].intersects(country['geometry']):
                     if country['SOVEREIGNT'] not in self.countries_of_interest:
@@ -133,7 +135,9 @@ class MapathonStatistics(object):
 
     def create_mapathon_changes(self):
         # TODO find changes and store the changes to the json files
-        pass
+
+        for country in self.countries_of_interest:
+            osc_file_name = self.find_osc_file(country)
 
     def create_users_list(self):
         # TODO find users who made changes for the mapathon area during the mapathon and store users to a json file
@@ -147,3 +151,74 @@ class MapathonStatistics(object):
     def store_to_page_list(self):
         # TODO store the created statistics web page to the list that can be shown for the users on the web
         pass
+
+    def find_osc_file(self, country):
+        """
+        TODO Find the osc file from Geofabrik that contains the changes for the mapathon day.
+        """
+
+        download_url = 'http://download.geofabrik.de/' + country['continent_name'] + '/' + country['name'] + '-updates'
+
+        page = requests.get(download_url)
+        webpage = html.fromstring(page.content)
+        subpage_urls = webpage.xpath('//a/@href[substring-before(., "/")]')
+        print(subpage_urls)
+        for subpage_url in subpage_urls:
+            subpage_download_url = download_url + '/' + subpage_url
+            subpage = requests.get(subpage_download_url)
+            subwebpage = html.fromstring(subpage.content)
+            subsubpage_urls = subwebpage.xpath('//a/@href[substring-before(., "/")]')
+            print(subsubpage_urls)
+            for subsubpage_url in subsubpage_urls:
+                osc_file_dir_page_download_url = subpage_download_url + '/' + subsubpage_url
+                osc_file_dir_page = requests.get(osc_file_dir_page_download_url)
+                osc_file_dir_webpage = html.fromstring(osc_file_dir_page.content)
+                osc_state_file_urls = osc_file_dir_webpage.xpath('//a/@href[contains(., ".state.txt")]')
+                print(osc_state_file_urls)
+
+
+    def parse_poly(lines):
+        """ Parse an Osmosis polygon filter file.
+            Accept a sequence of lines from a polygon file, return a shapely.geometry.MultiPolygon object.
+            From: https://wiki.openstreetmap.org/wiki/Osmosis/Polygon_Filter_File_Python_Parsing
+            See also: http://wiki.openstreetmap.org/wiki/Osmosis/Polygon_Filter_File_Format
+        """
+        in_ring = False
+        coords = []
+
+        for (index, line) in enumerate(lines):
+            if index == 0:
+                # first line is junk.
+                continue
+
+            elif index == 1:
+                # second line is the first polygon ring.
+                coords.append([[], []])
+                ring = coords[-1][0]
+                in_ring = True
+
+            elif in_ring and line.strip() == 'END':
+                # we are at the end of a ring, perhaps with more to come.
+                in_ring = False
+
+            elif in_ring:
+                # we are in a ring and picking up new coordinates.
+                ring.append(map(float, line.split()))
+
+            elif not in_ring and line.strip() == 'END':
+                # we are at the end of the whole polygon.
+                break
+
+            elif not in_ring and line.startswith('!'):
+                # we are at the start of a polygon part hole.
+                coords[-1][1].append([])
+                ring = coords[-1][1][-1]
+                in_ring = True
+
+            elif not in_ring:
+                # we are at the start of a polygon part.
+                coords.append([[], []])
+                ring = coords[-1][0]
+                in_ring = True
+
+        return MultiPolygon(coords)
