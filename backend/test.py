@@ -5,7 +5,7 @@ import uuid
 
 client_data = {
     'project_number': 3567,
-    'mapathon_date': '2018-01-17',
+    'mapathon_date': '2018-01-06',
     'mapathon_time_utc': 16,
     'types_of_mapping': ["building_yes", "landuse_residential", "highway"]
 }

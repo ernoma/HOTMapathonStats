@@ -7,6 +7,7 @@ import shapely.geometry as sgeom
 from shapely.ops import unary_union
 import os
 from lxml import html
+import dateutil
 
 class MapathonStatistics(object):
     """
@@ -157,24 +158,44 @@ class MapathonStatistics(object):
         TODO Find the osc file from Geofabrik that contains the changes for the mapathon day.
         """
 
+        mapathon_timestamp_string = self.client_data['mapathon_date'] + 'T' + str(self.client_data['mapathon_time_utc']) + ':00:00Z'
+        #print(mapathon_timestamp_string)
+        mapathon_timestamp = dateutil.parser.parse(mapathon_timestamp_string) #datetime.datetime object
+
         download_url = 'http://download.geofabrik.de/' + country['continent_name'] + '/' + country['name'] + '-updates'
 
         page = requests.get(download_url)
         webpage = html.fromstring(page.content)
         subpage_urls = webpage.xpath('//a/@href[substring-before(., "/")]')
-        print(subpage_urls)
+        #print(subpage_urls)
         for subpage_url in subpage_urls:
             subpage_download_url = download_url + '/' + subpage_url
             subpage = requests.get(subpage_download_url)
             subwebpage = html.fromstring(subpage.content)
             subsubpage_urls = subwebpage.xpath('//a/@href[substring-before(., "/")]')
-            print(subsubpage_urls)
+            #print(subsubpage_urls)
             for subsubpage_url in subsubpage_urls:
-                osc_file_dir_page_download_url = subpage_download_url + '/' + subsubpage_url
+                osc_file_dir_page_download_url = subpage_download_url + subsubpage_url
                 osc_file_dir_page = requests.get(osc_file_dir_page_download_url)
                 osc_file_dir_webpage = html.fromstring(osc_file_dir_page.content)
                 osc_state_file_urls = osc_file_dir_webpage.xpath('//a/@href[contains(., ".state.txt")]')
-                print(osc_state_file_urls)
+                #print(osc_state_file_urls)
+                for osc_state_file_url in osc_state_file_urls:
+                    osc_state_file_download_url = osc_file_dir_page_download_url + osc_state_file_url
+                    osc_state_file = requests.get(osc_state_file_download_url)
+                    lines = osc_state_file.text.splitlines()
+                    #print(lines)
+                    timestamp_string = lines[1].split('=')[1].replace('\\', '')
+                    #print(timestamp_string) # 2017-10-03T20:43:03Z
+                    osc_file_timestamp = dateutil.parser.parse(timestamp_string) #datetime.datetime object
+                    if mapathon_timestamp.date() == osc_file_timestamp.date():
+                        #print("osc file " + osc_state_file_url + " has date " + mapathon_timestamp_string)
+                        osc_file_number = osc_state_file_url.split('.')[0]
+                        osc_file_url = osc_file_number + '.osc.gz'
+                        osc_file_download_url = osc_file_dir_page_download_url + osc_file_url
+                        print(osc_file_download_url)
+                        return
+
 
 
     def parse_poly(lines):
