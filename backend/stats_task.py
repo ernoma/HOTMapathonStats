@@ -6,8 +6,9 @@ from geojson import FeatureCollection, MultiPolygon
 import shapely.geometry as sgeom
 from shapely.ops import unary_union
 import os
-from lxml import html
+from lxml import html, etree
 import dateutil
+import zlib
 
 class MapathonStatistics(object):
     """
@@ -194,6 +195,17 @@ class MapathonStatistics(object):
                         osc_file_url = osc_file_number + '.osc.gz'
                         osc_file_download_url = osc_file_dir_page_download_url + osc_file_url
                         print(osc_file_download_url)
+                        try:
+                            osc_gz_response = requests.get(osc_file_download_url)
+                        except Exception as e:
+                            print(e)
+                            # TODO handle all possible error conditions
+
+                        osc_data = zlib.decompress(osc_gz_response.content, 16 + zlib.MAX_WBITS)
+                        e = etree.fromstring(osc_data)
+                        ways = e.xpath("//way[starts-with(@timestamp, '{0}')]".format(self.client_data['mapathon_date']))
+                        #print(ways)
+
                         return
 
 
