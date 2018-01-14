@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 '''This contains the Flask REST API used by the web frontened.
 This can be run from command line by:
 export FLASK_APP=server.py
@@ -70,3 +72,5 @@ def get_mapathon_list():
     # TODO return list of the created mapathon statistics and pages
     pass
 
+if __name__ == '__main__':
+    app.run(host='0.0.0.0',port=5000,debug=True)
