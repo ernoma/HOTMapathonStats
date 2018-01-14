@@ -5,10 +5,12 @@ import geopandas as gpd
 from geojson import FeatureCollection, MultiPolygon
 import shapely.geometry as sgeom
 from shapely.ops import unary_union
+from shapely.geometry import Polygon
+from shapely.geometry import MultiPolygon as ShapelyMultiPolygon
 import os
 from lxml import html, etree
 import dateutil
-import zlib
+import mapathon_analyzer
 
 class MapathonStatistics(object):
     """
@@ -55,6 +57,17 @@ class MapathonStatistics(object):
         }
 
         success = self.find_countries()
+
+        if not success:
+            self.state = 'error'
+            return
+
+        self.state = {
+            'name': 'finding_geofabrik_areas',
+            'state_progress': 0
+        }
+
+        success = self.find_geofabrik_areas()
 
         if not success:
             self.state = 'error'
@@ -135,11 +148,34 @@ class MapathonStatistics(object):
 
         return True
 
+    def find_geofabrik_areas(self):
+        # TODO check if there are updated areas on the server
+        # TODO find Geofabrik area(s) that contain wholly or partially the project area(s)
+
+        cwd = os.getcwd()
+        #print(cwd)
+        geofabrik_dir = os.path.join(cwd, "Geofabrik")
+        for subdir, dirs, files in os.walk(geofabrik_dir):
+            #print(subdir)
+            #print(dirs)
+            #print(files)
+            for file in files:
+                with open(os.path.join(subdir, file), 'r') as poly_file:
+                    lines = poly_file.readlines()
+                    lines = [x.strip() for x in lines]
+                    # TODO handle South Africa and Lesotho as special case.
+                    # TODO Use south-africa-and-lesotho.poly and lesotho.poly and not south-africa.poly
+                    #print(file)
+                    multipolygon = self.parse_poly(lines)
+                    #print(multipolygon)
+
+
     def create_mapathon_changes(self):
         # TODO find changes and store the changes to the json files
 
         for country in self.countries_of_interest:
-            osc_file_name = self.find_osc_file(country)
+            osc_file_download_url = self.find_osc_file(country)
+            # mapathon_analyzer.createMapathonChangesFromURL(osc_file_download_url, , self.client_data['mapathon_date'])
 
     def create_users_list(self):
         # TODO find users who made changes for the mapathon area during the mapathon and store users to a json file
@@ -195,63 +231,35 @@ class MapathonStatistics(object):
                         osc_file_url = osc_file_number + '.osc.gz'
                         osc_file_download_url = osc_file_dir_page_download_url + osc_file_url
                         print(osc_file_download_url)
-                        try:
-                            osc_gz_response = requests.get(osc_file_download_url)
-                        except Exception as e:
-                            print(e)
-                            # TODO handle all possible error conditions
-
-                        osc_data = zlib.decompress(osc_gz_response.content, 16 + zlib.MAX_WBITS)
-                        e = etree.fromstring(osc_data)
-                        ways = e.xpath("//way[starts-with(@timestamp, '{0}')]".format(self.client_data['mapathon_date']))
-                        #print(ways)
-
-                        return
+                        return osc_file_download_url
 
 
-
-    def parse_poly(lines):
-        """ Parse an Osmosis polygon filter file.
-            Accept a sequence of lines from a polygon file, return a shapely.geometry.MultiPolygon object.
-            From: https://wiki.openstreetmap.org/wiki/Osmosis/Polygon_Filter_File_Python_Parsing
-            See also: http://wiki.openstreetmap.org/wiki/Osmosis/Polygon_Filter_File_Format
-        """
-        in_ring = False
+    def parse_poly(self, lines):
+        # See also https://wiki.openstreetmap.org/wiki/Osmosis/Polygon_Filter_File_Format and
+        #http://shapely.readthedocs.io/en/stable/manual.html#polygons
+        shapely_polygons = []
         coords = []
-
+        in_ring = False
         for (index, line) in enumerate(lines):
             if index == 0:
-                # first line is junk.
                 continue
-
-            elif index == 1:
-                # second line is the first polygon ring.
-                coords.append([[], []])
-                ring = coords[-1][0]
-                in_ring = True
-
             elif in_ring and line.strip() == 'END':
                 # we are at the end of a ring, perhaps with more to come.
                 in_ring = False
-
+                shapely_polygons.append(Polygon(coords))
+                coords = []
             elif in_ring:
+                # TODO what if parts none
                 # we are in a ring and picking up new coordinates.
-                ring.append(map(float, line.split()))
-
+                parts = line.split()
+                #print(parts)
+                coords.append((float(parts[0]), float(parts[1])))
             elif not in_ring and line.strip() == 'END':
                 # we are at the end of the whole polygon.
                 break
-
-            elif not in_ring and line.startswith('!'):
-                # we are at the start of a polygon part hole.
-                coords[-1][1].append([])
-                ring = coords[-1][1][-1]
-                in_ring = True
-
             elif not in_ring:
                 # we are at the start of a polygon part.
-                coords.append([[], []])
-                ring = coords[-1][0]
                 in_ring = True
+                continue
 
-        return MultiPolygon(coords)
+        return ShapelyMultiPolygon(shapely_polygons)

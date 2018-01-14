@@ -86,6 +86,10 @@ function updateStatsCreationState(stat_task_uuid) {
                         $("#serverSuccessAlert").text("Finding the project country or countries...");
                         $("#serverSuccessAlert").show();
                         break;
+                    case "finding_geofabrik_areas":
+                        $("#serverSuccessAlert").text("Finding the project areas...");
+                        $("#serverSuccessAlert").show();
+                        break;
                     case "creating_mapathon_changes":
                         $("#serverSuccessAlert").text("Extracting mapathon changes... Done " + data.state.state_progress + "%");
                         $("#serverSuccessAlert").show();
