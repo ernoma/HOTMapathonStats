@@ -152,6 +152,9 @@ class MapathonStatistics(object):
         # TODO check if there are updated areas on the server
         # TODO find Geofabrik area(s) that contain wholly or partially the project area(s)
 
+        collection = FeatureCollection(self.project_data['tasks']['features'])
+        project_tasks = gpd.GeoDataFrame.from_features(collection)
+
         cwd = os.getcwd()
         #print(cwd)
         geofabrik_dir = os.path.join(cwd, "Geofabrik")
@@ -166,8 +169,17 @@ class MapathonStatistics(object):
                     # TODO handle South Africa and Lesotho as special case.
                     # TODO Use south-africa-and-lesotho.poly and lesotho.poly and not south-africa.poly
                     #print(file)
-                    multipolygon = self.parse_poly(lines)
-                    #print(multipolygon)
+                    shapely_polygons = self.parse_poly(lines)
+                    #print(shapely_polygons[0])
+
+                    self.areas_of_interest = set()
+                    for index, project_task in project_tasks.iterrows():
+                        if project_task['geometry'].intersects(shapely_polygons):
+                            if file not in self.areas_of_interest:
+                                self.areas_of_interest.add(file)
+                                print("Project tasks intersercing poly: " + file)
+                        #else:
+                        #    print("Project tasks dows not interserct poly: " + file)
 
 
     def create_mapathon_changes(self):
@@ -236,7 +248,7 @@ class MapathonStatistics(object):
 
     def parse_poly(self, lines):
         # See also https://wiki.openstreetmap.org/wiki/Osmosis/Polygon_Filter_File_Format and
-        #http://shapely.readthedocs.io/en/stable/manual.html#polygons
+        # http://shapely.readthedocs.io/en/stable/manual.html#polygons
         shapely_polygons = []
         coords = []
         in_ring = False
@@ -249,7 +261,6 @@ class MapathonStatistics(object):
                 shapely_polygons.append(Polygon(coords))
                 coords = []
             elif in_ring:
-                # TODO what if parts none
                 # we are in a ring and picking up new coordinates.
                 parts = line.split()
                 #print(parts)
