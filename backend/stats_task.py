@@ -149,11 +149,14 @@ class MapathonStatistics(object):
         return True
 
     def find_geofabrik_areas(self):
+        # Find Geofabrik area(s) that contain wholly or partially the project area(s)
+
         # TODO check if there are updated areas on the server
-        # TODO find Geofabrik area(s) that contain wholly or partially the project area(s)
 
         collection = FeatureCollection(self.project_data['tasks']['features'])
         project_tasks = gpd.GeoDataFrame.from_features(collection)
+
+        self.areas_of_interest = {}
 
         cwd = os.getcwd()
         #print(cwd)
@@ -172,15 +175,34 @@ class MapathonStatistics(object):
                     shapely_polygons = self.parse_poly(lines)
                     #print(shapely_polygons[0])
 
-                    self.areas_of_interest = set()
                     for index, project_task in project_tasks.iterrows():
                         if project_task['geometry'].intersects(shapely_polygons):
                             if file not in self.areas_of_interest:
-                                self.areas_of_interest.add(file)
+                                self.areas_of_interest[file] = {
+                                    'subdir': subdir,
+                                    'file': file
+                                }
                                 print("Project tasks intersercing poly: " + file)
+                                #print(self.areas_of_interest)
                         #else:
                         #    print("Project tasks dows not interserct poly: " + file)
 
+        max_dir_level = -1
+
+        areas_for_osc_file_retrieval = []
+
+        #print(self.areas_of_interest)
+        # Retrieve osc file(s) only for the areas that are at the deepest level in the area hierarchy
+        for key, item in self.areas_of_interest.items():
+            dir_level = len(item['subdir'].split('/'))
+            print(dir_level)
+            if dir_level > max_dir_level:
+                max_dir_level = dir_level
+                areas_for_osc_file_retrieval = [item]
+            elif dir_level == max_dir_level:
+                areas_for_osc_file_retrieval.append(item)
+
+        print(areas_for_osc_file_retrieval)
 
     def create_mapathon_changes(self):
         # TODO find changes and store the changes to the json files
