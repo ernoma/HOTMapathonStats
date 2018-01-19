@@ -189,7 +189,7 @@ class MapathonStatistics(object):
 
         max_dir_level = -1
 
-        areas_for_osc_file_retrieval = []
+        self.areas_for_osc_file_retrieval = []
 
         #print(self.areas_of_interest)
         # Retrieve osc file(s) only for the areas that are at the deepest level in the area hierarchy
@@ -198,17 +198,22 @@ class MapathonStatistics(object):
             print(dir_level)
             if dir_level > max_dir_level:
                 max_dir_level = dir_level
-                areas_for_osc_file_retrieval = [item]
+                self.areas_for_osc_file_retrieval = [item]
             elif dir_level == max_dir_level:
-                areas_for_osc_file_retrieval.append(item)
+                self.areas_for_osc_file_retrieval.append(item)
 
-        print(areas_for_osc_file_retrieval)
+        print(self.areas_for_osc_file_retrieval)
+
+        return True
 
     def create_mapathon_changes(self):
         # TODO find changes and store the changes to the json files
 
-        for country in self.countries_of_interest:
-            osc_file_download_url = self.find_osc_file(country)
+        self.osc_file_download_urls = []
+
+        for osc_area in self.areas_for_osc_file_retrieval:
+            osc_file_download_url = self.find_osc_file(osc_area)
+            self.osc_file_download_urls.append(osc_file_download_url)
             # mapathon_analyzer.createMapathonChangesFromURL(osc_file_download_url, , self.client_data['mapathon_date'])
 
     def create_users_list(self):
@@ -224,16 +229,19 @@ class MapathonStatistics(object):
         # TODO store the created statistics web page to the list that can be shown for the users on the web
         pass
 
-    def find_osc_file(self, country):
+    def find_osc_file(self, osc_area):
         """
         TODO Find the osc file from Geofabrik that contains the changes for the mapathon day.
         """
+
+        geofabrik_base_dir = osc_area['subdir'].split('Geofabrik/')[1] + '/' + osc_area['file'].split('.poly')[0]
+        print(geofabrik_base_dir)
 
         mapathon_timestamp_string = self.client_data['mapathon_date'] + 'T' + str(self.client_data['mapathon_time_utc']) + ':00:00Z'
         #print(mapathon_timestamp_string)
         mapathon_timestamp = dateutil.parser.parse(mapathon_timestamp_string) #datetime.datetime object
 
-        download_url = 'http://download.geofabrik.de/' + country['continent_name'] + '/' + country['name'] + '-updates'
+        download_url = 'http://download.geofabrik.de/' + geofabrik_base_dir + '-updates'
 
         page = requests.get(download_url)
         webpage = html.fromstring(page.content)

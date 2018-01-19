@@ -19,10 +19,10 @@ class StatsTaskTest(unittest.TestCase):
         #     'continent_name': 'africa'
         # }
 
-        self.country = {
-            'name': 'germany',
-            'continent_name': 'europe'
-        }
+        # self.country = {
+        #     'name': 'germany',
+        #     'continent_name': 'europe'
+        # }
 
         # Uniquely dentifies the statistics creation task
         self.stat_task_uuid = uuid.uuid1()
@@ -38,7 +38,8 @@ class StatsTaskTest(unittest.TestCase):
         status_code = self.new_stat_task.get_project_data()
         self.assertEqual(status_code, 200)
         self.new_stat_task.find_geofabrik_areas()
-
+        self.new_stat_task.create_mapathon_changes()
+        self.assertEqual(self.new_stat_task.osc_file_download_urls[0], 'http://download.geofabrik.de/north-america/mexico-updates/000/001/754.osc.gz')
 
 if __name__ == '__main__':
     unittest.main()
