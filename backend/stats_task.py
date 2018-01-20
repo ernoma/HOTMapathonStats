@@ -214,7 +214,7 @@ class MapathonStatistics(object):
         for osc_area in self.areas_for_osc_file_retrieval:
             osc_file_download_url = self.find_osc_file(osc_area)
             self.osc_file_download_urls.append(osc_file_download_url)
-            # mapathon_analyzer.createMapathonChangesFromURL(osc_file_download_url, , self.client_data['mapathon_date'])
+            # result = mapathon_analyzer.createMapathonChangesFromURL(osc_file_download_url, self.project_data['areaOfInterest'], self.client_data['mapathon_date'], self.client_data['mapathon_time_utc'], self.client_data['types_of_mapping'])
 
     def create_users_list(self):
         # TODO find users who made changes for the mapathon area during the mapathon and store users to a json file

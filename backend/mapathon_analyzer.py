@@ -265,12 +265,16 @@ def createMapathonChanges(osc_root_element, project_json_file, date, min_hour_ut
     with open(output_dir + '/' + 'highways_footway.json', 'w') as outfile:
         json.dump(highways_footway, outfile)
 
+def createMapathonChangesAsDict(osc_root_element, area_of_interest, date, min_hour_utz, types_of_mapping):
+    # TODO
+    return None
+
 def createMapathonChangesFromFile(osc_file, project_json_file, date, min_hour_utz, output_dir):
     osc_root_element = etree.parse(osc_file).getroot()
     createMapathonChanges(osc_root_element, project_json_file, date, min_hour_utz, output_dir)
 
-def createMapathonChangesFromURL(osc_file_download_url, project_json_file, date, min_hour_utz, output_dir):
-    #TODO update input parameters
+def createMapathonChangesFromURL(osc_file_download_url, area_of_interest, date, min_hour_utz, types_of_mapping):
+    #TODO use updated input parameters
     try:
         osc_gz_response = requests.get(osc_file_download_url)
     except Exception as e:
@@ -280,7 +284,7 @@ def createMapathonChangesFromURL(osc_file_download_url, project_json_file, date,
     osc_data = zlib.decompress(osc_gz_response.content, 16 + zlib.MAX_WBITS)
     osc_root_element = etree.fromstring(osc_data)
 
-    createMapathonChanges(osc_root_element, project_json_file, date, min_hour_utz, output_dir)
+    return createMapathonChangesAsDict(osc_root_element, area_of_interest, date, min_hour_utz, types_of_mapping)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
