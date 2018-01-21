@@ -2,9 +2,10 @@
 from threading import Thread, Condition
 import requests
 import geopandas as gpd
-from geojson import FeatureCollection, MultiPolygon
+from geojson import Feature, FeatureCollection, MultiPolygon
 import shapely.geometry as sgeom
 from shapely.ops import unary_union
+from shapely.geometry import shape
 from shapely.geometry import Polygon
 from shapely.geometry import MultiPolygon as ShapelyMultiPolygon
 import os
@@ -209,12 +210,27 @@ class MapathonStatistics(object):
     def create_mapathon_changes(self):
         # TODO find changes and store the changes to the json files
 
+        self.project_feature_collection = self.createProjectPolygonFeatureCollection()
+
         self.osc_file_download_urls = []
 
         for osc_area in self.areas_for_osc_file_retrieval:
             osc_file_download_url = self.find_osc_file(osc_area)
             self.osc_file_download_urls.append(osc_file_download_url)
-            # result = mapathon_analyzer.createMapathonChangesFromURL(osc_file_download_url, self.project_data['areaOfInterest'], self.client_data['mapathon_date'], self.client_data['mapathon_time_utc'], self.client_data['types_of_mapping'])
+            result = mapathon_analyzer.createMapathonChangesFromURL(osc_file_download_url, self.project_feature_collection, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc'], self.client_data['types_of_mapping'])
+
+    def createProjectPolygonFeatureCollection(self):
+        geoms = [x.buffer(0) for x in shape(self.project_data['areaOfInterest']).buffer(0).geoms]
+        print(geoms)
+
+        geojson_features = []
+        for geom in geoms:
+            geojson_feature = Feature(geometry=geom, properties={})
+            geojson_features.append(geojson_feature)
+        feature_collection = FeatureCollection(geojson_features)
+        print(feature_collection)
+
+        return feature_collection
 
     def create_users_list(self):
         # TODO find users who made changes for the mapathon area during the mapathon and store users to a json file

@@ -267,6 +267,7 @@ def createMapathonChanges(osc_root_element, project_json_file, date, min_hour_ut
 
 def createMapathonChangesAsDict(osc_root_element, area_of_interest, date, min_hour_utz, types_of_mapping):
     # TODO
+
     return None
 
 def createMapathonChangesFromFile(osc_file, project_json_file, date, min_hour_utz, output_dir):
@@ -274,7 +275,8 @@ def createMapathonChangesFromFile(osc_file, project_json_file, date, min_hour_ut
     createMapathonChanges(osc_root_element, project_json_file, date, min_hour_utz, output_dir)
 
 def createMapathonChangesFromURL(osc_file_download_url, area_of_interest, date, min_hour_utz, types_of_mapping):
-    #TODO use updated input parameters
+    # TODO use updated input parameters
+    # area_of_interest is a geojson featurecollection of polygons similarly to the contents of the project_json_file argument
     try:
         osc_gz_response = requests.get(osc_file_download_url)
     except Exception as e:
