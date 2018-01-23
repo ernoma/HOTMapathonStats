@@ -71,8 +71,7 @@ def calculateCenter(points):
     return center_point
 
 
-def createMapathonChanges(osc_root_element, project_json_file, date, min_hour_utz, output_dir):
-    projectPolygons = createPolys(project_json_file)
+def createMapathonChanges(project_polygons, osc_root_element, date, min_hour_utz, output_dir):
 
     #ways = osc_root_element.xpath("//way[starts-with(@timestamp, '{0}') and @version='1' and @uid='69016']".format(date))
     #ways = osc_root_element.xpath("//way[starts-with(@timestamp, '{0}') and @version='1' and @user='erno']".format(date))
@@ -146,7 +145,7 @@ def createMapathonChanges(osc_root_element, project_json_file, date, min_hour_ut
                 continue
             else:
                 center = calculateCenter(feature_nodes)
-                if not isInsideAnyOfPolygons(center, projectPolygons):
+                if not isInsideAnyOfPolygons(center, project_polygons):
                     continue
                 if feature_version == 1: # store only nodes for created features to save memory & bandwidth
                     feature["nodes"] = feature_nodes
@@ -212,71 +211,82 @@ def createMapathonChanges(osc_root_element, project_json_file, date, min_hour_ut
 
     print("count_ways_with_no_nodes: ", count_ways_with_no_nodes)
 
+    return {
+        "buildings": buildings,
+        "residential_areas": residential_areas,
+        "highways_path": highways_path,
+        "highways_primary": highways_primary,
+        "highways_residential": highways_residential,
+        "highways_secondary": highways_secondary,
+        "highways_service": highways_service,
+        "highways_tertiary": highways_tertiary,
+        "highways_track": highways_track,
+        "highways_unclassified": highways_unclassified,
+        "highways_road": highways_road,
+        "highways_footway": highways_footway
+    }
+
+
+def createMapathonChangesFromFile(project_polygons, osc_file, date, min_hour_utz, output_dir):
+    osc_root_element = etree.parse(osc_file).getroot()
+    results = createMapathonChanges(project_polygons, osc_root_element, date, min_hour_utz, output_dir)
+
     os.makedirs(output_dir, exist_ok=True)
 
-    #print(len(ways))
-    #print(len(buildings))
+    # print(len(ways))
+    # print(len(buildings))
     with open(output_dir + '/' + 'buildings.json', 'w') as outfile:
-        json.dump(buildings, outfile)
+        json.dump(results['buildings'], outfile)
 
-    #print(len(residential_areas))
-    #print(json.dumps(residential_areas))
+    # print(len(residential_areas))
+    # print(json.dumps(residential_areas))
     with open(output_dir + '/' + 'residential_areas.json', 'w') as outfile:
-        json.dump(residential_areas, outfile)
+        json.dump(results['residential_areas'], outfile)
 
-    #print(len(highways_path))
-    #print(json.dumps(highways_path))
+    # print(len(highways_path))
+    # print(json.dumps(highways_path))
     with open(output_dir + '/' + 'highways_path.json', 'w') as outfile:
-        json.dump(highways_path, outfile)
+        json.dump(results['highways_path'], outfile)
 
-    #print(len(highways_primary))
+    # print(len(highways_primary))
     with open(output_dir + '/' + 'highways_primary.json', 'w') as outfile:
-        json.dump(highways_primary, outfile)
+        json.dump(results['highways_primary'], outfile)
 
-    #print(len(highways_residential))
+    # print(len(highways_residential))
     with open(output_dir + '/' + 'highways_residential.json', 'w') as outfile:
-        json.dump(highways_residential, outfile)
+        json.dump(results['highways_residential'], outfile)
 
-    #print(len(highways_secondary))
+    # print(len(highways_secondary))
     with open(output_dir + '/' + 'highways_secondary.json', 'w') as outfile:
-        json.dump(highways_secondary, outfile)
+        json.dump(results['highways_secondary'], outfile)
 
-    #print(len(highways_service))
+    # print(len(highways_service))
     with open(output_dir + '/' + 'highways_service.json', 'w') as outfile:
-        json.dump(highways_service, outfile)
+        json.dump(results['highways_service'], outfile)
 
-    #print(len(highways_tertiary))
+    # print(len(highways_tertiary))
     with open(output_dir + '/' + 'highways_tertiary.json', 'w') as outfile:
-        json.dump(highways_tertiary, outfile)
+        json.dump(results['highways_tertiary'], outfile)
 
-    #print(len(highways_track))
+    # print(len(highways_track))
     with open(output_dir + '/' + 'highways_track.json', 'w') as outfile:
-        json.dump(highways_track, outfile)
+        json.dump(results['highways_track'], outfile)
 
-    #print(len(highways_unclassified))
+    # print(len(highways_unclassified))
     with open(output_dir + '/' + 'highways_unclassified.json', 'w') as outfile:
-        json.dump(highways_unclassified, outfile)
+        json.dump(results['highways_unclassified'], outfile)
 
-    #print(len(highways_road))
+    # print(len(highways_road))
     with open(output_dir + '/' + 'highways_road.json', 'w') as outfile:
-        json.dump(highways_road, outfile)
+        json.dump(results['highways_road'], outfile)
 
-    #print(len(highways_footway))
+    # print(len(highways_footway))
     with open(output_dir + '/' + 'highways_footway.json', 'w') as outfile:
-        json.dump(highways_footway, outfile)
+        json.dump(results['highways_footway'], outfile)
 
-def createMapathonChangesAsDict(osc_root_element, area_of_interest, date, min_hour_utz, types_of_mapping):
-    # TODO
-
-    return None
-
-def createMapathonChangesFromFile(osc_file, project_json_file, date, min_hour_utz, output_dir):
-    osc_root_element = etree.parse(osc_file).getroot()
-    createMapathonChanges(osc_root_element, project_json_file, date, min_hour_utz, output_dir)
-
-def createMapathonChangesFromURL(osc_file_download_url, area_of_interest, date, min_hour_utz, types_of_mapping):
+def createMapathonChangesFromURL(project_polygons, osc_file_download_url, date, min_hour_utz, types_of_mapping):
     # TODO use updated input parameters
-    # area_of_interest is a geojson featurecollection of polygons similarly to the contents of the project_json_file argument
+    # project_polygons is a geojson featurecollection of polygons similarly to the contents of the project_json_file argument
     try:
         osc_gz_response = requests.get(osc_file_download_url)
     except Exception as e:
@@ -286,7 +296,7 @@ def createMapathonChangesFromURL(osc_file_download_url, area_of_interest, date, 
     osc_data = zlib.decompress(osc_gz_response.content, 16 + zlib.MAX_WBITS)
     osc_root_element = etree.fromstring(osc_data)
 
-    return createMapathonChangesAsDict(osc_root_element, area_of_interest, date, min_hour_utz, types_of_mapping)
+    return createMapathonChanges(project_polygons, osc_root_element, date, min_hour_utz, types_of_mapping)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -301,4 +311,5 @@ if __name__ == '__main__':
     # parser.add_argument("", help="")
     args = parser.parse_args()
 
-    createMapathonChangesFromFile(args.osc_file, args.project_json_file, args.date, args.min_hour_utz, args.output_dir)
+    project_polygons = createPolys(args.project_json_file)
+    createMapathonChangesFromFile(project_polygons, args.osc_file, args.date, args.min_hour_utz, args.output_dir)

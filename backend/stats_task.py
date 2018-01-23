@@ -217,7 +217,7 @@ class MapathonStatistics(object):
         for osc_area in self.areas_for_osc_file_retrieval:
             osc_file_download_url = self.find_osc_file(osc_area)
             self.osc_file_download_urls.append(osc_file_download_url)
-            result = mapathon_analyzer.createMapathonChangesFromURL(osc_file_download_url, self.project_feature_collection, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc'], self.client_data['types_of_mapping'])
+            result = mapathon_analyzer.createMapathonChangesFromURL(self.project_feature_collection, osc_file_download_url, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc'], self.client_data['types_of_mapping'])
 
     def createProjectPolygonFeatureCollection(self):
         geoms = [x.buffer(0) for x in shape(self.project_data['areaOfInterest']).buffer(0).geoms]
