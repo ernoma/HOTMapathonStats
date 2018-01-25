@@ -71,7 +71,7 @@ def calculateCenter(points):
     return center_point
 
 
-def createMapathonChanges(project_polygons, osc_root_element, date, min_hour_utz, output_dir):
+def createMapathonChanges(project_polygons, osc_root_element, date, min_hour_utz):
 
     #ways = osc_root_element.xpath("//way[starts-with(@timestamp, '{0}') and @version='1' and @uid='69016']".format(date))
     #ways = osc_root_element.xpath("//way[starts-with(@timestamp, '{0}') and @version='1' and @user='erno']".format(date))
@@ -229,7 +229,7 @@ def createMapathonChanges(project_polygons, osc_root_element, date, min_hour_utz
 
 def createMapathonChangesFromFile(project_polygons, osc_file, date, min_hour_utz, output_dir):
     osc_root_element = etree.parse(osc_file).getroot()
-    results = createMapathonChanges(project_polygons, osc_root_element, date, min_hour_utz, output_dir)
+    results = createMapathonChanges(project_polygons, osc_root_element, date, min_hour_utz)
 
     os.makedirs(output_dir, exist_ok=True)
 
@@ -284,7 +284,7 @@ def createMapathonChangesFromFile(project_polygons, osc_file, date, min_hour_utz
     with open(output_dir + '/' + 'highways_footway.json', 'w') as outfile:
         json.dump(results['highways_footway'], outfile)
 
-def createMapathonChangesFromURL(project_polygons, osc_file_download_url, date, min_hour_utz, types_of_mapping):
+def createMapathonChangesFromURL(project_polygons, osc_file_download_url, date, min_hour_utz):
     # TODO use updated input parameters
     # project_polygons is a geojson featurecollection of polygons similarly to the contents of the project_json_file argument
     try:
@@ -296,7 +296,7 @@ def createMapathonChangesFromURL(project_polygons, osc_file_download_url, date, 
     osc_data = zlib.decompress(osc_gz_response.content, 16 + zlib.MAX_WBITS)
     osc_root_element = etree.fromstring(osc_data)
 
-    return createMapathonChanges(project_polygons, osc_root_element, date, min_hour_utz, types_of_mapping)
+    return createMapathonChanges(project_polygons, osc_root_element, date, min_hour_utz)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

@@ -98,6 +98,10 @@ function updateStatsCreationState(stat_task_uuid) {
                         $("#serverSuccessAlert").text("Finding users who made changes for the mapathon area during the mapathon...");
                         $("#serverSuccessAlert").show();
                         break;
+                    case "storing_osm_changes":
+                        $("#serverSuccessAlert").text("Storing mapathon changes and usernames...");
+                        $("#serverSuccessAlert").show();
+                        break;
                     case "creating_statistics_web_page":
                         $("#serverSuccessAlert").text("Creating a web page that visualizes the mapathon statistics...");
                         $("#serverSuccessAlert").show();

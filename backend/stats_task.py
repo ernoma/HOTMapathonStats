@@ -89,6 +89,13 @@ class MapathonStatistics(object):
         self.create_users_list()
 
         self.state = {
+            'name': 'storing_osm_changes',
+            'state_progress': 0
+        }
+
+        self.store_changes()
+
+        self.state = {
             'name': 'creating_statistics_web_page',
             'state_progress': 0
         }
@@ -214,10 +221,22 @@ class MapathonStatistics(object):
 
         self.osc_file_download_urls = []
 
+        mapathon_changes_for_all_areas = []
+
         for osc_area in self.areas_for_osc_file_retrieval:
             osc_file_download_url = self.find_osc_file(osc_area)
             self.osc_file_download_urls.append(osc_file_download_url)
-            result = mapathon_analyzer.createMapathonChangesFromURL(self.project_feature_collection, osc_file_download_url, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc'], self.client_data['types_of_mapping'])
+            result = mapathon_analyzer.createMapathonChangesFromURL(self.project_feature_collection, osc_file_download_url, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc'])
+            mapathon_changes_for_all_areas.append(result)
+
+        self.filtered_changes_for_all_areas = self.filter_same_changes(mapathon_changes_for_all_areas)
+
+    def filter_same_changes(self, mapathon_changes_for_all_areas):
+        pass
+        # TODO if changes were extracted from more than one osc file then
+        # the areas for the osc files can partially overlap and therefore there is need to look up and filter
+        # the same changes
+        # return filtered_changes_for_all_areas
 
     def createProjectPolygonFeatureCollection(self):
         geoms = [x.buffer(0) for x in shape(self.project_data['areaOfInterest']).buffer(0).geoms]
@@ -236,8 +255,13 @@ class MapathonStatistics(object):
         # TODO find users who made changes for the mapathon area during the mapathon and store users to a json file
         pass
 
+    def store_changes(self):
+        # TODO store found OSM changes and usernames of those who did the changes for the project area to a data store
+        pass
+
     def create_statistics_web_page(self):
         # TODO create a web page that visualizes the mapathon statistics
+        # TODO use only the self.client_data.types_of_mapping
         # TODO make sure that the web client has the URL to the page available after this function finishes
         pass
 
