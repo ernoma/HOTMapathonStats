@@ -212,18 +212,18 @@ def createMapathonChanges(project_polygons, osc_root_element, date, min_hour_utz
     print("count_ways_with_no_nodes: ", count_ways_with_no_nodes)
 
     return {
-        "buildings": buildings,
-        "residential_areas": residential_areas,
-        "highways_path": highways_path,
-        "highways_primary": highways_primary,
-        "highways_residential": highways_residential,
-        "highways_secondary": highways_secondary,
-        "highways_service": highways_service,
-        "highways_tertiary": highways_tertiary,
-        "highways_track": highways_track,
-        "highways_unclassified": highways_unclassified,
-        "highways_road": highways_road,
-        "highways_footway": highways_footway
+        "building": buildings,
+        "landuse_residential": residential_areas,
+        "highway_path": highways_path,
+        "highway_primary": highways_primary,
+        "highway_residential": highways_residential,
+        "highway_secondary": highways_secondary,
+        "highway_service": highways_service,
+        "highway_tertiary": highways_tertiary,
+        "highway_track": highways_track,
+        "highway_unclassified": highways_unclassified,
+        "highway_road": highways_road,
+        "highway_footway": highways_footway
     }
 
 
@@ -236,53 +236,53 @@ def createMapathonChangesFromFile(project_polygons, osc_file, date, min_hour_utz
     # print(len(ways))
     # print(len(buildings))
     with open(output_dir + '/' + 'buildings.json', 'w') as outfile:
-        json.dump(results['buildings'], outfile)
+        json.dump(results['building'], outfile)
 
     # print(len(residential_areas))
     # print(json.dumps(residential_areas))
     with open(output_dir + '/' + 'residential_areas.json', 'w') as outfile:
-        json.dump(results['residential_areas'], outfile)
+        json.dump(results['landuse_residential'], outfile)
 
     # print(len(highways_path))
     # print(json.dumps(highways_path))
     with open(output_dir + '/' + 'highways_path.json', 'w') as outfile:
-        json.dump(results['highways_path'], outfile)
+        json.dump(results['highway_path'], outfile)
 
     # print(len(highways_primary))
     with open(output_dir + '/' + 'highways_primary.json', 'w') as outfile:
-        json.dump(results['highways_primary'], outfile)
+        json.dump(results['highway_primary'], outfile)
 
     # print(len(highways_residential))
     with open(output_dir + '/' + 'highways_residential.json', 'w') as outfile:
-        json.dump(results['highways_residential'], outfile)
+        json.dump(results['highway_residential'], outfile)
 
     # print(len(highways_secondary))
     with open(output_dir + '/' + 'highways_secondary.json', 'w') as outfile:
-        json.dump(results['highways_secondary'], outfile)
+        json.dump(results['highway_secondary'], outfile)
 
     # print(len(highways_service))
     with open(output_dir + '/' + 'highways_service.json', 'w') as outfile:
-        json.dump(results['highways_service'], outfile)
+        json.dump(results['highway_service'], outfile)
 
     # print(len(highways_tertiary))
     with open(output_dir + '/' + 'highways_tertiary.json', 'w') as outfile:
-        json.dump(results['highways_tertiary'], outfile)
+        json.dump(results['highway_tertiary'], outfile)
 
     # print(len(highways_track))
     with open(output_dir + '/' + 'highways_track.json', 'w') as outfile:
-        json.dump(results['highways_track'], outfile)
+        json.dump(results['highway_track'], outfile)
 
     # print(len(highways_unclassified))
     with open(output_dir + '/' + 'highways_unclassified.json', 'w') as outfile:
-        json.dump(results['highways_unclassified'], outfile)
+        json.dump(results['highway_unclassified'], outfile)
 
     # print(len(highways_road))
     with open(output_dir + '/' + 'highways_road.json', 'w') as outfile:
-        json.dump(results['highways_road'], outfile)
+        json.dump(results['highway_road'], outfile)
 
     # print(len(highways_footway))
     with open(output_dir + '/' + 'highways_footway.json', 'w') as outfile:
-        json.dump(results['highways_footway'], outfile)
+        json.dump(results['highway_footway'], outfile)
 
 def createMapathonChangesFromURL(project_polygons, osc_file_download_url, date, min_hour_utz):
     # TODO use updated input parameters

@@ -12,6 +12,7 @@ import os
 from lxml import html, etree
 import dateutil
 import mapathon_analyzer
+from user_list import UserList
 
 class MapathonStatistics(object):
     """
@@ -21,6 +22,9 @@ class MapathonStatistics(object):
     def __init__(self, stat_task_uuid, client_data):
         self.stat_task_uuid = stat_task_uuid
         self.client_data = client_data
+        self.mapathon_changes = []
+        self.users = []
+
 
         self.state = {
             'name': 'initialized',
@@ -215,7 +219,7 @@ class MapathonStatistics(object):
         return True
 
     def create_mapathon_changes(self):
-        # TODO find changes and store the changes to the json files
+        # find changes for the mapathon area during the mapathon
 
         self.project_feature_collection = self.createProjectPolygonFeatureCollection()
 
@@ -227,9 +231,12 @@ class MapathonStatistics(object):
             osc_file_download_url = self.find_osc_file(osc_area)
             self.osc_file_download_urls.append(osc_file_download_url)
             result = mapathon_analyzer.createMapathonChangesFromURL(self.project_feature_collection, osc_file_download_url, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc'])
-            mapathon_changes_for_all_areas.append(result)
+            for types_key in self.client_data['types_of_mapping']:
+                for result_key, result_json in result:
+                    if result_key.startswith(types_key):
+                        mapathon_changes_for_all_areas.append(result_json)
 
-        self.filtered_changes_for_all_areas = self.filter_same_changes(mapathon_changes_for_all_areas)
+        self.mapathon_changes = self.filter_same_changes(mapathon_changes_for_all_areas)
 
     def filter_same_changes(self, mapathon_changes_for_all_areas):
         pass
@@ -252,8 +259,10 @@ class MapathonStatistics(object):
         return feature_collection
 
     def create_users_list(self):
-        # TODO find users who made changes for the mapathon area during the mapathon and store users to a json file
-        pass
+        # find users who made changes for the mapathon area during the mapathon
+        
+        user_list = UserList()
+        self.users = user_list.find_users(self.mapathon_changes)
 
     def store_changes(self):
         # TODO store found OSM changes and usernames of those who did the changes for the project area to a data store
