@@ -11,7 +11,7 @@ from shapely.geometry import MultiPolygon as ShapelyMultiPolygon
 import os
 from lxml import html, etree
 import dateutil
-import mapathon_analyzer
+from mapathon_analyzer import MapathonChangeCreator
 from user_list import UserList
 
 class MapathonStatistics(object):
@@ -22,6 +22,7 @@ class MapathonStatistics(object):
     def __init__(self, stat_task_uuid, client_data):
         self.stat_task_uuid = stat_task_uuid
         self.client_data = client_data
+        self.mapathon_change_creator = MapathonChangeCreator()
         self.mapathon_changes = []
         self.users = []
 
@@ -230,7 +231,7 @@ class MapathonStatistics(object):
         for osc_area in self.areas_for_osc_file_retrieval:
             osc_file_download_url = self.find_osc_file(osc_area)
             self.osc_file_download_urls.append(osc_file_download_url)
-            result = mapathon_analyzer.createMapathonChangesFromURL(self.project_feature_collection, osc_file_download_url, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc'])
+            result = self.mapathon_change_creator.createMapathonChangesFromURL(self.project_feature_collection, osc_file_download_url, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc'])
             for types_key in self.client_data['types_of_mapping']:
                 for result_key, result_json in result:
                     if result_key.startswith(types_key):
@@ -260,7 +261,7 @@ class MapathonStatistics(object):
 
     def create_users_list(self):
         # find users who made changes for the mapathon area during the mapathon
-        
+
         user_list = UserList()
         self.users = user_list.find_users(self.mapathon_changes)
 
