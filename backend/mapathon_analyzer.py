@@ -12,6 +12,11 @@ from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
 
 class MapathonChangeCreator(object):
+    """
+    Functionality for finding changes made for the HOT-OSM project during the mapathon.
+    It utilizes the GeoJSON that specifies the project area and the osc file(s) that contain
+    the changes for the specific location and day.
+    """
 
     def isInsideAnyOfPolygons(self, point, polys):
         for poly in polys:
