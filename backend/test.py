@@ -45,7 +45,7 @@ class StatsTaskTest(unittest.TestCase):
     def test_create_project_polygon_feature_collection(self):
         status_code = self.new_stat_task.get_project_data()
         self.assertEqual(status_code, 200)
-        project_feature_collection = self.new_stat_task.createProjectPolygonFeatureCollection()
+        project_feature_collection = self.new_stat_task.create_project_polygon_feature_collection()
         # TODO
 
 if __name__ == '__main__':

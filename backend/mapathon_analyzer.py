@@ -18,7 +18,7 @@ class MapathonChangeCreator(object):
     the changes for the specific location and day.
     """
 
-    def isInsideAnyOfPolygons(self, point, polys):
+    def is_inside_any_of_polygons(self, point, polys):
         for poly in polys:
             shapelyPoint = Point(point['lat'], point['lon'])
             shapelyPolygon = Polygon(poly)
@@ -27,7 +27,7 @@ class MapathonChangeCreator(object):
                 return True
         return False
 
-    def isInsidePolygon(self, point, polyPoints):
+    def is_inside_polygon(self, point, polyPoints):
         # adapted from http://stackoverflow.com/questions/36399381/whats-the-fastest-way-of-checking-if-a-point-is-inside-a-polygon-in-python
         shapelyPoint = Point(point['lat'], point['lon'])
         shapelyPolygon = Polygon(polyPoints)
@@ -35,19 +35,19 @@ class MapathonChangeCreator(object):
         #print(isInside)
         return isInside
 
-    def createPolys(self, project_json_file):
+    def create_polys(self, project_json_file):
         polys = []
 
         with open(project_json_file, 'r') as data_file:
             data = json.load(data_file)
             geojsonFeatures = data['features']
             for feature in geojsonFeatures:
-                poly = self.createPoly(feature)
+                poly = self.create_poly(feature)
                 polys.append(poly)
 
         return polys
 
-    def createPoly(self, geojsonFeature):
+    def create_poly(self, geojsonFeature):
         polyString = ""
         lines = geojsonFeature['geometry']['coordinates'][0]
         for line in lines:
@@ -64,7 +64,7 @@ class MapathonChangeCreator(object):
             #print(coords)
         return coords
 
-    def calculateCenter(self, points):
+    def calculate_center(self, points):
         #print(points)
         center_point = {}
         latSum = 0
@@ -77,7 +77,7 @@ class MapathonChangeCreator(object):
         return center_point
 
 
-    def createMapathonChanges(self, project_polygons, osc_root_element, date, min_hour_utz):
+    def create_mapathon_changes(self, project_polygons, osc_root_element, date, min_hour_utz):
 
         #ways = osc_root_element.xpath("//way[starts-with(@timestamp, '{0}') and @version='1' and @uid='69016']".format(date))
         #ways = osc_root_element.xpath("//way[starts-with(@timestamp, '{0}') and @version='1' and @user='erno']".format(date))
@@ -150,8 +150,8 @@ class MapathonChangeCreator(object):
                     count_ways_with_no_nodes += 1
                     continue
                 else:
-                    center = self.calculateCenter(feature_nodes)
-                    if not self.isInsideAnyOfPolygons(center, project_polygons):
+                    center = self.calculate_center(feature_nodes)
+                    if not self.is_inside_any_of_polygons(center, project_polygons):
                         continue
                     if feature_version == 1: # store only nodes for created features to save memory & bandwidth
                         feature["nodes"] = feature_nodes
@@ -233,10 +233,10 @@ class MapathonChangeCreator(object):
         }
 
 
-    def createMapathonChangesFromFile(self, project_json_file, osc_file, date, min_hour_utz, output_dir):
-        project_polygons = self.createPolys(project_json_file)
+    def create_mapathon_changes_from_file(self, project_json_file, osc_file, date, min_hour_utz, output_dir):
+        project_polygons = self.create_polys(project_json_file)
         osc_root_element = etree.parse(osc_file).getroot()
-        results = self.createMapathonChanges(project_polygons, osc_root_element, date, min_hour_utz)
+        results = self.create_mapathon_changes(project_polygons, osc_root_element, date, min_hour_utz)
 
         os.makedirs(output_dir, exist_ok=True)
 
@@ -291,7 +291,7 @@ class MapathonChangeCreator(object):
         with open(output_dir + '/' + 'highways_footway.json', 'w') as outfile:
             json.dump(results['highway_footway'], outfile)
 
-    def createMapathonChangesFromURL(self, project_polygons, osc_file_download_url, date, min_hour_utz):
+    def create_mapathon_changes_from_URL(self, project_polygons, osc_file_download_url, date, min_hour_utz):
         # TODO use updated input parameters
         # project_polygons is a geojson featurecollection of polygons similarly to the contents of the project_json_file argument
         try:
@@ -303,7 +303,7 @@ class MapathonChangeCreator(object):
         osc_data = zlib.decompress(osc_gz_response.content, 16 + zlib.MAX_WBITS)
         osc_root_element = etree.fromstring(osc_data)
 
-        return self.createMapathonChanges(project_polygons, osc_root_element, date, min_hour_utz)
+        return self.create_mapathon_changes(project_polygons, osc_root_element, date, min_hour_utz)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -320,4 +320,4 @@ if __name__ == '__main__':
 
     mapathon_change_creator = MapathonChangeCreator()
 
-    mapathon_change_creator.createMapathonChangesFromFile(args.project_json_file, args.osc_file, args.date, args.min_hour_utz, args.output_dir)
+    mapathon_change_creator.create_mapathon_changes_from_file(args.project_json_file, args.osc_file, args.date, args.min_hour_utz, args.output_dir)

@@ -222,7 +222,7 @@ class MapathonStatistics(object):
     def create_mapathon_changes(self):
         # find changes for the mapathon area during the mapathon
 
-        self.project_feature_collection = self.createProjectPolygonFeatureCollection()
+        self.project_feature_collection = self.create_project_polygon_feature_collection()
 
         self.osc_file_download_urls = []
 
@@ -231,7 +231,7 @@ class MapathonStatistics(object):
         for osc_area in self.areas_for_osc_file_retrieval:
             osc_file_download_url = self.find_osc_file(osc_area)
             self.osc_file_download_urls.append(osc_file_download_url)
-            result = self.mapathon_change_creator.createMapathonChangesFromURL(self.project_feature_collection, osc_file_download_url, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc'])
+            result = self.mapathon_change_creator.create_mapathon_changes_from_URL(self.project_feature_collection, osc_file_download_url, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc'])
             for types_key in self.client_data['types_of_mapping']:
                 for result_key, result_json in result:
                     if result_key.startswith(types_key):
@@ -246,7 +246,7 @@ class MapathonStatistics(object):
         # the same changes
         # return filtered_changes_for_all_areas
 
-    def createProjectPolygonFeatureCollection(self):
+    def create_project_polygon_feature_collection(self):
         geoms = [x.buffer(0) for x in shape(self.project_data['areaOfInterest']).buffer(0).geoms]
         print(geoms)
 
@@ -281,7 +281,7 @@ class MapathonStatistics(object):
 
     def find_osc_file(self, osc_area):
         """
-        TODO Find the osc file from Geofabrik that contains the changes for the mapathon day.
+        Find the osc file from Geofabrik that contains the changes for the mapathon day.
         """
 
         geofabrik_base_dir = osc_area['subdir'].split('Geofabrik/')[1] + '/' + osc_area['file'].split('.poly')[0]
