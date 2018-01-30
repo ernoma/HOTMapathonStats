@@ -305,6 +305,29 @@ class MapathonChangeCreator(object):
 
         return self.create_mapathon_changes(project_polygons, osc_root_element, date, min_hour_utz)
 
+    def filter_same_changes(self, mapathon_changes_for_multiple_areas):
+        # TODO if changes were extracted from more than one area (osc file) then
+        # the areas (of the osc files) can partially overlap and therefore there is need to look up and filter
+        # the same changes
+        # mapathon_changes_for_multiple_areas parameter is an array of dictionaries that have all or part
+        # of the key-value pairs that are returned from the create_mapathon_changes functions.
+        # The items in the array are assumed to have the same keys.
+        # returns filtered_changes_for_multiple_areas
+
+        if len(mapathon_changes_for_multiple_areas) >= 1:
+            filtered_mapathon_changes = mapathon_changes_for_multiple_areas[0]
+
+            for i in range(1, len(mapathon_changes_for_multiple_areas)):
+                for key, item in mapathon_changes_for_multiple_areas[i].items():
+                    pass
+                    # TODO iterate over the JSON elements of the item in the filtered_mapathon_changes and
+                    # the the JSON elements of the item in mapathon_changes_for_multiple_areas[i] corresponding the key
+                    # and add the missing JSON elements to the filtered_mapathon_changes item JSON
+
+        else:
+            return mapathon_changes_for_multiple_areas
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("osc_file",

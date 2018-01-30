@@ -237,14 +237,7 @@ class MapathonStatistics(object):
                     if result_key.startswith(types_key):
                         mapathon_changes_for_all_areas.append(result_json)
 
-        self.mapathon_changes = self.filter_same_changes(mapathon_changes_for_all_areas)
-
-    def filter_same_changes(self, mapathon_changes_for_all_areas):
-        pass
-        # TODO if changes were extracted from more than one osc file then
-        # the areas for the osc files can partially overlap and therefore there is need to look up and filter
-        # the same changes
-        # return filtered_changes_for_all_areas
+        self.mapathon_changes = self.mapathon_change_creator.filter_same_changes(mapathon_changes_for_all_areas)
 
     def create_project_polygon_feature_collection(self):
         geoms = [x.buffer(0) for x in shape(self.project_data['areaOfInterest']).buffer(0).geoms]
