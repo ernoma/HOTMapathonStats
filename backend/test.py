@@ -48,5 +48,11 @@ class StatsTaskTest(unittest.TestCase):
         project_feature_collection = self.new_stat_task.create_project_polygon_feature_collection()
         # TODO
 
+    def test_filter_same_changes(self):
+        pass
+        # TODO use the filter_same_changes function in the mapathon_analyzer.py
+        # for the two osc files that are actually same file twice
+        # and assert that the result is changes from only the other osc file
+
 if __name__ == '__main__':
     unittest.main()

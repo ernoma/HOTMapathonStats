@@ -306,7 +306,7 @@ class MapathonChangeCreator(object):
         return self.create_mapathon_changes(project_polygons, osc_root_element, date, min_hour_utz)
 
     def filter_same_changes(self, mapathon_changes_for_multiple_areas):
-        # TODO if changes were extracted from more than one area (osc file) then
+        # if changes were extracted from more than one area (osc file) then
         # the areas (of the osc files) can partially overlap and therefore there is need to look up and filter
         # the same changes
         # mapathon_changes_for_multiple_areas parameter is an array of dictionaries that have all or part
@@ -315,15 +315,24 @@ class MapathonChangeCreator(object):
         # returns filtered_changes_for_multiple_areas
 
         if len(mapathon_changes_for_multiple_areas) >= 1:
+            # iterate over the JSON elements of the item in the filtered_mapathon_changes and
+            # the the JSON elements of the item in mapathon_changes_for_multiple_areas[i] corresponding the key
+            # and add the missing JSON elements to the filtered_mapathon_changes item JSON
+
             filtered_mapathon_changes = mapathon_changes_for_multiple_areas[0]
 
             for i in range(1, len(mapathon_changes_for_multiple_areas)):
-                for key, item in mapathon_changes_for_multiple_areas[i].items():
-                    pass
-                    # TODO iterate over the JSON elements of the item in the filtered_mapathon_changes and
-                    # the the JSON elements of the item in mapathon_changes_for_multiple_areas[i] corresponding the key
-                    # and add the missing JSON elements to the filtered_mapathon_changes item JSON
+                for key, area_changes in mapathon_changes_for_multiple_areas[i].items():
+                    for area_change in area_changes:
+                        found_change = False
+                        for filtered_change in filtered_mapathon_changes[key]:
+                            if filtered_change['id'] == area_change['id']:
+                                found_change = True
+                                break
+                        if not found_change:
+                            filtered_mapathon_changes[key].append(area_change)
 
+            return filtered_mapathon_changes
         else:
             return mapathon_changes_for_multiple_areas
 
