@@ -248,7 +248,7 @@ class MapathonStatistics(object):
             geojson_feature = Feature(geometry=geom, properties={})
             geojson_features.append(geojson_feature)
         feature_collection = FeatureCollection(geojson_features)
-        print(feature_collection)
+        #print(feature_collection)
 
         return feature_collection
 

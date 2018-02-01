@@ -19,6 +19,7 @@ class MapathonChangeCreator(object):
     """
 
     def is_inside_any_of_polygons(self, point, polys):
+        print(polys)
         for poly in polys:
             shapelyPoint = Point(point['lat'], point['lon'])
             shapelyPolygon = Polygon(poly)
@@ -35,15 +36,20 @@ class MapathonChangeCreator(object):
         #print(isInside)
         return isInside
 
-    def create_polys(self, project_json_file):
-        polys = []
-
+    def create_polys_from_file(self, project_json_file):
         with open(project_json_file, 'r') as data_file:
             data = json.load(data_file)
-            geojsonFeatures = data['features']
-            for feature in geojsonFeatures:
-                poly = self.create_poly(feature)
-                polys.append(poly)
+            polys = self.create_polys_from_feature_collection(data)
+
+            return polys
+
+    def create_polys_from_feature_collection(self, data):
+        polys = []
+
+        geojsonFeatures = data['features']
+        for feature in geojsonFeatures:
+            poly = self.create_poly(feature)
+            polys.append(poly)
 
         return polys
 
@@ -234,7 +240,7 @@ class MapathonChangeCreator(object):
 
 
     def create_mapathon_changes_from_file(self, project_json_file, osc_file, date, min_hour_utz, output_dir):
-        project_polygons = self.create_polys(project_json_file)
+        project_polygons = self.create_polys_from_file(project_json_file)
         osc_root_element = etree.parse(osc_file).getroot()
         results = self.create_mapathon_changes(project_polygons, osc_root_element, date, min_hour_utz)
 
@@ -291,8 +297,7 @@ class MapathonChangeCreator(object):
         with open(output_dir + '/' + 'highways_footway.json', 'w') as outfile:
             json.dump(results['highway_footway'], outfile)
 
-    def create_mapathon_changes_from_URL(self, project_polygons, osc_file_download_url, date, min_hour_utz):
-        # TODO use updated input parameters
+    def create_mapathon_changes_from_URL(self, project_polygon_feature_collection, osc_file_download_url, date, min_hour_utz):
         # project_polygons is a geojson featurecollection of polygons similarly to the contents of the project_json_file argument
         try:
             osc_gz_response = requests.get(osc_file_download_url)
@@ -303,6 +308,7 @@ class MapathonChangeCreator(object):
         osc_data = zlib.decompress(osc_gz_response.content, 16 + zlib.MAX_WBITS)
         osc_root_element = etree.fromstring(osc_data)
 
+        project_polygons = self.create_polys_from_feature_collection(project_polygon_feature_collection)
         return self.create_mapathon_changes(project_polygons, osc_root_element, date, min_hour_utz)
 
     def filter_same_changes(self, mapathon_changes_for_multiple_areas):
