@@ -185,7 +185,7 @@ class MapathonStatistics(object):
                     # TODO handle South Africa and Lesotho as special case.
                     # TODO Use south-africa-and-lesotho.poly and lesotho.poly and not south-africa.poly
                     #print(file)
-                    shapely_polygons = self.parse_poly(lines)
+                    shapely_polygons = self.parse_polygon(lines)
                     #print(shapely_polygons[0])
 
                     for index, project_task in project_tasks.iterrows():
@@ -195,10 +195,10 @@ class MapathonStatistics(object):
                                     'subdir': subdir,
                                     'file': file
                                 }
-                                print("Project tasks intersercing poly: " + file)
+                                print("Project tasks intersercing polygon: " + file)
                                 #print(self.areas_of_interest)
                         #else:
-                        #    print("Project tasks dows not interserct poly: " + file)
+                        #    print("Project tasks dows not interserct polygon: " + file)
 
         max_dir_level = -1
 
@@ -319,7 +319,7 @@ class MapathonStatistics(object):
                         return osc_file_download_url
 
 
-    def parse_poly(self, lines):
+    def parse_polygon(self, lines):
         # See also https://wiki.openstreetmap.org/wiki/Osmosis/Polygon_Filter_File_Format and
         # http://shapely.readthedocs.io/en/stable/manual.html#polygons
         shapely_polygons = []

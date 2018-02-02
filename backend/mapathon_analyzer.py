@@ -18,49 +18,49 @@ class MapathonChangeCreator(object):
     the changes for the specific location and day.
     """
 
-    def is_inside_any_of_polygons(self, point, polys):
-        print(polys)
-        for poly in polys:
-            shapelyPoint = Point(point['lat'], point['lon'])
-            shapelyPolygon = Polygon(poly)
-            isInside = shapelyPolygon.contains(shapelyPoint)
+    def is_inside_any_of_polygons(self, point, polygons):
+        print(polygons)
+        for polygon in polygons:
+            shapely_point = Point(point['lat'], point['lon'])
+            shapely_polygon = Polygon(polygon)
+            isInside = shapely_polygon.contains(shapely_point)
             if isInside:
                 return True
         return False
 
-    def is_inside_polygon(self, point, polyPoints):
+    def is_inside_polygon(self, point, polygon_points):
         # adapted from http://stackoverflow.com/questions/36399381/whats-the-fastest-way-of-checking-if-a-point-is-inside-a-polygon-in-python
-        shapelyPoint = Point(point['lat'], point['lon'])
-        shapelyPolygon = Polygon(polyPoints)
-        isInside = shapelyPolygon.contains(shapelyPoint)
+        shapely_point = Point(point['lat'], point['lon'])
+        shapely_polygon = Polygon(polygon_points)
+        isInside = shapely_polygon.contains(shapely_point)
         #print(isInside)
         return isInside
 
-    def create_polys_from_file(self, project_json_file):
+    def create_polygons_from_file(self, project_json_file):
         with open(project_json_file, 'r') as data_file:
             data = json.load(data_file)
-            polys = self.create_polys_from_feature_collection(data)
+            polygons = self.create_polygons_from_feature_collection(data)
 
             return polys
 
-    def create_polys_from_feature_collection(self, data):
-        polys = []
+    def create_polygons_from_feature_collection(self, data):
+        polygons = []
 
         geojsonFeatures = data['features']
         for feature in geojsonFeatures:
-            poly = self.create_poly(feature)
-            polys.append(poly)
+            polygon = self.create_polygon(feature)
+            polygons.append(polygon)
 
-        return polys
+        return polygons
 
-    def create_poly(self, geojsonFeature):
-        polyString = ""
+    def create_polygon(self, geojsonFeature):
+        polygon_string = ""
         lines = geojsonFeature['geometry']['coordinates'][0]
         for line in lines:
-            polyString += str("%.9f" % round(line[1],9)) + " " + str("%.9f" % round(line[0], 9)) + " "
+            polygon_string += str("%.9f" % round(line[1],9)) + " " + str("%.9f" % round(line[0], 9)) + " "
 
-        polyString = polyString.rstrip(" ")
-        data = polyString.split(' ')
+        polygon_string = polygon_string.rstrip(" ")
+        data = polygon_string.split(' ')
         #print(data)
 
         #print(len(data))
@@ -240,7 +240,7 @@ class MapathonChangeCreator(object):
 
 
     def create_mapathon_changes_from_file(self, project_json_file, osc_file, date, min_hour_utz, output_dir):
-        project_polygons = self.create_polys_from_file(project_json_file)
+        project_polygons = self.create_polygons_from_file(project_json_file)
         osc_root_element = etree.parse(osc_file).getroot()
         results = self.create_mapathon_changes(project_polygons, osc_root_element, date, min_hour_utz)
 
@@ -308,7 +308,7 @@ class MapathonChangeCreator(object):
         osc_data = zlib.decompress(osc_gz_response.content, 16 + zlib.MAX_WBITS)
         osc_root_element = etree.fromstring(osc_data)
 
-        project_polygons = self.create_polys_from_feature_collection(project_polygon_feature_collection)
+        project_polygons = self.create_polygons_from_feature_collection(project_polygon_feature_collection)
         return self.create_mapathon_changes(project_polygons, osc_root_element, date, min_hour_utz)
 
     def filter_same_changes(self, mapathon_changes_for_multiple_areas):
