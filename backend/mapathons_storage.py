@@ -7,13 +7,12 @@ class MapathonsStorage(object):
     - List of all mapathons that have a statistics page
     """
 
-    def storeMapathon(self, mapathon_data):
+    def store_mapathon(self, mapathon_data):
         pass
 
-    def getAllMapathons(self):
+    def get_all_mapathons(self):
         pass
 
-    def getMapathonByID(self, mapathon_id):
+    def get_mapathon_by_ID(self, mapathon_id):
         pass
 
-    
