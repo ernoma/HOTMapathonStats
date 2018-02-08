@@ -23,6 +23,9 @@ def alive():
 
 @app.route('/stats/create', methods=['POST'])
 def create_mapathon_stats():
+    # Called from the web client when the user has filled and selected the form inputs and
+    # submits the form. Starts a background task for creating the mapathon statistics and page.
+    # Returns uuid that identifies the mapathon creation task.
     project_number = request.form['projectNumber']
     mapathon_date = request.form['mapathonDate']
     mapathon_time_utc = request.form['mapathonTime']
@@ -53,6 +56,9 @@ def create_mapathon_stats():
 
 @app.route('/stats/state', methods=['GET'])
 def get_stats_state():
+    # Called from the web client to request status update for a mapathon creation task.
+    # The task is identified with uuid that is provided as a parameter.
+    # Returns the status of the statistics creation task.
     stat_task_uuid = request.args.get('stat_task_uuid', type=str)
 
     stat_task = current_app.config['stat_tasks'].get(stat_task_uuid)
