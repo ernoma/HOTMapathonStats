@@ -13,6 +13,7 @@ from lxml import html, etree
 import dateutil
 from mapathon_analyzer import MapathonChangeCreator
 from user_list import UserList
+from mapathons_storage import MapathonsStorage
 
 class MapathonStatistics(object):
     """
@@ -20,11 +21,12 @@ class MapathonStatistics(object):
     """
 
     def __init__(self, stat_task_uuid, client_data):
+        self.mapathons_storage = MapathonsStorage()
         self.stat_task_uuid = stat_task_uuid
         self.client_data = client_data
         self.mapathon_change_creator = MapathonChangeCreator()
         self.mapathon_changes = []
-        self.users = []
+        self.mapathon_users = []
 
 
         self.state = {
@@ -256,11 +258,17 @@ class MapathonStatistics(object):
         # find users who made changes for the mapathon area during the mapathon
 
         user_list = UserList()
-        self.users = user_list.find_users(self.mapathon_changes)
+        self.mapathon_users = user_list.find_users(self.mapathon_changes)
 
     def store_changes(self):
         # TODO store found OSM changes and usernames of those who did the changes for the project area to a data store
-        pass
+        mapathon_data = {
+            'stat_task_uuid': self.stat_task_uuid,
+            'mapathon_info': self.client_data,
+            'mapathon_changes': self.mapathon_changes,
+            'mapathon_users': self.mapathon_users
+        }
+        self.mapathons_storage.store_mapathon(mapathon_data)
 
     def create_statistics_web_page(self):
         # TODO create a web page that visualizes the mapathon statistics

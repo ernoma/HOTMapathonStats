@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
 import unittest
+import uuid
+
 import stats_task
 import mapathon_analyzer
-import uuid
+from mapathons_storage import MapathonsStorage
 
 class StatsTaskTest(unittest.TestCase):
 
@@ -56,14 +58,22 @@ class StatsTaskTest(unittest.TestCase):
         # use the filter_same_changes function in the mapathon_analyzer.py
         # for the two osc files that are actually same file twice
         # and assert that the result is changes from only the other osc file
+        pass
+        # downloadURL = 'http://download.geofabrik.de/north-america/mexico-updates/000/001/774.osc.gz'
+        # status_code = self.new_stat_task.get_project_data()
+        # self.assertEqual(status_code, 200)
+        # project_polygons = self.new_stat_task.create_project_polygon_feature_collection()
+        # mapathon_changes = self.mapathon_change_creator.create_mapathon_changes_from_URL(project_polygons, downloadURL, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc'])
+        # filtered_mapathon_changes = self.mapathon_change_creator.filter_same_changes([mapathon_changes, mapathon_changes])
+        # self.assertSequenceEqual(mapathon_changes, filtered_mapathon_changes)
 
-        downloadURL = 'http://download.geofabrik.de/north-america/mexico-updates/000/001/774.osc.gz'
-        status_code = self.new_stat_task.get_project_data()
-        self.assertEqual(status_code, 200)
-        project_polygons = self.new_stat_task.create_project_polygon_feature_collection()
-        mapathon_changes = self.mapathon_change_creator.create_mapathon_changes_from_URL(project_polygons, downloadURL, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc'])
-        filtered_mapathon_changes = self.mapathon_change_creator.filter_same_changes([mapathon_changes, mapathon_changes])
-        self.assertSequenceEqual(mapathon_changes, filtered_mapathon_changes)
+    def test_mongodb_atlas_connect(self):
+        mapathons_storage = MapathonsStorage()
+        mapathons_storage.initialize()
+        self.assertIsNotNone(mapathons_storage.mongo_client)
+        self.assertIsNotNone(mapathons_storage.db)
+        serverStatusResult = mapathons_storage.db.command("serverStatus")
+        self.assertIsNotNone(serverStatusResult['opcounters'])
 
 if __name__ == '__main__':
     unittest.main()

@@ -11,6 +11,7 @@ from flask_cors import CORS
 import uuid
 
 import stats_task
+from mapathons_storage import MapathonsStorage
 
 app = Flask(__name__)
 CORS(app)
@@ -76,6 +77,7 @@ def get_stats_state():
 @app.route('/mapathon/list', methods=['GET'])
 def get_mapathon_list():
     # TODO return list of the created mapathon statistics and pages
+    mapathons_storage = MapathonsStorage()
     pass
 
 if __name__ == '__main__':
