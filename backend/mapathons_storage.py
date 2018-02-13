@@ -49,7 +49,8 @@ class MapathonsStorage(object):
         return result.inserted_id
 
     def get_all_mapathons(self):
-        pass
+        mapathons = self.db.mapathons.find({})
+        return mapathons
 
     def get_mapathon_by_ID(self, mapathon_id):
         pass
