@@ -261,7 +261,7 @@ class MapathonStatistics(object):
         self.mapathon_users = user_list.find_users(self.mapathon_changes)
 
     def store_changes(self):
-        # TODO store found OSM changes and usernames of those who did the changes for the project area to a data store
+        # store found OSM changes and usernames of those who did the changes for the project area to a data store
         mapathon_data = {
             'stat_task_uuid': self.stat_task_uuid,
             'mapathon_info': self.client_data,

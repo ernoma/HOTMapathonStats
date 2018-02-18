@@ -44,7 +44,7 @@ class MapathonsStorage(object):
 
         result = self.db.mapathons.insert_one(mapathon)
 
-        # TODO store found OSM changes and usernames of those who did the changes for the project area to a data store
+        # store found OSM changes and usernames of those who did the changes for the project area to a data store
 
         self.store_mapathon_changes(result.inserted_id, mapathon_data['mapathon_info']['types_of_mapping'], mapathon_data['mapathon_changes'])
         self.store_mapathon_users(result.inserted_id, mapathon_data['mapathon_users'])
@@ -56,7 +56,7 @@ class MapathonsStorage(object):
         return mapathons
 
     def get_mapathon_by_ID(self, mapathon_id):
-        pass
+        return self.db.mapathons.find_one({'_id': mapathon_id})
 
     def store_mapathon_changes(self, mapathon_id, types_of_mapping, mapathon_changes):
         # Store only those types of changes (residential areas, buildings, roads) chosen by the user

@@ -78,7 +78,8 @@ def get_stats_state():
 def get_mapathon_list():
     # TODO return list of the created mapathon statistics and pages
     mapathons_storage = MapathonsStorage()
-    pass
+    mapathons = mapathons_storage.get_all_mapathons()
+    return jsonify(mapathons)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5000,debug=True)
