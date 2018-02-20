@@ -6,6 +6,7 @@ import uuid
 import stats_task
 import mapathon_analyzer
 from mapathons_storage import MapathonsStorage
+import uuid
 
 class StatsTaskTest(unittest.TestCase):
 
@@ -67,13 +68,39 @@ class StatsTaskTest(unittest.TestCase):
         # filtered_mapathon_changes = self.mapathon_change_creator.filter_same_changes([mapathon_changes, mapathon_changes])
         # self.assertSequenceEqual(mapathon_changes, filtered_mapathon_changes)
 
-    def test_mongodb_atlas_connect(self):
+    # def test_mongodb_atlas_connect(self):
+    #     mapathons_storage = MapathonsStorage()
+    #     mapathons_storage.initialize()
+    #     self.assertIsNotNone(mapathons_storage.mongo_client)
+    #     self.assertIsNotNone(mapathons_storage.db)
+    #     serverStatusResult = mapathons_storage.db.command("serverStatus")
+    #     self.assertIsNotNone(serverStatusResult['opcounters'])
+
+    def test_mapathon_store(self):
         mapathons_storage = MapathonsStorage()
         mapathons_storage.initialize()
-        self.assertIsNotNone(mapathons_storage.mongo_client)
-        self.assertIsNotNone(mapathons_storage.db)
-        serverStatusResult = mapathons_storage.db.command("serverStatus")
-        self.assertIsNotNone(serverStatusResult['opcounters'])
+
+        mapathon_data = {
+            'stat_task_uuid': uuid.uuid1(),
+            'mapathon_info': self.client_data,
+            'mapathon_changes': { 'building': [],
+                                  'landuse_residential': [],
+                                  'highway_path': [],
+                                  'highway_primary': [],
+                                  'highway_residential': [],
+                                  'highway_secondary': [],
+                                  'highway_service': [],
+                                  'highway_tertiary': [],
+                                  'highway_track': [],
+                                  'highway_unclassified': [],
+                                  'highway_road': [],
+                                  'highway_footway': []},
+            'mapathon_users': []
+        }
+
+        inserted_id = mapathons_storage.store_mapathon(mapathon_data)
+        self.assertIsNotNone(inserted_id)
+
 
 if __name__ == '__main__':
     unittest.main()

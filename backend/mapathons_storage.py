@@ -79,7 +79,7 @@ class MapathonsStorage(object):
             #     "highway_footway": highways_footway
             # }
 
-        output_dir = os.path.join(MapathonsStorage.OUTPUT_BASE_PATH, mapathon_id)
+        output_dir = os.path.join(MapathonsStorage.OUTPUT_BASE_PATH, str(mapathon_id))
 
         os.makedirs(output_dir, exist_ok=True)
 
@@ -129,9 +129,9 @@ class MapathonsStorage(object):
 
 
     def store_mapathon_users(self, mapathon_id, mapathon_users):
-        output_dir = os.path.join(MapathonsStorage.OUTPUT_BASE_PATH, mapathon_id)
+        output_dir = os.path.join(MapathonsStorage.OUTPUT_BASE_PATH, str(mapathon_id))
         os.makedirs(output_dir, exist_ok=True)
 
         # "'mapathon_users': self.mapathon_users
         with open(os.path.join(output_dir, 'usernames.json'), 'w') as outfile:
-            json.dump(self.users, outfile)
+            json.dump(mapathon_users, outfile)

@@ -14,6 +14,7 @@ import dateutil
 from mapathon_analyzer import MapathonChangeCreator
 from user_list import UserList
 from mapathons_storage import MapathonsStorage
+from mapathon_webpage import MapathonWebPage
 
 class MapathonStatistics(object):
     """
@@ -22,6 +23,7 @@ class MapathonStatistics(object):
 
     def __init__(self, stat_task_uuid, client_data):
         self.mapathons_storage = MapathonsStorage()
+        self.mapathon_webpage = MapathonWebPage(self.mapathons_storage)
         self.stat_task_uuid = stat_task_uuid
         self.client_data = client_data
         self.mapathon_change_creator = MapathonChangeCreator()
@@ -268,13 +270,13 @@ class MapathonStatistics(object):
             'mapathon_changes': self.mapathon_changes,
             'mapathon_users': self.mapathon_users
         }
-        self.mapathons_storage.store_mapathon(mapathon_data)
+        self.mapathon_id = self.mapathons_storage.store_mapathon(mapathon_data)
 
     def create_statistics_web_page(self):
         # TODO create a web page that visualizes the mapathon statistics
         # TODO use only the self.client_data.types_of_mapping
         # TODO make sure that the web client has the URL to the page available after this function finishes
-        pass
+        self.mapathon_webpage.create_mapathon_web_page(self.mapathon_id)
 
     def store_to_page_list(self):
         # TODO store the created statistics web page to the list that can be shown for the users on the web

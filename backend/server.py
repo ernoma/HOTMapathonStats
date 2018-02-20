@@ -9,6 +9,7 @@ flask run --host=0.0.0.0
 from flask import Flask, request, jsonify, current_app
 from flask_cors import CORS
 import uuid
+from bson.json_util import dumps
 
 import stats_task
 from mapathons_storage import MapathonsStorage
@@ -79,7 +80,7 @@ def get_mapathon_list():
     # TODO return list of the created mapathon statistics and pages
     mapathons_storage = MapathonsStorage()
     mapathons = mapathons_storage.get_all_mapathons()
-    return jsonify(mapathons)
+    return dumps(mapathons)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5000,debug=True)
