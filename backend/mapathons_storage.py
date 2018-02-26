@@ -32,7 +32,8 @@ class MapathonsStorage(object):
 
         mapathon = {
             'stat_task_uuid': mapathon_data['stat_task_uuid'],
-            'mapathon_info': mapathon_data['mapathon_info']
+            'mapathon_info': mapathon_data['mapathon_info'],
+            'username_count': len(mapathon_data['mapathon_users']),
             # mapathon_info example:
             # mapathon_info = {
             #   'project_number': '3567',
@@ -42,6 +43,7 @@ class MapathonsStorage(object):
             # }
         }
 
+        #self.db.mapathons.remove({})
         result = self.db.mapathons.insert_one(mapathon)
 
         # store found OSM changes and usernames of those who did the changes for the project area to a data store

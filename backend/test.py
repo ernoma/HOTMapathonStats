@@ -15,6 +15,7 @@ class StatsTaskTest(unittest.TestCase):
             'project_number': '3567',
             'mapathon_date': '2018-01-26',
             'mapathon_time_utc': 16,
+            'mapathon_title': 'Monthly Missing Maps Mapathon at Finnish Red Cross HQ',
             'types_of_mapping': ["building", "landuse_residential", "highway"]
         }
 
@@ -95,7 +96,7 @@ class StatsTaskTest(unittest.TestCase):
                                   'highway_unclassified': [],
                                   'highway_road': [],
                                   'highway_footway': []},
-            'mapathon_users': []
+            'mapathon_users': ['masa','communitybuilder','erno','itroad32']
         }
 
         inserted_id = mapathons_storage.store_mapathon(mapathon_data)

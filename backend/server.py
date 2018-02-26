@@ -32,13 +32,15 @@ def create_mapathon_stats():
     mapathon_date = request.form['mapathonDate']
     mapathon_time_utc = request.form['mapathonTime']
     types_of_mapping = request.form.getlist('typesOfMapping')
+    mapathon_title = request.form['mapathonTitle']
     print(types_of_mapping)
 
     client_data = {
         'project_number': project_number,
         'mapathon_date': mapathon_date,
         'mapathon_time_utc': mapathon_time_utc,
-        'types_of_mapping': types_of_mapping
+        'types_of_mapping': types_of_mapping,
+        'mapathon_title': mapathon_title
     }
 
     # Uniquely dentifies the statistics creation task
