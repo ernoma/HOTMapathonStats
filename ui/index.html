@@ -1,22 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>List of Mapathons with Statistics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
     <link rel="stylesheet" href="lib/font-awesome-4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="lib/awesomplete/awesomplete.css">
     <!--<link rel="stylesheet" href="/lib/jqcloud/jqcloud.min.css">-->
     <link rel="stylesheet" href="index.css">
+    <title>List of Mapathons with Statistics</title>
   </head>
   <body>
-    <div class="container">
-      <div id="mapathonList">
+    <main role="main" class="container-fluid ">
+      <div class="row">
+        <div class="col-sm">
+          <div class="hot-osm">
+            <h2>Create HOT-OSM Mapathon Statistics</h2>
+
+            <p>Fill the form below to create HOT-OSM statistics for a mapathon.</p>
+
+            <form id="createStatisticsForm">
+                <div class="form-group row">
+                    <label for="mapathonDate" class="col-md-6 col-form-label">Mapathon was held on</label>
+                    <div class="col-md-6">
+                        <input type="date" id="mapathonDate" name="mapathonDate" placeholder="2018/11/21">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="mapathonTime" class="col-md-6 col-form-label">Mapathon started at the hour (UTC)</label>
+                    <div class="col-md-6">
+                        <input type="number" id="mapathonTime" name="mapathonTime" placeholder="16">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="projectNumber" class="col-md-6 col-form-label">Project number</label>
+                    <div class="col-md-6">
+                        <input id="projectNumber" name="projectNumber" placeholder="3567">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-6 col-form-label">Type(s) of mapping</label>
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="building" id="mappingBuildingsCheckbox" name="typesOfMapping" checked>
+                            <label class="form-check-label" for="mappingBuildingsCheckbox">
+                                Buildings
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="landuse_residential" id="mappingResidentialCheckbox" name="typesOfMapping" checked>
+                            <label class="form-check-label" for="mappingResidentialCheckbox">
+                                Residential areas
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="highway" id="mappingRoadsCheckbox" name="typesOfMapping" checked>
+                            <label class="form-check-label" for="mappingRoadsCheckbox">
+                                Roads
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="mapathonTitle" class="col-md-6 col-form-label">Mapathon title (optional)</label>
+                    <div class="col-md-6">
+                        <input id="mapathonTitle" name="mapathonTitle" placeholder="34th Finnish Mapathon">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Create statistics</button>
+            </form>
+            <div class="alert alert-success" id="serverSuccessAlert" role="alert"></div>
+            <div class="alert alert-danger" id="serverErrorAlert" role="alert"></div>
+          </div> <!-- /hot-osm -->
+        </div>
+        <div class="col-sm">
+          <div class="hot-osm">
+            <h2>List of Created Mapathon Statistics</h2>
+            <div id="mapathonList">
+            </div>
+          </div>
+        </div>
       </div>
-     
-    </div> <!-- /container -->
+    </main> <!-- /container -->
     <script type="text/javascript" src="lib/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -24,7 +93,7 @@
     <script type="text/javascript" src="lib/Leaflet.draw-0.4.9/dist/leaflet.draw.js"></script>
     <script type="text/javascript" src="lib/shramov-leaflet-plugins/layer/tile/Bing.js"></script>
     <!--<script type="text/javascript" src="lib/jqcloud/jqcloud.min.js"></script>-->
+    <script src="lib/awesomplete/awesomplete.min.js"></script>
     <script type="text/javascript" src="index.js"></script>
-    <!--<script type="text/javascript" src="tile_calc.js"></script>-->
   </body>
 </html>
