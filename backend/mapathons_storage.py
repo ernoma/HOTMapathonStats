@@ -3,6 +3,7 @@ import os
 from pymongo import MongoClient
 import urllib.parse
 import json
+from bson.objectid import ObjectId
 
 class MapathonsStorage(object):
     """
@@ -58,7 +59,7 @@ class MapathonsStorage(object):
         return mapathons
 
     def get_mapathon_by_ID(self, mapathon_id):
-        return self.db.mapathons.find_one({'_id': mapathon_id})
+        return self.db.mapathons.find_one({'_id': ObjectId(mapathon_id)})
 
     def store_mapathon_changes(self, mapathon_id, types_of_mapping, mapathon_changes):
         # Store only those types of changes (residential areas, buildings, roads) chosen by the user

@@ -2,11 +2,14 @@
 
 import unittest
 import uuid
+from bson.json_util import dumps
+from pprint import pprint
 
 import stats_task
 import mapathon_analyzer
 from mapathons_storage import MapathonsStorage
-import uuid
+from mapathon_webpage import MapathonWebPage
+
 
 class StatsTaskTest(unittest.TestCase):
 
@@ -102,6 +105,18 @@ class StatsTaskTest(unittest.TestCase):
         inserted_id = mapathons_storage.store_mapathon(mapathon_data)
         self.assertIsNotNone(inserted_id)
 
+    def test_mapathon_webpage(self):
+        mapathons_storage = MapathonsStorage()
+        mapathons_data = mapathons_storage.get_all_mapathons()
+        #pprint(dumps(mapathons_data))
+        for mapathon_data in mapathons_data:
+            #print(mapathon_data)
+            mapathon_web_page = MapathonWebPage(mapathons_storage)
+            mapathon_id = str(mapathon_data['_id'])
+            #print(mapathon_id)
+            mapathon_web_page.create_mapathon_web_page(mapathon_id)
+            self.assertEqual(str(mapathon_web_page.mapathon_data['_id']), mapathon_id)
+            mapathon_web_page.store_mapathon_web_page()
 
 if __name__ == '__main__':
     unittest.main()
