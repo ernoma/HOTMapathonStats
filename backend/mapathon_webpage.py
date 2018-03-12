@@ -39,7 +39,14 @@ class MapathonWebPage(object):
             self.template_js = template_js_file.read()
             pprint(self.template_js)
 
+            self.create_mapathon_js()
+
+    def create_mapathon_js(self):
+        pass
+        # TODO use reg expressions to create the final js
+
     def create_mapathon_html(self):
+        # TODO Use Python string formatting or / flask templates to create the final html
         # {mapathon_title} = Monthly Missing Maps Mapathon at Finnish Red Cross HQ - September 2017
         # {mapathon_introduction_p1} = Data created on 14th of September 2017 from 17:00 to 23:44 (Finnish summer time).
         # {mapathon_introduction_p2} = Some statistics for our contributions on the <a href="http://tasks.hotosm.org/project/3453">#1880 - #3453 - Arua District Part 1</a> task in Uganda.
