@@ -11,6 +11,9 @@ from shapely.geometry import MultiPolygon as ShapelyMultiPolygon
 import os
 from lxml import html, etree
 import dateutil
+
+from pprint import pprint
+
 from mapathon_analyzer import MapathonChangeCreator
 from user_list import UserList
 from mapathons_storage import MapathonsStorage
@@ -37,6 +40,10 @@ class MapathonStatistics(object):
         }
 
     def get_state(self):
+
+        if self.state['name'] == 'creating_mapathon_changes':
+            self.state['state_progress'] = self.mapathon_change_creator.get_analysis_progress()
+
         return self.state
 
     def start_task(self):
@@ -90,26 +97,26 @@ class MapathonStatistics(object):
 
         self.create_mapathon_changes()
 
-        self.state = {
-            'name': 'creating_users_list',
-            'state_progress': 0
-        }
+        # self.state = {
+        #     'name': 'creating_users_list',
+        #     'state_progress': 0
+        # }
 
-        self.create_users_list()
+        # self.create_users_list()
 
-        self.state = {
-            'name': 'storing_osm_changes',
-            'state_progress': 0
-        }
+        # self.state = {
+        #     'name': 'storing_osm_changes',
+        #     'state_progress': 0
+        # }
 
         self.store_changes()
 
-        self.state = {
-            'name': 'creating_statistics_web_page',
-            'state_progress': 0
-        }
+        # self.state = {
+        #     'name': 'creating_statistics_web_page',
+        #     'state_progress': 0
+        # }
 
-        self.create_statistics_web_page()
+        # self.create_statistics_web_page()
 
         self.state = {
             'name': 'storing_to_page_list',
@@ -117,6 +124,11 @@ class MapathonStatistics(object):
         }
 
         self.store_to_page_list()
+
+        self.state = {
+            'name': 'storing_to_page_list',
+            'state_progress': 0
+        }
 
     def get_project_data(self):
         resp = requests.get('https://tasks.hotosm.org/api/v1/project/' + self.client_data['project_number'])
@@ -129,6 +141,15 @@ class MapathonStatistics(object):
         return resp.status_code
 
     def find_countries(self):
+        self.countries_of_interest = set()
+
+        ##################
+
+        ##self.countries_of_interest.add('United Republic of Tanzania')
+        ##return True
+
+        ##################
+
         collection = FeatureCollection(self.project_data['tasks']['features'])
         project_tasks = gpd.GeoDataFrame.from_features(collection)
         #print(project_tasks.head(1))
@@ -145,7 +166,7 @@ class MapathonStatistics(object):
         #import matplotlib.pyplot as plt
         #plt.show()
 
-        self.countries_of_interest = set()
+        
         for index, project_task in project_tasks.iterrows():
             country_of_interest = None
             for index2, country in countries.iterrows():
@@ -155,10 +176,10 @@ class MapathonStatistics(object):
                         print(country['SOVEREIGNT'])
 
         # TODO modify to work with the create_mapathon_changes function
-        cond = Condition()
-        cond.acquire()
-        while True:
-            cond.wait()
+        # cond = Condition()
+        # cond.acquire()
+        # while True:
+        #     cond.wait()
 
         if len(self.countries_of_interest) == 0:
             return False
@@ -166,6 +187,17 @@ class MapathonStatistics(object):
         return True
 
     def find_geofabrik_areas(self):
+        
+        #####################
+        
+        # self.areas_of_interest = {
+        #     'tanzania.poly': {'subdir': '/home/erno/github/HOTMapathonStats/backend/Geofabrik/africa', 'file': 'tanzania.poly'}
+        # }
+        # self.areas_for_osc_file_retrieval = [{'subdir': '/home/erno/github/HOTMapathonStats/backend/Geofabrik/africa', 'file': 'tanzania.poly'}]
+        # return True
+
+        #####################
+
         # Find Geofabrik area(s) that contain wholly or partially the project area(s)
 
         # TODO check if there are updated areas on the server
@@ -219,7 +251,7 @@ class MapathonStatistics(object):
             elif dir_level == max_dir_level:
                 self.areas_for_osc_file_retrieval.append(item)
 
-        print(self.areas_for_osc_file_retrieval)
+        print('areas_for_osc_file_retrieval', self.areas_for_osc_file_retrieval)
 
         return True
 
@@ -234,17 +266,25 @@ class MapathonStatistics(object):
 
         for osc_area in self.areas_for_osc_file_retrieval:
             osc_file_download_url = self.find_osc_file(osc_area)
+            print('osc_file_download_url', osc_file_download_url)
             self.osc_file_download_urls.append(osc_file_download_url)
-            result = self.mapathon_change_creator.create_mapathon_changes_from_URL(self.project_feature_collection, osc_file_download_url, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc'])
-            for types_key in self.client_data['types_of_mapping']:
-                for result_key, result_json in result:
-                    if result_key.startswith(types_key):
-                        mapathon_changes_for_all_areas.append(result_json)
+            
+            ######
+            self.mapathon_changes = self.mapathon_change_creator.create_mapathon_changes_from_URL(self.project_feature_collection, osc_file_download_url, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc'])
+            #print(self.mapathon_changes)
+            #####
 
-        self.mapathon_changes = self.mapathon_change_creator.filter_same_changes(mapathon_changes_for_all_areas)
+        #     result = self.mapathon_change_creator.create_mapathon_changes_from_URL(self.project_feature_collection, osc_file_download_url, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc'])
+        #     for types_key in self.client_data['types_of_mapping']:
+        #         for result_key, result_json in result.items():
+        #             if result_key.startswith(types_key):
+        #                 mapathon_changes_for_all_areas.append(result_json)
+
+        # self.mapathon_changes = self.mapathon_change_creator.filter_same_changes(mapathon_changes_for_all_areas)
 
     def create_project_polygon_feature_collection(self):
-        geoms = [x.buffer(0) for x in shape(self.project_data['areaOfInterest']).buffer(0).geoms]
+        #pprint(shape(self.project_data['areaOfInterest']).buffer(0))
+        geoms = [x.buffer(0) for x in shape(self.project_data['areaOfInterest']).geoms]
         print(geoms)
 
         geojson_features = []
@@ -268,7 +308,7 @@ class MapathonStatistics(object):
             'stat_task_uuid': self.stat_task_uuid,
             'mapathon_info': self.client_data,
             'mapathon_changes': self.mapathon_changes,
-            'mapathon_users': self.mapathon_users
+            #'mapathon_users': self.mapathon_users
         }
         self.mapathon_id = self.mapathons_storage.store_mapathon(mapathon_data)
 
@@ -287,6 +327,8 @@ class MapathonStatistics(object):
         Find the osc file from Geofabrik that contains the changes for the mapathon day.
         """
 
+        print(osc_area)
+
         geofabrik_base_dir = osc_area['subdir'].split('Geofabrik/')[1] + '/' + osc_area['file'].split('.poly')[0]
         print(geofabrik_base_dir)
 
@@ -295,6 +337,7 @@ class MapathonStatistics(object):
         mapathon_timestamp = dateutil.parser.parse(mapathon_timestamp_string) #datetime.datetime object
 
         download_url = 'http://download.geofabrik.de/' + geofabrik_base_dir + '-updates'
+        print(download_url)
 
         page = requests.get(download_url)
         webpage = html.fromstring(page.content)

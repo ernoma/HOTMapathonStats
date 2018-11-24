@@ -34,7 +34,7 @@ class MapathonsStorage(object):
         mapathon = {
             'stat_task_uuid': mapathon_data['stat_task_uuid'],
             'mapathon_info': mapathon_data['mapathon_info'],
-            'mapathon_users': mapathon_data['mapathon_users'],
+            #'mapathon_users': mapathon_data['mapathon_users'],
             # mapathon_info example:
             # mapathon_info = {
             #   'project_number': '3567',
@@ -50,7 +50,7 @@ class MapathonsStorage(object):
         # store found OSM changes and usernames of those who did the changes for the project area to a data store
 
         self.store_mapathon_changes(result.inserted_id, mapathon_data['mapathon_info']['types_of_mapping'], mapathon_data['mapathon_changes'])
-        self.store_mapathon_users(result.inserted_id, mapathon_data['mapathon_users'])
+        #self.store_mapathon_users(result.inserted_id, mapathon_data['mapathon_users'])
 
         return result.inserted_id
 

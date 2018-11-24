@@ -18,8 +18,11 @@ class MapathonChangeCreator(object):
     the changes for the specific location and day.
     """
 
+    def __init__(self):
+        self.analysis_percentage = 0
+
     def is_inside_any_of_polygons(self, point, polygons):
-        print(polygons)
+        #print(polygons)
         for polygon in polygons:
             shapely_point = Point(point['lat'], point['lon'])
             shapely_polygon = Polygon(polygon)
@@ -41,7 +44,7 @@ class MapathonChangeCreator(object):
             data = json.load(data_file)
             polygons = self.create_polygons_from_feature_collection(data)
 
-            return polys
+            return polygons
 
     def create_polygons_from_feature_collection(self, data):
         polygons = []
@@ -85,6 +88,8 @@ class MapathonChangeCreator(object):
 
     def create_mapathon_changes(self, project_polygons, osc_root_element, date, min_hour_utz):
 
+        self.analysis_percentage = 0
+
         #ways = osc_root_element.xpath("//way[starts-with(@timestamp, '{0}') and @version='1' and @uid='69016']".format(date))
         #ways = osc_root_element.xpath("//way[starts-with(@timestamp, '{0}') and @version='1' and @user='erno']".format(date))
         #ways = osc_root_element.xpath("//way[starts-with(@timestamp, '{0}') and @version='1']".format(date))
@@ -113,6 +118,7 @@ class MapathonChangeCreator(object):
 
             percentage = i / len(ways) * 100
             print("Done", "%.2f" % round(percentage, 2), "\b%")
+            self.analysis_percentage = round(percentage, 2)
 
             feature = {}
             #print(way.tag)
@@ -311,6 +317,9 @@ class MapathonChangeCreator(object):
         project_polygons = self.create_polygons_from_feature_collection(project_polygon_feature_collection)
         return self.create_mapathon_changes(project_polygons, osc_root_element, date, min_hour_utz)
 
+    def get_analysis_progress(self):
+        return self.analysis_percentage
+
     def filter_same_changes(self, mapathon_changes_for_multiple_areas):
         # if changes were extracted from more than one area (osc file) then
         # the areas (of the osc files) can partially overlap and therefore there is need to look up and filter
@@ -327,7 +336,10 @@ class MapathonChangeCreator(object):
 
             filtered_mapathon_changes = mapathon_changes_for_multiple_areas[0]
 
+            print(range(1, len(mapathon_changes_for_multiple_areas)))
+
             for i in range(1, len(mapathon_changes_for_multiple_areas)):
+                print(i)
                 for key, area_changes in mapathon_changes_for_multiple_areas[i].items():
                     for area_change in area_changes:
                         found_change = False

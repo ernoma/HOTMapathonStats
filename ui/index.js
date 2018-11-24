@@ -30,8 +30,8 @@ function handleMapathonsData(data) {
             item.mapathon_info.mapathon_date + ' at ' +
             item.mapathon_info.mapathon_time_utc + ' (UTC) for project ' +
             '<a target="_blank" href="https://tasks.hotosm.org/project/' + item.mapathon_info.project_number + '">' + item.mapathon_info.project_number + '</a>. ' +
-            item.mapathon_users.length + ' <i class="fa fa-user" aria-hidden="true"></i></p>' +
-            '<a href="#" id="' + item._id.$oid + '" class="btn btn-primary">Show statistics page</a></div></div>';
+            // item.mapathon_users.length + ' <i class="fa fa-user" aria-hidden="true"></i></p>' +
+            '<a href="stats?id=' + item._id.$oid + '" id="' + item._id.$oid + '" class="btn btn-primary">Show statistics page</a></div></div>';
         $("#mapathonList").append(html);
 
         $("#" + item._id.$oid).on('click', showMapathon);
@@ -129,7 +129,13 @@ function updateStatsCreationState(stat_task_uuid) {
                         $("#serverSuccessAlert").show();
                         break;
                     case "creating_mapathon_changes":
-                        $("#serverSuccessAlert").text("Extracting mapathon changes... Done " + data.state.state_progress + "%");
+                        $("#serverSuccessAlert").html(
+                            "Extracting mapathon changes... Done " + data.state.state_progress + "%.<br>" +
+                            "You can find the result page later on the created mapathon statistics list and at the address<br>" +
+                            window.location.href + "stats?id=" + stat_task_uuid +
+                            ".<br>You can safely close this page now."
+                            );
+                        
                         $("#serverSuccessAlert").show();
                         break;
                     case "creating_users_list":
@@ -146,7 +152,11 @@ function updateStatsCreationState(stat_task_uuid) {
                         break;
                     case "storing_to_page_list":
                         // TODO show a link to the user where the statistics page is located
-                        $("#serverSuccessAlert").text("Page created and can be found at the...");
+                        $("#serverSuccessAlert").html(
+                            "<a href='" +
+                            window.location.href + "stats?id=" + stat_task_uuid + "'>Result page</a> created"
+                        );
+                        //$("#serverSuccessAlert").text("Page created and can be found at the...");
                         $("#serverSuccessAlert").show();
                         break;
                     case "error":

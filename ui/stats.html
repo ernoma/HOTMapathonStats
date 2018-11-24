@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{mapathon_title}</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <link rel="stylesheet" href="lib/font-awesome-4.5.0/css/font-awesome.min.css">
+    <!--<link rel="stylesheet" href="/lib/jqcloud/jqcloud.min.css">-->
+    <link rel="stylesheet" href="stats.css">
+  </head>
+  <body>
+    <div class="container bottom-buffer">
+      
+      <h1>{mapathon_title}</h1>
+
+      <p>{mapathon_introduction_p1}</p>
+
+      <p>{mapathon_introduction_p2}</p>
+
+      <h2 id="users_heading">Edits by</h2>
+      
+      <div class="row" id="users_div">
+	<div class="col-md-1"><i class="fa fa-spinner fa-pulse"></i></div>
+      </div>
+      
+      <h2>Map of the Created Objects</h2>
+
+      <div id="map_canvas"></div>
+      	<div id="statistics">
+	
+			<h2>Statistics</h2>
+
+			{buildings_section}
+
+			{residential_areas_section}
+
+			{roads_section}
+
+	  </div>
+	</div>
+    <!-- <script type="text/javascript" src="lib/jquery-3.2.1.min.js"></script> -->
+    <!-- <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <script type="text/javascript" src="lib/Leaflet.draw-0.4.9/dist/leaflet.draw.js"></script>
+    <script type="text/javascript" src="lib/shramov-leaflet-plugins/layer/tile/Bing.js"></script> -->
+    <!--<script type="text/javascript" src="lib/jqcloud/jqcloud.min.js"></script>-->
+    <!-- <script type="text/javascript" src="mapathon.js"></script> -->
+    <!--<script type="text/javascript" src="tile_calc.js"></script>-->
+  </body>
+</html>

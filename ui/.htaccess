@@ -1,0 +1,3 @@
+
+RewriteEngine On
+RewriteRule ^stats$ stats.html [L]

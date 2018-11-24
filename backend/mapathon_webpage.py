@@ -28,16 +28,16 @@ class MapathonWebPage(object):
 
         with open(os.path.join(MapathonWebPage.MAPATHON_TEMPLATE_BASE_PATH, 'mapathon.html')) as template_html_file:
             self.template_html = template_html_file.read()
-            pprint(self.template_html)
+            #pprint(self.template_html)
 
             self.create_mapathon_html()
 
         with open(os.path.join(MapathonWebPage.MAPATHON_TEMPLATE_BASE_PATH, 'mapathon.css')) as template_css_file:
             self.template_css = template_css_file.read()
-            pprint(self.template_css)
+            #pprint(self.template_css)
         with open(os.path.join(MapathonWebPage.MAPATHON_TEMPLATE_BASE_PATH, 'mapathon.js')) as template_js_file:
             self.template_js = template_js_file.read()
-            pprint(self.template_js)
+            #pprint(self.template_js)
 
             self.create_mapathon_js()
 
