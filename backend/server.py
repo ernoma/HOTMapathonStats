@@ -84,5 +84,22 @@ def get_mapathon_list():
     mapathons = mapathons_storage.get_all_mapathons()
     return dumps(mapathons)
 
+# @app.route('/mapathon/info', methods=['GET'])
+# def get_mapathon_info():
+#     mapathon_id = request.args.get('id')
+
+#     mapathons_storage = MapathonsStorage()
+#     data = mapathons_storage.get_mapathon_info(mapathon_id)
+#     return dumps(data)
+
+@app.route('/mapathon/data', methods=['GET'])
+def get_mapathon_data():
+    mapathon_id = request.args.get('id')
+    type_of_mapping = request.args.get('type')
+
+    mapathons_storage = MapathonsStorage()
+    data = mapathons_storage.get_mapathon_changes(mapathon_id, type_of_mapping)
+    return dumps(data)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5000,debug=True)

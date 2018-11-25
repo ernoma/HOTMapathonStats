@@ -84,8 +84,11 @@ class StatsTaskTest(unittest.TestCase):
         mapathons_storage = MapathonsStorage()
         mapathons_storage.initialize()
 
+        stat_task_uuid = uuid.uuid1()
+        # print(stat_task_uuid)
+
         mapathon_data = {
-            'stat_task_uuid': uuid.uuid1(),
+            'stat_task_uuid': stat_task_uuid,
             'mapathon_info': self.client_data,
             'mapathon_changes': { 'building': [],
                                   'landuse_residential': [],
@@ -105,18 +108,28 @@ class StatsTaskTest(unittest.TestCase):
         inserted_id = mapathons_storage.store_mapathon(mapathon_data)
         self.assertIsNotNone(inserted_id)
 
-    def test_mapathon_webpage(self):
-        mapathons_storage = MapathonsStorage()
-        mapathons_data = mapathons_storage.get_all_mapathons()
-        #pprint(dumps(mapathons_data))
-        for mapathon_data in mapathons_data:
-            #print(mapathon_data)
-            mapathon_web_page = MapathonWebPage(mapathons_storage)
-            mapathon_id = str(mapathon_data['_id'])
-            #print(mapathon_id)
-            mapathon_web_page.create_mapathon_web_page(mapathon_id)
-            self.assertEqual(str(mapathon_web_page.mapathon_data['_id']), mapathon_id)
-            mapathon_web_page.store_mapathon_web_page()
+        mapathon = mapathons_storage.get_mapathon_by_stat_task_id(str(stat_task_uuid))
+
+        # print(mapathon)
+
+        self.assertIsNotNone(mapathon)
+        self.assertEqual(stat_task_uuid, mapathon['stat_task_uuid'])
+
+        # oid = str(mapathon['_id'])
+        # print(oid)
+
+    # def test_mapathon_webpage(self):
+    #     mapathons_storage = MapathonsStorage()
+    #     mapathons_data = mapathons_storage.get_all_mapathons()
+    #     #pprint(dumps(mapathons_data))
+    #     for mapathon_data in mapathons_data:
+    #         #print(mapathon_data)
+    #         mapathon_web_page = MapathonWebPage(mapathons_storage)
+    #         mapathon_id = str(mapathon_data['_id'])
+    #         #print(mapathon_id)
+    #         mapathon_web_page.create_mapathon_web_page(mapathon_id)
+    #         self.assertEqual(str(mapathon_web_page.mapathon_data['_id']), mapathon_id)
+    #         mapathon_web_page.store_mapathon_web_page()
 
 if __name__ == '__main__':
     unittest.main()

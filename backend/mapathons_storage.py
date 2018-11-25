@@ -4,6 +4,7 @@ from pymongo import MongoClient
 import urllib.parse
 import json
 from bson.objectid import ObjectId
+import uuid
 
 class MapathonsStorage(object):
     """
@@ -60,6 +61,9 @@ class MapathonsStorage(object):
 
     def get_mapathon_by_ID(self, mapathon_id):
         return self.db.mapathons.find_one({'_id': ObjectId(mapathon_id)})
+
+    def get_mapathon_by_stat_task_id(self, stat_task_id):
+        return self.db.mapathons.find_one({'stat_task_uuid': uuid.UUID(stat_task_id)})
 
     def store_mapathon_changes(self, mapathon_id, types_of_mapping, mapathon_changes):
         # Store only those types of changes (residential areas, buildings, roads) chosen by the user
@@ -130,6 +134,55 @@ class MapathonsStorage(object):
             with open(os.path.join(output_dir, 'highways_footway.json'), 'w') as outfile:
                 json.dump(mapathon_changes['highway_footway'], outfile)
 
+    def get_mapathon_changes(self, mapathon_id, type_of_mapping):
+
+        if '-' in mapathon_id:
+            mapathon = self.get_mapathon_by_stat_task_id(mapathon_id)
+            #print(mapathon)
+            mapathon_id = str(mapathon['_id'])
+
+        input_dir = os.path.join(MapathonsStorage.OUTPUT_BASE_PATH, mapathon_id)
+
+        if type_of_mapping == "building":
+            with open(os.path.join(input_dir, 'buildings.json'), 'r') as infile:
+                data = json.load(infile)
+
+        elif type_of_mapping == "landuse_residential":
+            with open(os.path.join(input_dir, 'residential_areas.json'), 'r') as infile:
+                data = json.load(infile)
+
+        elif type_of_mapping == "highways_primary":
+            with open(os.path.join(input_dir, 'highways_primary.json'), 'r') as infile:
+                data = json.load(infile)
+        elif type_of_mapping == "highways_secondary":
+            with open(os.path.join(input_dir, 'highways_secondary.json'), 'r') as infile:
+                data = json.load(infile)
+        elif type_of_mapping == "highways_tertiary":
+            with open(os.path.join(input_dir, 'highways_tertiary.json'), 'r') as infile:
+                data = json.load(infile)
+        elif type_of_mapping == "highways_unclassified":
+            with open(os.path.join(input_dir, 'highways_unclassified.json'), 'r') as infile:
+                data = json.load(infile)
+        elif type_of_mapping == "highways_residential":
+            with open(os.path.join(input_dir, 'highways_residential.json'), 'r') as infile:
+                data = json.load(infile)
+        elif type_of_mapping == "highways_service":
+            with open(os.path.join(input_dir, 'highways_service.json'), 'r') as infile:
+                data = json.load(infile)
+        elif type_of_mapping == "highways_track":
+            with open(os.path.join(input_dir, 'highways_track.json'), 'r') as infile:
+                data = json.load(infile)
+        elif type_of_mapping == "highways_path":
+            with open(os.path.join(input_dir, 'highways_path.json'), 'r') as infile:
+                data = json.load(infile)
+        elif type_of_mapping == "highways_footway":
+            with open(os.path.join(input_dir, 'highways_footway.json'), 'r') as infile:
+                data = json.load(infile)
+        elif type_of_mapping == "highways_road":
+            with open(os.path.join(input_dir, 'highways_road.json'), 'r') as infile:
+                data = json.load(infile)
+
+        return data
 
     def store_mapathon_users(self, mapathon_id, mapathon_users):
         output_dir = os.path.join(MapathonsStorage.OUTPUT_BASE_PATH, str(mapathon_id))

@@ -8,6 +8,17 @@ body {
     border: 1px solid #000;
 }
 
+.hot-osm-title {
+    padding: 1rem 1.5rem 1rem 1.5rem;
+    text-align: center;
+}
+
+.hot-osm-footer {
+    padding: 1rem 1.5rem 1rem 1.5rem;
+    text-align: center;
+}
+
+
 #serverSuccessAlert, #serverErrorAlert {
     margin-top: 1em;
     display: none;

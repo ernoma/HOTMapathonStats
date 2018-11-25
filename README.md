@@ -19,7 +19,7 @@ There is a backend implemented with Python that creates the statistics.
   * `pip3 install geojson`
   * `pip3 install dateutil`
   * `pip3 install lxml`
-  * `pip3 install shapely==1.6b4`
+  * `pip3 install shapely`
   * `pip3 install requests`
   * `pip3 install pymongo`
   * `pip3 install dnspython`

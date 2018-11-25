@@ -3,10 +3,13 @@ var projects = [];
 var projectNumberAwesomplete = null;
 var projectSelectedNumber = null;
 
-var serverURL = "http://localhost:5000";
+var submittedHOTOSMFormData = null;
 
 
 $(document).ready(function () {
+
+    serverURL = "http://" + window.location.hostname + ":5000";
+
     getMapathons();
 
     getProjectSearchPage(1);
@@ -19,8 +22,8 @@ $(document).ready(function () {
 //
 
 function getMapathons() {
-    return $.getJSON("http://localhost:5000/mapathon/list", handleMapathonsData);
-}   
+    return $.getJSON("http://" + window.location.hostname + ":5000/mapathon/list", handleMapathonsData);
+}
 
 function handleMapathonsData(data) {
     console.log(data);
@@ -29,9 +32,13 @@ function handleMapathonsData(data) {
             '<p class="card-text">Mapathon held on ' +
             item.mapathon_info.mapathon_date + ' at ' +
             item.mapathon_info.mapathon_time_utc + ' (UTC) for project ' +
-            '<a target="_blank" href="https://tasks.hotosm.org/project/' + item.mapathon_info.project_number + '">' + item.mapathon_info.project_number + '</a>. ' +
+            '<a target="_blank" href="https://tasks.hotosm.org/project/' + item.mapathon_info.project_number + '">' + item.mapathon_info.project_number + '</a>.</p>' +
             // item.mapathon_users.length + ' <i class="fa fa-user" aria-hidden="true"></i></p>' +
-            '<a href="stats?id=' + item._id.$oid + '" id="' + item._id.$oid + '" class="btn btn-primary">Show statistics page</a></div></div>';
+            '<p><a target="_blank" href="stats?' +
+            createMapathonStatPageQueryParamsForItem(item);
+        html += '&id=' + item._id.$oid;
+        html +=
+            '" id="' + item._id.$oid + '" class="btn btn-primary">Show statistics page</a></p></div></div>';
         $("#mapathonList").append(html);
 
         $("#" + item._id.$oid).on('click', showMapathon);
@@ -53,6 +60,13 @@ function createStatistics(event) {
     $("#serverSuccessAlert").text("Sending the data...");
     $("#serverSuccessAlert").show();
     var method = "/stats/create";
+
+    submittedHOTOSMFormData = $("#createStatisticsForm").serializeArray();
+    // createMapathonStatPageQueryParamsFromFormData(submittedHOTOSMFormData);
+    // return;
+
+    // TODO clear updateStatsCreationState timeout if any
+
     $.ajax({
         type: 'POST',
         url: serverURL + method,
@@ -62,7 +76,8 @@ function createStatistics(event) {
             console.log(data);
             hideAlerts();
             if (data.status == 'OK') {
-                $("#serverSuccessAlert").text("Processing the data...");
+                $("#serverSuccessAlert").html(
+                    "Processing the data...");
                 $("#serverSuccessAlert").show();
 
                 setTimeout(updateStatsCreationState, 5000, data.stat_task_uuid);
@@ -94,6 +109,16 @@ function createStatistics(event) {
     });
 }
 
+function getStatsURLCopyInfo(stat_task_uuid) {
+    return "Provided that the statistics are created succesfully, you can find the result page later on the created mapathon statistics list and at the address<br>" +
+        "<input type='text' size='40' id='spanStatsURL' value='" +
+        window.location.href + "stats?" + 
+        createMapathonStatPageQueryParamsFromFormData(submittedHOTOSMFormData) + 
+        "&uid=" + stat_task_uuid +
+        "'>&nbsp<button class='btn btn-primary' onclick='text=document.getElementById(\"spanStatsURL\").select();document.execCommand(\"copy\");'>Copy</button>" +
+        "<br>You can safely close this page now."
+}
+
 function updateStatsCreationState(stat_task_uuid) {
 
     var method = "/stats/state"
@@ -113,27 +138,37 @@ function updateStatsCreationState(stat_task_uuid) {
             if (data.state != null) {
                 switch (data.state.name) {
                     case "initialized":
-                        $("#serverSuccessAlert").text("Processing the data...");
+                        $("#serverSuccessAlert").html(
+                            "Processing the data...<br>" +
+                            getStatsURLCopyInfo(stat_task_uuid)
+                        );
                         $("#serverSuccessAlert").show();
                         break;
                     case "getting_project_data":
-                        $("#serverSuccessAlert").text("Getting the project data...");
+                        $("#serverSuccessAlert").html(
+                            "Getting the project data...<br>" +
+                            getStatsURLCopyInfo(stat_task_uuid)
+                        );
                         $("#serverSuccessAlert").show();
                         break;
                     case "finding_project_countries":
-                        $("#serverSuccessAlert").text("Finding the project country or countries...");
+                        $("#serverSuccessAlert").html(
+                            "Finding the project country or countries...<br>" +
+                            getStatsURLCopyInfo(stat_task_uuid)
+                        );
                         $("#serverSuccessAlert").show();
                         break;
                     case "finding_geofabrik_areas":
-                        $("#serverSuccessAlert").text("Finding the project areas...");
+                        $("#serverSuccessAlert").html(
+                            "Finding the project areas...<br>" +
+                            getStatsURLCopyInfo(stat_task_uuid)
+                            );
                         $("#serverSuccessAlert").show();
                         break;
                     case "creating_mapathon_changes":
                         $("#serverSuccessAlert").html(
                             "Extracting mapathon changes... Done " + data.state.state_progress + "%.<br>" +
-                            "You can find the result page later on the created mapathon statistics list and at the address<br>" +
-                            window.location.href + "stats?id=" + stat_task_uuid +
-                            ".<br>You can safely close this page now."
+                            getStatsURLCopyInfo(stat_task_uuid)
                             );
                         
                         $("#serverSuccessAlert").show();
@@ -143,7 +178,10 @@ function updateStatsCreationState(stat_task_uuid) {
                         $("#serverSuccessAlert").show();
                         break;
                     case "storing_osm_changes":
-                        $("#serverSuccessAlert").text("Storing mapathon changes and usernames...");
+                        $("#serverSuccessAlert").text(
+                            "Storing mapathon changes...<br>" +
+                            getStatsURLCopyInfo(stat_task_uuid)
+                        );
                         $("#serverSuccessAlert").show();
                         break;
                     case "creating_statistics_web_page":
@@ -151,10 +189,12 @@ function updateStatsCreationState(stat_task_uuid) {
                         $("#serverSuccessAlert").show();
                         break;
                     case "storing_to_page_list":
-                        // TODO show a link to the user where the statistics page is located
+                        // show a link to the user where the statistics page is located
                         $("#serverSuccessAlert").html(
                             "<a href='" +
-                            window.location.href + "stats?id=" + stat_task_uuid + "'>Result page</a> created"
+                            window.location.href + "stats?" + 
+                            createMapathonStatPageQueryParamsFromFormData(submittedHOTOSMFormData) + 
+                            "&uid=" + stat_task_uuid + "'>Result page</a> created"
                         );
                         //$("#serverSuccessAlert").text("Page created and can be found at the...");
                         $("#serverSuccessAlert").show();
@@ -170,8 +210,10 @@ function updateStatsCreationState(stat_task_uuid) {
                         $("#serverErrorAlert").show();
                         console.log("unknown state: " + data.state);
                 }
-                // TODO only set timeout if the statistics creation is not finished
-                setTimeout(updateStatsCreationState, 5000, stat_task_uuid);
+                // only set timeout if the statistics creation is not finished
+                if (data.state.name != "storing_to_page_list" && data.state.name != "error") {
+                    setTimeout(updateStatsCreationState, 5000, stat_task_uuid);
+                }
             }
             else {
                 // TODO should maybe just take care of the security issues.
@@ -200,6 +242,56 @@ function updateStatsCreationState(stat_task_uuid) {
         }
     });
 
+}
+
+function createMapathonStatPageQueryParamsForItem(item) {
+    var html = "";
+    html += 'title=' + encodeURIComponent(item.mapathon_info.mapathon_title) +
+    '&date=' + item.mapathon_info.mapathon_date +
+    '&time=' + item.mapathon_info.mapathon_time_utc +
+    '&project=' + item.mapathon_info.project_number +
+    '&types=';
+    item.mapathon_info.types_of_mapping.forEach(type => {
+        html += type + ','
+    });
+    html = html.slice(0, -1);
+
+    return html;
+}
+
+function createMapathonStatPageQueryParamsFromFormData(data) {
+    console.log(data);
+    var html = "";
+    var title = "";
+    var date = "";
+    var time = "";
+    var project = "";
+
+    for (var i = 0; i < data.length; i++) {
+        if (data[i].name == 'mapathonTitle') {
+            title += 'title=' + encodeURIComponent(data[i].value);
+        }
+        if (data[i].name == 'mapathonDate') {
+            date += '&date=' + data[i].value;
+        }
+        if (data[i].name == 'mapathonTime') {
+            time += '&time=' + data[i].value;
+        }
+        if (data[i].name == 'projectNumber') {
+            project += '&project=' + data[i].value;
+        }
+    }
+    html += title + date + time + project;
+    html += '&types=';
+    for (var i = 0; i < data.length; i++) {
+        if (data[i].name == 'typesOfMapping') {
+            html += data[i].value + ',';
+        }
+    }
+
+    html = html.slice(0, -1);
+
+    return html;
 }
 
 function hideAlerts() {

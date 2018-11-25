@@ -26,6 +26,7 @@ class MapathonChangeCreator(object):
         for polygon in polygons:
             shapely_point = Point(point['lat'], point['lon'])
             shapely_polygon = Polygon(polygon)
+            # TODO probably would be better to use the intersects function.
             isInside = shapely_polygon.contains(shapely_point)
             if isInside:
                 return True

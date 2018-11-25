@@ -284,7 +284,16 @@ class MapathonStatistics(object):
 
     def create_project_polygon_feature_collection(self):
         #pprint(shape(self.project_data['areaOfInterest']).buffer(0))
-        geoms = [x.buffer(0) for x in shape(self.project_data['areaOfInterest']).geoms]
+        tasks = self.project_data['tasks']
+        shape_tasks = [] 
+        for feature in tasks['features']:
+            shape_tasks.append(shape(feature['geometry']))
+
+        project_tasks_shapely_union = unary_union(shape_tasks)
+        if type(project_tasks_shapely_union) is sgeom.collection.GeometryCollection:
+            geoms = [x.buffer(0) for x in shape(project_tasks_shapely_union).geoms]
+        else:
+            geoms = [project_tasks_shapely_union.buffer(0)]
         print(geoms)
 
         geojson_features = []
