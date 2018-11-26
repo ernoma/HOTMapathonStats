@@ -57,11 +57,20 @@ function showMapathon(event) {
 function createStatistics(event) {
     event.preventDefault();
     hideAlerts();
+
+    submittedHOTOSMFormData = $("#createStatisticsForm").serializeArray();
+    //console.log(submittedHOTOSMFormData);
+
+    if (!checkFormDataGiven(submittedHOTOSMFormData)) {
+        $("#serverErrorAlert").text("Please, fill the form fully.");
+        $("#serverErrorAlert").show();
+        return;
+    }
+
     $("#serverSuccessAlert").text("Sending the data...");
     $("#serverSuccessAlert").show();
     var method = "/stats/create";
-
-    submittedHOTOSMFormData = $("#createStatisticsForm").serializeArray();
+    
     // createMapathonStatPageQueryParamsFromFormData(submittedHOTOSMFormData);
     // return;
 
@@ -257,6 +266,34 @@ function createMapathonStatPageQueryParamsForItem(item) {
     html = html.slice(0, -1);
 
     return html;
+}
+
+function checkFormDataGiven(data) {
+    var title = false;
+    var date = false;
+    var time = false;
+    var project = false;
+    var types = false;
+
+    for (var i = 0; i < data.length; i++) {
+        if (data[i].name == 'mapathonTitle' && data[i].value != "") {
+            title = true;
+        }
+        else if (data[i].name == 'mapathonDate' && data[i].value != "") {
+            date = true;
+        }
+        else if (data[i].name == 'mapathonTime' && data[i].value != "") {
+            time = true;
+        }
+        else if (data[i].name == 'projectNumber' && data[i].value != "") {
+            project = true;
+        }
+        else if (data[i].name == 'typesOfMapping') {
+            types = true;
+        }
+    }
+    
+    return (title && date && time && project && types);
 }
 
 function createMapathonStatPageQueryParamsFromFormData(data) {
