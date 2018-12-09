@@ -9,6 +9,7 @@ import stats_task
 import mapathon_analyzer
 from mapathons_storage import MapathonsStorage
 from mapathon_webpage import MapathonWebPage
+from osmosis_postgis import OsmosisPostgis
 
 
 class StatsTaskTest(unittest.TestCase):
@@ -81,42 +82,43 @@ class StatsTaskTest(unittest.TestCase):
     #     self.assertIsNotNone(serverStatusResult['opcounters'])
 
     def test_mapathon_store(self):
-        mapathons_storage = MapathonsStorage()
-        mapathons_storage.initialize()
+        pass
+        # mapathons_storage = MapathonsStorage()
+        # mapathons_storage.initialize()
 
-        stat_task_uuid = uuid.uuid1()
-        # print(stat_task_uuid)
+        # stat_task_uuid = uuid.uuid1()
+        # # print(stat_task_uuid)
 
-        mapathon_data = {
-            'stat_task_uuid': stat_task_uuid,
-            'mapathon_info': self.client_data,
-            'mapathon_changes': { 'building': [],
-                                  'landuse_residential': [],
-                                  'highway_path': [],
-                                  'highway_primary': [],
-                                  'highway_residential': [],
-                                  'highway_secondary': [],
-                                  'highway_service': [],
-                                  'highway_tertiary': [],
-                                  'highway_track': [],
-                                  'highway_unclassified': [],
-                                  'highway_road': [],
-                                  'highway_footway': []},
-            'mapathon_users': ['masa','communitybuilder','erno','itroad32']
-        }
+        # mapathon_data = {
+        #     'stat_task_uuid': stat_task_uuid,
+        #     'mapathon_info': self.client_data,
+        #     'mapathon_changes': { 'building': [],
+        #                           'landuse_residential': [],
+        #                           'highway_path': [],
+        #                           'highway_primary': [],
+        #                           'highway_residential': [],
+        #                           'highway_secondary': [],
+        #                           'highway_service': [],
+        #                           'highway_tertiary': [],
+        #                           'highway_track': [],
+        #                           'highway_unclassified': [],
+        #                           'highway_road': [],
+        #                           'highway_footway': []},
+        #     'mapathon_users': ['masa','communitybuilder','erno','itroad32']
+        # }
 
-        inserted_id = mapathons_storage.store_mapathon(mapathon_data)
-        self.assertIsNotNone(inserted_id)
+        # inserted_id = mapathons_storage.store_mapathon(mapathon_data)
+        # self.assertIsNotNone(inserted_id)
 
-        mapathon = mapathons_storage.get_mapathon_by_stat_task_id(str(stat_task_uuid))
+        # mapathon = mapathons_storage.get_mapathon_by_stat_task_id(str(stat_task_uuid))
 
-        # print(mapathon)
+        # # print(mapathon)
 
-        self.assertIsNotNone(mapathon)
-        self.assertEqual(stat_task_uuid, mapathon['stat_task_uuid'])
+        # self.assertIsNotNone(mapathon)
+        # self.assertEqual(stat_task_uuid, mapathon['stat_task_uuid'])
 
-        # oid = str(mapathon['_id'])
-        # print(oid)
+        # # oid = str(mapathon['_id'])
+        # # print(oid)
 
     # def test_mapathon_webpage(self):
     #     mapathons_storage = MapathonsStorage()
@@ -130,6 +132,13 @@ class StatsTaskTest(unittest.TestCase):
     #         mapathon_web_page.create_mapathon_web_page(mapathon_id)
     #         self.assertEqual(str(mapathon_web_page.mapathon_data['_id']), mapathon_id)
     #         mapathon_web_page.store_mapathon_web_page()
+
+    def test_osmosis_postgis(self):
+        osmosis_postgis = OsmosisPostgis()
+        db_name = 'osmosis_pg_test'
+        osmosis_postgis.prepare_db(db_name)
+        ret = osmosis_postgis.write_osc_to_pg_using_osmosis(db_name, '042.osc')
+        self.assertEqual(ret, 0)
 
 if __name__ == '__main__':
     unittest.main()

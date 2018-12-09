@@ -7,3 +7,4 @@ backend/.idea/
 backend/__pycache__/
 backend/venv/
 backend/mapathons_data/*
+backend/osc_data/*
