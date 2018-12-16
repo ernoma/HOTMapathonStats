@@ -695,9 +695,11 @@ function showMapathonBasicData() {
 	// console.log(urlParams.get("title"));
 	$("#mapathonTitle").text(urlParams.get("title"));
 
+	time_zone_info = urlParams.get("tz") != undefined ? '(' + urlParams.get("tz") + ')' : '(UTC)';
+
 	$("#mapathonIntro").html(
 		'<p>Data created on ' + moment(urlParams.get("date"), "YYYY-MM-DD").format("Do [of] MMM YYYY") +
-		' from ' + urlParams.get("time") + ' (UTC).</p>' +
+		' from ' + urlParams.get("time") + ' ' + time_zone_info + '.</p>' +
 		'<p>Some statistics for our contributions on the <a href="https://tasks.hotosm.org/project/' + urlParams.get("project") + '">#' + urlParams.get("project") + ' - ' + projectHOTOSMData.projectInfo.name + ' task</a>' +
 		'.</p>'
 	);
