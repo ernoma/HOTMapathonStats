@@ -631,6 +631,8 @@ function calculateLanduseStatistics(elements, userFriendlyName, typeHtmlElementP
     var totalArea = 0;
     var modifiedCount = 0;
 
+	console.log("calculateLanduseStatistics", userFriendlyName, typeHtmlElementPrefix, color, weight);
+
     for (var i = 0; i < elements.length; i++) {
         var landuseArea = elements[i];
 
@@ -647,7 +649,7 @@ function calculateLanduseStatistics(elements, userFriendlyName, typeHtmlElementP
 			if (latLngs.length > 2) {
 				landuseAreaNonEmptyCount++;
 				var polygon = L.polygon(latLngs, {color: color, weight: weight });
-				var linkText = userFriendlyName + ' area, id: ' + landuseArea.id;
+				var linkText = userFriendlyName + ', id: ' + landuseArea.id;
 				//var linkText = '<a href="http://www.openstreetmap.org/way/' + residentialArea.id + '" target="_blank">View on openstreetmap.org</a>';
 				polygon.bindPopup(linkText);
 				polygon.addTo(map);
@@ -660,9 +662,9 @@ function calculateLanduseStatistics(elements, userFriendlyName, typeHtmlElementP
     var modifiedPercentage = elements.length == 0 ? 0 : modifiedCount / elements.length * 100;
     var text = "" + landuseAreaCount + ", +" + modifiedCount + " modified" + " (" + modifiedPercentage.toFixed(1) + "%)";
 	
-	$("#" + typeHtmlElementPrefix + "_area_count_div").text(text);
-    $("#" + typeHtmlElementPrefix + "_area_total_area_div").html(Math.round(totalArea) + " m<sup>2</sup>");
-    $("#" + typeHtmlElementPrefix + "_area_avg_area_div").html(Math.round(totalArea / landuseAreaNonEmptyCount) + " m<sup>2</sup>");
+	$("#" + typeHtmlElementPrefix + "_count_div").text(text);
+    $("#" + typeHtmlElementPrefix + "_total_area_div").html(Math.round(totalArea) + " m<sup>2</sup>");
+    $("#" + typeHtmlElementPrefix + "_avg_area_div").html(Math.round(totalArea / landuseAreaNonEmptyCount) + " m<sup>2</sup>");
 }
 
 function combineElements(elements, elementArrays) {
