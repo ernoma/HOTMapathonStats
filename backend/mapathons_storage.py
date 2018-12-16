@@ -101,6 +101,16 @@ class MapathonsStorage(object):
             with open(os.path.join(output_dir, 'residential_areas.json'), 'w') as outfile:
                 json.dump(mapathon_changes['landuse_residential'], outfile)
 
+        if "landuse_farmland" in types_of_mapping:
+            with open(os.path.join(output_dir, 'landuse_farmland.json'), 'w') as outfile:
+                json.dump(mapathon_changes['landuse_farmland'], outfile)
+        if "landuse_orchard" in types_of_mapping:
+            with open(os.path.join(output_dir, 'landuse_orchard.json'), 'w') as outfile:
+                json.dump(mapathon_changes['landuse_orchard'], outfile)
+        if "landuse_any_other" in types_of_mapping:
+            with open(os.path.join(output_dir, 'landuse_any_other.json'), 'w') as outfile:
+                json.dump(mapathon_changes['landuse_any_other'], outfile)
+
         if "highway" in types_of_mapping:
             # print(len(mapathon_changes['highway_path']))
             # print(json.dumps(mapathon_changes['highway_path']))
