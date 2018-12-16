@@ -52,14 +52,26 @@ class MapathonChangeCreator(object):
 
         geojsonFeatures = data['features']
         for feature in geojsonFeatures:
-            polygon = self.create_polygon(feature)
-            polygons.append(polygon)
+            #print(feature)
+            print(feature['geometry']['type'])
+            if feature['geometry']['type'] == 'Polygon':
+                lines = feature['geometry']['coordinates'][0]
+                polygon = self.create_polygon(lines)
+                polygons.append(polygon)
+            elif feature['geometry']['type'] == 'MultiPolygon':
+                for subgeom in feature['geometry']['coordinates']:
+                    lines = subgeom[0]
+                    polygon = self.create_polygon(lines)
+                    polygons.append(polygon)
+            else:
+                print('unhandled feature geometry type', feature['geometry']['type'])
 
         return polygons
 
-    def create_polygon(self, geojsonFeature):
+    def create_polygon(self, lines):
         polygon_string = ""
-        lines = geojsonFeature['geometry']['coordinates'][0]
+        
+        #print(lines)
         for line in lines:
             polygon_string += str("%.9f" % round(line[1],9)) + " " + str("%.9f" % round(line[0], 9)) + " "
 
@@ -102,6 +114,9 @@ class MapathonChangeCreator(object):
 
         buildings = []
         residential_areas = []
+        landuse_farmlands = []
+        landuse_orchards = []
+        landuse_any_other = []
         highways_path = []
         highways_primary = []
         highways_residential = []
@@ -185,7 +200,7 @@ class MapathonChangeCreator(object):
                         #print(key)
                         value = tag.xpath("string(@v)")
                         feature_tags[key] = value
-                        if key == "building" or (key == "landuse" and value == "residential") or key == "highway":
+                        if key == "building" or key == "landuse" or key == "highway":
                             feature_type = key
                             feature_type_value = value
 
@@ -197,7 +212,14 @@ class MapathonChangeCreator(object):
                     if feature_type == "building":
                         buildings.append(feature)
                     elif feature_type == "landuse":
-                        residential_areas.append(feature)
+                        if feature_type_value == "residential":
+                            residential_areas.append(feature)
+                        elif feature_type_value == "farmland":
+                            landuse_farmlands.append(feature)
+                        elif feature_type_value == "orchard":
+                            landuse_orchards.append(feature)
+                        else:
+                            landuse_any_other.append(feature)
                     elif feature_type == "highway":
                         if feature_type_value == "path":
                             highways_path.append(feature)
@@ -233,6 +255,9 @@ class MapathonChangeCreator(object):
         return {
             "building": buildings,
             "landuse_residential": residential_areas,
+            "landuse_farmland": landuse_farmlands,
+            "landuse_orchard": landuse_orchards,
+            "landuse_any_other": landuse_any_other,
             "highway_path": highways_path,
             "highway_primary": highways_primary,
             "highway_residential": highways_residential,
@@ -262,6 +287,15 @@ class MapathonChangeCreator(object):
         # print(json.dumps(residential_areas))
         with open(output_dir + '/' + 'residential_areas.json', 'w') as outfile:
             json.dump(results['landuse_residential'], outfile)
+
+        with open(output_dir + '/' + 'landuse_farmland.json', 'w') as outfile:
+            json.dump(results['landuse_farmland'], outfile)
+
+        with open(output_dir + '/' + 'landuse_orchard.json', 'w') as outfile:
+            json.dump(results['landuse_orchard'], outfile)
+
+        with open(output_dir + '/' + 'landuse_any_other.json', 'w') as outfile:
+            json.dump(results['landuse_any_other'], outfile)
 
         # print(len(highways_path))
         # print(json.dumps(highways_path))

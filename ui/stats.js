@@ -26,6 +26,13 @@ var roadStats = {
     modifiedCount: 0
 }
 
+var landuseStats = {
+	whenApplyCountRemaining: undefined,
+    lengthSum: 0,
+    count: 0,
+    modifiedCount: 0
+}
+
 const urlParams = new URLSearchParams(window.location.search);
 
 var projectHOTOSMData = null;
@@ -75,6 +82,10 @@ function showStatistics() {
 			createResidentialAreaSectionElements();
 			createResidentialAreaStatistics();
 		}
+		else if(type == 'landuse_any_other') {
+			createLanduseAnyOtherSectionElements();
+			createLanduseAnyOtherSectionStatistics();
+		}
 		else { // type == 'highway'
 			createRoadSectionElements();
 			createRoadStatistics();
@@ -117,6 +128,49 @@ function createResidentialAreaSectionElements() {
 		'</div>';
 		
 	$("#residentialAreasSection").html(residentialAreasSectionHTML);
+}
+
+function createLanduseAnyOtherSectionElements() {
+	var landuseAnyOtherSectionHTML =
+		'<h3>Other landuse</h3>' +
+		'<div class="row top-buffer">' +
+		'<div class="col-sm-3">Farmlands, total count</div>' +
+		'<div class="col-sm-9"id="landuse_farmland_count_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'</div>' +
+		'<div class="row">' +
+		'<div class="col-sm-3">Farmlands, total area</div>' +
+		'<div class="col-sm-9" id="landuse_farmland_total_area_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'</div>' +
+		'<div class="row">' +
+		'<div class="col-sm-3">Farmlands, average area</div>' +
+		'<div class="col-sm-9" id="landuse_farmland_avg_area_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'</div>' +
+		'<div class="row top-buffer">' +
+		'<div class="col-sm-3">Orchards, total count</div>' +
+		'<div class="col-sm-9"id="landuse_orchard_count_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'</div>' +
+		'<div class="row">' +
+		'<div class="col-sm-3">Orchards, total area</div>' +
+		'<div class="col-sm-9" id="landuse_orchard_total_area_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'</div>' +
+		'<div class="row">' +
+		'<div class="col-sm-3">Orchards, average area</div>' +
+		'<div class="col-sm-9" id="landuse_orchard_avg_area_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'</div>' +
+		'<div class="row top-buffer">' +
+		'<div class="col-sm-3">Other, total count</div>' +
+		'<div class="col-sm-9"id="landuse_any_other_count_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'</div>' +
+		'<div class="row">' +
+		'<div class="col-sm-3">Other, total area</div>' +
+		'<div class="col-sm-9" id="landuse_any_other_total_area_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'</div>' +
+		'<div class="row">' +
+		'<div class="col-sm-3">Other, average area</div>' +
+		'<div class="col-sm-9" id="landuse_any_other_avg_area_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'</div>';
+		
+	$("#landuseAnyOtherSection").html(landuseAnyOtherSectionHTML);
 }
 
 function createRoadSectionElements() {
@@ -320,6 +374,39 @@ function createResidentialAreaStatistics(data_dirs) {
     });
 }
 
+function createLanduseAnyOtherSectionStatistics(data_dirs) {
+	var parameters = [
+		{
+			id: urlParams.get("id") != null ? urlParams.get("id") : urlParams.get("uid"),
+			type: "landuse_farmland"
+		},
+		{
+			id: urlParams.get("id") != null ? urlParams.get("id") : urlParams.get("uid"),
+			type: "landuse_orchard"
+		},
+		{
+			id: urlParams.get("id") != null ? urlParams.get("id") : urlParams.get("uid"),
+			type: "landuse_any_other"
+		}
+	];
+
+	var landuseJSONCalls = {
+		farmland: [],
+		orchard: [],
+		any_other: []
+	};	
+
+    landuseStats.whenApplyCountRemaining = 3;
+    
+	landuseJSONCalls.farmland.push(readJSONData(serverURL + '/mapathon/data', parameters[0]));
+	landuseJSONCalls.orchard.push(readJSONData(serverURL + '/mapathon/data', parameters[1]));
+	landuseJSONCalls.any_other.push(readJSONData(serverURL + '/mapathon/data', parameters[2]));
+
+    $.when.apply($, landuseJSONCalls.farmland).done(handleLandusetatisicsData("Farmland", "landuse_farmland", '#9b6a25', 2));
+    $.when.apply($, landuseJSONCalls.orchard).done(handleLandusetatisicsData("Orchard", "landuse_orchard", '#1a420b', 2));
+    $.when.apply($, landuseJSONCalls.any_other).done(handleLandusetatisicsData("Other landuse", "landuse_any_other", '#9cb3bf', 2));
+}
+
 function createBuildingStatistics() {
     var ajaxCalls = [];
 
@@ -500,27 +587,82 @@ function distance(lat1, lon1, lat2, lon2) {
 
 function handleRoadStatisicsData(lengthHtmlElementID, countHtmlElementID, mapLineColor, weight, dashArray) {
     return function(data, textStatus, jqXHR) {
-	//console.log(arguments);
-	var elements = null;
-	if (arguments.length > 1 && arguments[1].constructor === Array) {
-	    elements = arguments[0][0];
-	    combineElements(elements, Array.from(arguments).slice(1));
-	}
-	else {
-	    elements = arguments[0];
-	}
-	var result = calculateRoadStatistics(elements, lengthHtmlElementID, countHtmlElementID, mapLineColor, weight, dashArray);
-	roadStats.lengthSum += result.length;
-	roadStats.count += result.createdCount;
-	roadStats.modifiedCount += result.modifiedCount;
-	
-	roadStats.whenApplyCountRemaining--;
-	if (roadStats.whenApplyCountRemaining == 0) {
-	    $("#roads_total_length_div").text("" + Math.round(roadStats.lengthSum / 1000) + " km");
-	    var modifiedPercentage = roadStats.modifiedCount / (roadStats.modifiedCount + roadStats.count) * 100;
-	    $("#roads_total_count_div").text("" + roadStats.count + ", +" + roadStats.modifiedCount + " modified (" + modifiedPercentage.toFixed(1) + "%)");
-	}
+		//console.log(arguments);
+		var elements = null;
+		if (arguments.length > 1 && arguments[1].constructor === Array) {
+			elements = arguments[0][0];
+			combineElements(elements, Array.from(arguments).slice(1));
+		}
+		else {
+			elements = arguments[0];
+		}
+		var result = calculateRoadStatistics(elements, lengthHtmlElementID, countHtmlElementID, mapLineColor, weight, dashArray);
+		roadStats.lengthSum += result.length;
+		roadStats.count += result.createdCount;
+		roadStats.modifiedCount += result.modifiedCount;
+		
+		roadStats.whenApplyCountRemaining--;
+		if (roadStats.whenApplyCountRemaining == 0) {
+			$("#roads_total_length_div").text("" + Math.round(roadStats.lengthSum / 1000) + " km");
+			var modifiedPercentage = roadStats.modifiedCount / (roadStats.modifiedCount + roadStats.count) * 100;
+			$("#roads_total_count_div").text("" + roadStats.count + ", +" + roadStats.modifiedCount + " modified (" + modifiedPercentage.toFixed(1) + "%)");
+		}
     };
+}
+
+function handleLandusetatisicsData(userFriendlyName, typeHtmlElementPrefix, color, weight) {
+	return function(data, textStatus, jqXHR) {
+		var elements = null;
+		if (arguments.length > 1 && arguments[1].constructor === Array) {
+			elements = arguments[0][0];
+			combineElements(elements, Array.from(arguments).slice(1));
+		}
+		else {
+			elements = arguments[0];
+		}
+
+		calculateLanduseStatistics(elements, userFriendlyName, typeHtmlElementPrefix, color, weight);
+	};
+}
+
+function calculateLanduseStatistics(elements, userFriendlyName, typeHtmlElementPrefix, color, weight) {
+	var landuseAreaCount = 0;
+    var landuseAreaNonEmptyCount = 0;
+    var totalArea = 0;
+    var modifiedCount = 0;
+
+    for (var i = 0; i < elements.length; i++) {
+        var landuseArea = elements[i];
+
+		if(landuseArea.version != 1) {
+			modifiedCount++;
+		}
+		else {	    
+			var area = 0;
+			var latLngs = [];
+			landuseAreaCount++;
+			for (var j = 0; j < landuseArea.nodes.length; j++) {
+				latLngs.push(L.latLng(landuseArea.nodes[j].lat, landuseArea.nodes[j].lon));
+			}
+			if (latLngs.length > 2) {
+				landuseAreaNonEmptyCount++;
+				var polygon = L.polygon(latLngs, {color: color, weight: weight });
+				var linkText = userFriendlyName + ' area, id: ' + landuseArea.id;
+				//var linkText = '<a href="http://www.openstreetmap.org/way/' + residentialArea.id + '" target="_blank">View on openstreetmap.org</a>';
+				polygon.bindPopup(linkText);
+				polygon.addTo(map);
+				area = L.GeometryUtil.geodesicArea(latLngs); // in squaremeters
+				totalArea += area;
+			}
+		}
+    }
+
+    var modifiedPercentage = elements.length == 0 ? 0 : modifiedCount / elements.length * 100;
+    var text = "" + landuseAreaCount + ", +" + modifiedCount + " modified" + " (" + modifiedPercentage.toFixed(1) + "%)";
+	
+	$("#" + typeHtmlElementPrefix + "_area_count_div").text(text);
+    $("#" + typeHtmlElementPrefix + "_area_total_area_div").html(Math.round(totalArea) + " m<sup>2</sup>");
+    $("#" + typeHtmlElementPrefix + "_area_avg_area_div").html(Math.round(totalArea / landuseAreaNonEmptyCount) + " m<sup>2</sup>");
 }
 
 function combineElements(elements, elementArrays) {

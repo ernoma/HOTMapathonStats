@@ -150,6 +150,15 @@ class MapathonsStorage(object):
         elif type_of_mapping == "landuse_residential":
             with open(os.path.join(input_dir, 'residential_areas.json'), 'r') as infile:
                 data = json.load(infile)
+        elif type_of_mapping == "landuse_farmland":
+            with open(os.path.join(input_dir, 'landuse_farmland.json'), 'r') as infile:
+                data = json.load(infile)
+        elif type_of_mapping == "landuse_orchard":
+            with open(os.path.join(input_dir, 'landuse_orchard.json'), 'r') as infile:
+                data = json.load(infile)
+        elif type_of_mapping == "landuse_any_other":
+            with open(os.path.join(input_dir, 'landuse_any_other.json'), 'r') as infile:
+                data = json.load(infile)
 
         elif type_of_mapping == "highways_primary":
             with open(os.path.join(input_dir, 'highways_primary.json'), 'r') as infile:

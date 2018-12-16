@@ -291,8 +291,10 @@ class MapathonStatistics(object):
 
         project_tasks_shapely_union = unary_union(shape_tasks)
         if type(project_tasks_shapely_union) is sgeom.collection.GeometryCollection:
+            print('GeometryCollection')
             geoms = [x.buffer(0) for x in shape(project_tasks_shapely_union).geoms]
         else:
+            print('not GeometryCollection')
             geoms = [project_tasks_shapely_union.buffer(0)]
         print(geoms)
 
