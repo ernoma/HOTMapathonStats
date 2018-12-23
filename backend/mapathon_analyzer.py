@@ -341,16 +341,27 @@ class MapathonChangeCreator(object):
     def create_mapathon_changes_from_URL(self, project_polygon_feature_collection, osc_file_download_url, date, min_hour_utz):
         # project_polygons is a geojson featurecollection of polygons similarly to the contents of the project_json_file argument
         try:
-            osc_gz_response = requests.get(osc_file_download_url)
+            #osc_gz_response = requests.get(osc_file_download_url)
+            osc_gz_response = requests.get(osc_file_download_url, stream=True)
         except Exception as e:
             print(e)
             # TODO handle all possible error conditions
+        
+        self.save_osc_to_file(osc_file_download_url, osc_gz_response)
 
-        osc_data = zlib.decompress(osc_gz_response.content, 16 + zlib.MAX_WBITS)
-        osc_root_element = etree.fromstring(osc_data)
+        # osc_data = zlib.decompress(osc_gz_response.content, 16 + zlib.MAX_WBITS)
+        # osc_root_element = etree.fromstring(osc_data)
 
-        project_polygons = self.create_polygons_from_feature_collection(project_polygon_feature_collection)
-        return self.create_mapathon_changes(project_polygons, osc_root_element, date, min_hour_utz)
+        # project_polygons = self.create_polygons_from_feature_collection(project_polygon_feature_collection)
+        # return self.create_mapathon_changes(project_polygons, osc_root_element, date, min_hour_utz)
+
+    def save_osc_to_file(self, osc_file_download_url, osc_gz_response):
+        file_name = osc_file_download_url.split(':')[1][2:].replace('download.geofabrik.de/', '').replace('/', '_')
+        output_path = os.path.join(os.getcwd(), 'osc_data', file_name)
+        with open(output_path, 'wb') as outfile:
+            for chunk in osc_gz_response.iter_content(chunk_size=1024): 
+                if chunk:
+                    outfile.write(chunk)
 
     def get_analysis_progress(self):
         return self.analysis_percentage
