@@ -11,6 +11,9 @@ import argparse
 from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
 
+from osmosis_postgis import OsmosisPostgis
+from project_postgis import ProjectPostgis
+
 class MapathonChangeCreator(object):
     """
     Functionality for finding changes made for the HOT-OSM project during the mapathon.
@@ -20,6 +23,8 @@ class MapathonChangeCreator(object):
 
     def __init__(self):
         self.analysis_percentage = 0
+        self.osmosis_postgis = OsmosisPostgis()
+        self.project_postgis = ProjectPostgis()
 
     def is_inside_any_of_polygons(self, point, polygons):
         #print(polygons)
@@ -347,7 +352,9 @@ class MapathonChangeCreator(object):
             print(e)
             # TODO handle all possible error conditions
         
-        self.save_osc_to_file(osc_file_download_url, osc_gz_response)
+        file_name = self.save_osc_to_file(osc_file_download_url, osc_gz_response)
+        self.insert_data_to_db(file_name, project_polygon_feature_collection)
+        # TODO analyze in PostGIS db
 
         # osc_data = zlib.decompress(osc_gz_response.content, 16 + zlib.MAX_WBITS)
         # osc_root_element = etree.fromstring(osc_data)
@@ -355,16 +362,35 @@ class MapathonChangeCreator(object):
         # project_polygons = self.create_polygons_from_feature_collection(project_polygon_feature_collection)
         # return self.create_mapathon_changes(project_polygons, osc_root_element, date, min_hour_utz)
 
+
+    def insert_data_to_db(self, file_name, project_polygon_feature_collection):
+        
+        self.db_name = file_name.split('.')[0]
+        self.osmosis_postgis.prepare_db(self.db_name)
+        ret = self.osmosis_postgis.write_osc_to_pg_using_osmosis(self.db_name, file_name)
+
+        if ret == 0:
+            pass
+        else:
+            pass
+             # TODO
+
+        self.project_postgis.write_project_features_to_pg(self.db_name, project_polygon_feature_collection)
+
     def save_osc_to_file(self, osc_file_download_url, osc_gz_response):
-        file_name = osc_file_download_url.split(':')[1][2:].replace('download.geofabrik.de/', '').replace('/', '_')
+        file_name = osc_file_download_url.split(':')[1][2:].replace('download.geofabrik.de/', '').replace('/', '_').replace('-', '_')
         output_path = os.path.join(os.getcwd(), 'osc_data', file_name)
         with open(output_path, 'wb') as outfile:
             for chunk in osc_gz_response.iter_content(chunk_size=1024): 
                 if chunk:
                     outfile.write(chunk)
 
+        return file_name
+
+
     def get_analysis_progress(self):
         return self.analysis_percentage
+
 
     def filter_same_changes(self, mapathon_changes_for_multiple_areas):
         # if changes were extracted from more than one area (osc file) then

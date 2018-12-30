@@ -141,7 +141,7 @@ class StatsTaskTest(unittest.TestCase):
         osmosis_postgis = OsmosisPostgis()
         db_name = 'osmosis_pg_test'
         osmosis_postgis.prepare_db(db_name)
-        ret = osmosis_postgis.write_osc_to_pg_using_osmosis(db_name, 'africa_algeria-updates_000_000_910.osc.gz')
+        ret = osmosis_postgis.write_osc_to_pg_using_osmosis(db_name, 'africa_algeria_updates_000_000_910.osc.gz')
         self.assertEqual(ret, 0)
 
 if __name__ == '__main__':

@@ -18,6 +18,8 @@ class OsmosisPostgis:
     def prepare_db(self, db_name):
         cursor = self.connection.cursor()
         
+        # TODO what if the database already exists?
+
         sql_query = 'CREATE DATABASE {}'.format(db_name)
         cursor.execute(sql_query, (db_name,))
         
