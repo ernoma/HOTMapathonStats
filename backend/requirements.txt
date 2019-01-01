@@ -1,0 +1,10 @@
+Flask
+flask-cors
+geopandas
+geojson
+python-dateutil
+lxml
+shapely
+requests
+pymongo
+psycopg2

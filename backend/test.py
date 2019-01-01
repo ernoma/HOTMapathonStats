@@ -133,16 +133,16 @@ class StatsTaskTest(unittest.TestCase):
     #         self.assertEqual(str(mapathon_web_page.mapathon_data['_id']), mapathon_id)
     #         mapathon_web_page.store_mapathon_web_page()
 
-    def test_download_osc_to_file(self):
-        osc_file_download_url = 'https://download.geofabrik.de/africa/algeria-updates/000/000/910.osc.gz'
-        self.mapathon_change_creator.create_mapathon_changes_from_URL(None, osc_file_download_url, None, None)
+    # def test_download_osc_to_file(self):
+    #     osc_file_download_url = 'https://download.geofabrik.de/africa/algeria-updates/000/000/910.osc.gz'
+    #     self.mapathon_change_creator.create_mapathon_changes_from_URL(None, osc_file_download_url, None, None)
 
-    def test_osmosis_postgis(self):
-        osmosis_postgis = OsmosisPostgis()
-        db_name = 'osmosis_pg_test'
-        osmosis_postgis.prepare_db(db_name)
-        ret = osmosis_postgis.write_osc_to_pg_using_osmosis(db_name, 'africa_algeria_updates_000_000_910.osc.gz')
-        self.assertEqual(ret, 0)
+    # def test_osmosis_postgis(self):
+    #     osmosis_postgis = OsmosisPostgis()
+    #     db_name = 'osmosis_pg_test'
+    #     osmosis_postgis.prepare_db(db_name)
+    #     ret = osmosis_postgis.write_osc_to_pg_using_osmosis(db_name, 'africa_algeria_updates_000_000_910.osc.gz')
+    #     self.assertEqual(ret, 0)
 
 if __name__ == '__main__':
     unittest.main()
