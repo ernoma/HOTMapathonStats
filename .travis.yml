@@ -16,4 +16,4 @@ addons:
   sonarcloud:
     organization: "ernoma-github"
 script:
-  - sonar-scanner
+  - sonar-scanner -Dsonar.projectKey=ernoma_HOTMapathonStats -Dsonar.projectName=HOTMapathonStats -Dsonar.projectVersion=1.0 -Dsonar.sources=. -Dsonar.exclusions=ui/lib/**,backend/osmosis_scripts/**
