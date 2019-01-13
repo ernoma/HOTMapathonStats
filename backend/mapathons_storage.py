@@ -25,9 +25,6 @@ class MapathonsStorage(object):
         self.mongo_client = MongoClient(MapathonsStorage.MONGODB_URL)
         self.db = self.mongo_client.hot_mapathon_stastistics
 
-        #serverStatusResult = self.db.command("serverStatus")
-        #print(serverStatusResult)
-
     def store_mapathon(self, mapathon_data):
         # Store mapathon details, found OSM changes and usernames of those who did the changes for the project area to a data store
         # Return mapathon_id
@@ -68,36 +65,15 @@ class MapathonsStorage(object):
     def store_mapathon_changes(self, mapathon_id, types_of_mapping, mapathon_changes):
         # Store only those types of changes (residential areas, buildings, roads) chosen by the user
 
-        #import pprint
-        #pprint(mapathon_changes)
-        #'mapathon_changes': self.mapathon_changes
-            # {
-            #     "building": buildings,
-            #     "landuse_residential": residential_areas,
-            #     "highway_path": highways_path,
-            #     "highway_primary": highways_primary,
-            #     "highway_residential": highways_residential,
-            #     "highway_secondary": highways_secondary,
-            #     "highway_service": highways_service,
-            #     "highway_tertiary": highways_tertiary,
-            #     "highway_track": highways_track,
-            #     "highway_unclassified": highways_unclassified,
-            #     "highway_road": highways_road,
-            #     "highway_footway": highways_footway
-            # }
-
         output_dir = os.path.join(MapathonsStorage.OUTPUT_BASE_PATH, str(mapathon_id))
 
         os.makedirs(output_dir, exist_ok=True)
 
         if "building" in types_of_mapping:
-            # print(len(mapathon_changes['building']))
             with open(os.path.join(output_dir, 'buildings.json'), 'w') as outfile:
                 json.dump(mapathon_changes['building'], outfile)
 
         if "landuse_residential" in types_of_mapping:
-            # print(len(mapathon_changes['landuse_residential']))
-            # print(json.dumps(mapathon_changes['landuse_residential']))
             with open(os.path.join(output_dir, 'residential_areas.json'), 'w') as outfile:
                 json.dump(mapathon_changes['landuse_residential'], outfile)
 
@@ -110,8 +86,6 @@ class MapathonsStorage(object):
                 json.dump(mapathon_changes['landuse_any_other'], outfile)
 
         if "highway" in types_of_mapping:
-            # print(len(mapathon_changes['highway_path']))
-            # print(json.dumps(mapathon_changes['highway_path']))
             with open(os.path.join(output_dir, 'highways_path.json'), 'w') as outfile:
                 json.dump(mapathon_changes['highway_path'], outfile)
             # print(len(highways_primary))
@@ -142,12 +116,17 @@ class MapathonsStorage(object):
             with open(os.path.join(output_dir, 'highways_footway.json'), 'w') as outfile:
                 json.dump(mapathon_changes['highway_footway'], outfile)
 
-    def get_mapathon_changes(self, mapathon_id, type_of_mapping):
-
+    def convert_mapathon_id(self, mapathon_id):
         if '-' in mapathon_id:
             mapathon = self.get_mapathon_by_stat_task_id(mapathon_id)
             #print(mapathon)
             mapathon_id = str(mapathon['_id'])
+
+        return mapathon_id
+
+    def get_mapathon_changes(self, mapathon_id, type_of_mapping):
+
+        mapathon_id = self.convert_mapathon_id(mapathon_id)
 
         input_dir = os.path.join(MapathonsStorage.OUTPUT_BASE_PATH, mapathon_id)
 

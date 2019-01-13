@@ -32,8 +32,8 @@ class MapathonChangeCreator(object):
             shapely_point = Point(point['lat'], point['lon'])
             shapely_polygon = Polygon(polygon)
             # TODO probably would be better to use the intersects function.
-            isInside = shapely_polygon.contains(shapely_point)
-            if isInside:
+            is_inside = shapely_polygon.contains(shapely_point)
+            if is_inside:
                 return True
         return False
 
@@ -41,9 +41,9 @@ class MapathonChangeCreator(object):
         # adapted from http://stackoverflow.com/questions/36399381/whats-the-fastest-way-of-checking-if-a-point-is-inside-a-polygon-in-python
         shapely_point = Point(point['lat'], point['lon'])
         shapely_polygon = Polygon(polygon_points)
-        isInside = shapely_polygon.contains(shapely_point)
-        #print(isInside)
-        return isInside
+        is_inside = shapely_polygon.contains(shapely_point)
+        #print(is_inside)
+        return is_inside
 
     def create_polygons_from_file(self, project_json_file):
         with open(project_json_file, 'r') as data_file:
@@ -55,8 +55,8 @@ class MapathonChangeCreator(object):
     def create_polygons_from_feature_collection(self, data):
         polygons = []
 
-        geojsonFeatures = data['features']
-        for feature in geojsonFeatures:
+        geojson_features = data['features']
+        for feature in geojson_features:
             #print(feature)
             print(feature['geometry']['type'])
             if feature['geometry']['type'] == 'Polygon':
@@ -94,28 +94,55 @@ class MapathonChangeCreator(object):
     def calculate_center(self, points):
         #print(points)
         center_point = {}
-        latSum = 0
-        lonSum = 0
+        lat_sum = 0
+        lon_sum = 0
         for point in points:
-            latSum += point['lat']
-            lonSum += point['lon']
-        center_point['lat'] = latSum / len(points)
-        center_point['lon'] = lonSum / len(points)
+            lat_sum += point['lat']
+            lon_sum += point['lon']
+        center_point['lat'] = lat_sum / len(points)
+        center_point['lon'] = lon_sum / len(points)
         return center_point
 
+
+    def create_feature(self, way):
+        feature = {}
+        feature['id'] = way.xpath("string(@id)")
+        feature['user'] = way.xpath("string(@user)")
+        feature['uid'] = way.xpath("string(@uid)")
+        feature_version = int(way.xpath("string(@version)"))
+        feature['version'] = feature_version
+        #print(len(way))
+        nds = way.xpath("nd")
+        feature_nodes = []
+        for nd in nds:
+            feature_node = {}
+            node_ref = nd.xpath("string(@ref)")
+            feature_node['id'] = node_ref
+            nodes = osc_root_element.xpath("//node[@id='%s']" % node_ref)
+            if len(nodes) == 1: # NOTE: can also be 0
+                lat = nodes[0].xpath("string(@lat)")
+                lon = nodes[0].xpath("string(@lon)")
+                feature_node['lat'] = float(lat)
+                feature_node['lon'] = float(lon)
+                feature_nodes.append(feature_node)
+
+        if len(feature_nodes) == 0: # do not store a way that does not have any new nodes
+            count_ways_with_no_nodes += 1
+            continue
+        else:
+            center = self.calculate_center(feature_nodes)
+            if not self.is_inside_any_of_polygons(center, project_polygons):
+                continue
+            if feature_version == 1: # store only nodes for created features to save memory & bandwidth
+                feature["nodes"] = feature_nodes
+
+        return feature
 
     def create_mapathon_changes(self, project_polygons, osc_root_element, date, min_hour_utz):
 
         self.analysis_percentage = 0
 
-        #ways = osc_root_element.xpath("//way[starts-with(@timestamp, '{0}') and @version='1' and @uid='69016']".format(date))
-        #ways = osc_root_element.xpath("//way[starts-with(@timestamp, '{0}') and @version='1' and @user='erno']".format(date))
-        #ways = osc_root_element.xpath("//way[starts-with(@timestamp, '{0}') and @version='1']".format(date))
-        #ways = osc_root_element.xpath("//way[starts-with(@timestamp, '{0}') and @uid='69016']".format(date))
-        #ways = osc_root_element.xpath("//way[starts-with(@timestamp, '{0}') and @user='erno']".format(date))
         ways = osc_root_element.xpath("//way[starts-with(@timestamp, '{0}')]".format(date))
-
-        #print(ways)
 
         buildings = []
         residential_areas = []
@@ -141,68 +168,19 @@ class MapathonChangeCreator(object):
             print("Done", "%.2f" % round(percentage, 2), "\b%")
             self.analysis_percentage = round(percentage, 2)
 
-            feature = {}
-            #print(way.tag)
-            #print(way.attrib)
-            #print(way.xpath("string(@id)"))
-
             timestamp = dateutil.parser.parse(way.xpath("string(@timestamp)")) #datetime.datetime object
-            #print(way.xpath("string(@timestamp)"))
-            #print(timestamp.hour)
+
             if timestamp.hour >= int(min_hour_utz):
-                feature['id'] = way.xpath("string(@id)")
-                feature['user'] = way.xpath("string(@user)")
-                feature['uid'] = way.xpath("string(@uid)")
-                feature_version = int(way.xpath("string(@version)"))
-                feature['version'] = feature_version
-                #print(len(way))
-                nds = way.xpath("nd")
-                feature_nodes = []
-                for nd in nds:
-                    feature_node = {}
-                    node_ref = nd.xpath("string(@ref)")
-                    feature_node['id'] = node_ref
-                    nodes = osc_root_element.xpath("//node[@id='%s']" % node_ref)
-                    if len(nodes) > 1: # NOTE: can also be 0
-                        pass
-                        #print("len(nodes) > 1, ", len(nodes))
-                        #print(nodes[0].attrib)
-                        #print(nodes[1].attrib)
-                    elif len(nodes) == 0:
-                        pass
-                        #print("len(nodes) == 0")
-                        #print(len(nds))
-                    else:
-                        lat = nodes[0].xpath("string(@lat)")
-                        lon = nodes[0].xpath("string(@lon)")
-                        feature_node['lat'] = float(lat)
-                        feature_node['lon'] = float(lon)
-                        feature_nodes.append(feature_node)
+                feature = self.create_feature(way)
 
-                if len(feature_nodes) == 0: # do not store a way that does not have any new nodes
-                    count_ways_with_no_nodes += 1
-                    continue
-                else:
-                    center = self.calculate_center(feature_nodes)
-                    if not self.is_inside_any_of_polygons(center, project_polygons):
-                        continue
-                    if feature_version == 1: # store only nodes for created features to save memory & bandwidth
-                        feature["nodes"] = feature_nodes
-
-                #for nd in nds:
-                #    print(nd.attrib)
-                feature_type = ''
                 tags = way.xpath("tag")
-                #print(len(tags))
 
                 if(len(tags) > 0):
-                    #print(len(tags))
                     feature_tags = {}
+                    feature_type = ''
                     feature_type_value = ''
                     for tag in tags:
-                        #print(tag.attrib)
                         key = tag.xpath("string(@k)")
-                        #print(key)
                         value = tag.xpath("string(@v)")
                         feature_tags[key] = value
                         if key == "building" or key == "landuse" or key == "highway":
@@ -210,9 +188,6 @@ class MapathonChangeCreator(object):
                             feature_type_value = value
 
                         feature['tags'] = feature_tags
-
-                        #if feature_type is not '':
-                        #    print(feature_type)
 
                     if feature_type == "building":
                         buildings.append(feature)
@@ -244,14 +219,14 @@ class MapathonChangeCreator(object):
                             highways_unclassified.append(feature)
                         elif feature_type_value == "road":
                             highways_road.append(feature)
-                        elif feature_type_value == "footway":
-                            highways_footway.append(feature)
                         elif feature_type_value == "motorway":
                             highways_road.append(feature)
                         elif feature_type_value == "trunk":
                             highways_road.append(feature)
                         elif feature_type_value == "living_street":
                             highways_road.append(feature)
+                        elif feature_type_value == "footway":
+                            highways_footway.append(feature)
                         else:
                             print(feature_type_value)
 

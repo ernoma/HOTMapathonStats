@@ -97,26 +97,7 @@ class MapathonStatistics(object):
 
         self.create_mapathon_changes()
 
-        # self.state = {
-        #     'name': 'creating_users_list',
-        #     'state_progress': 0
-        # }
-
-        # self.create_users_list()
-
-        # self.state = {
-        #     'name': 'storing_osm_changes',
-        #     'state_progress': 0
-        # }
-
         self.store_changes()
-
-        # self.state = {
-        #     'name': 'creating_statistics_web_page',
-        #     'state_progress': 0
-        # }
-
-        # self.create_statistics_web_page()
 
         self.state = {
             'name': 'storing_to_page_list',
@@ -143,39 +124,20 @@ class MapathonStatistics(object):
     def find_countries(self):
         self.countries_of_interest = set()
 
-        ##################
-
-        ##self.countries_of_interest.add('United Republic of Tanzania')
-        ##return True
-
-        ##################
-
         collection = FeatureCollection(self.project_data['tasks']['features'])
         project_tasks = gpd.GeoDataFrame.from_features(collection)
         #print(project_tasks.head(1))
         project_multipolygon = MultiPolygon(self.project_data['areaOfInterest']['coordinates'])
         shapely_multipolygon = sgeom.shape(project_multipolygon)
-        project_tasks_shapely_union = unary_union(shapely_multipolygon)
-        #print(project_union)
-        #project_tasks_union = gpd.GeoSeries(project_tasks_shapely_union)
-        #project_tasks_union.plot(color='red')
 
         countries = gpd.read_file(os.path.join(os.getcwd(), 'ne_10m_admin_0_countries', 'ne_10m_admin_0_countries.shp'))
-        #print(countries.head(2))
-        #countries.plot(figsize=(8, 8))
-        #import matplotlib.pyplot as plt
-        #plt.show()
-
         
         for index, project_task in project_tasks.iterrows():
-            country_of_interest = None
             for index2, country in countries.iterrows():
-                if project_task['geometry'].intersects(country['geometry']):
-                    if country['SOVEREIGNT'] not in self.countries_of_interest:
-                        self.countries_of_interest.add(country['SOVEREIGNT'])
-                        print(country['SOVEREIGNT'])
+                if project_task['geometry'].intersects(country['geometry']) and country['SOVEREIGNT'] not in self.countries_of_interest:
+                    self.countries_of_interest.add(country['SOVEREIGNT'])
+                    print(country['SOVEREIGNT'])
 
-        # TODO modify to work with the create_mapathon_changes function
         # cond = Condition()
         # cond.acquire()
         # while True:
@@ -187,16 +149,6 @@ class MapathonStatistics(object):
         return True
 
     def find_geofabrik_areas(self):
-        
-        #####################
-        
-        # self.areas_of_interest = {
-        #     'tanzania.poly': {'subdir': '/home/erno/github/HOTMapathonStats/backend/Geofabrik/africa', 'file': 'tanzania.poly'}
-        # }
-        # self.areas_for_osc_file_retrieval = [{'subdir': '/home/erno/github/HOTMapathonStats/backend/Geofabrik/africa', 'file': 'tanzania.poly'}]
-        # return True
-
-        #####################
 
         # Find Geofabrik area(s) that contain wholly or partially the project area(s)
 
@@ -224,17 +176,7 @@ class MapathonStatistics(object):
                     shapely_polygons = self.parse_polygon(lines)
                     #print(shapely_polygons[0])
 
-                    for index, project_task in project_tasks.iterrows():
-                        if project_task['geometry'].intersects(shapely_polygons):
-                            if file not in self.areas_of_interest:
-                                self.areas_of_interest[file] = {
-                                    'subdir': subdir,
-                                    'file': file
-                                }
-                                print("Project tasks intersercing polygon: " + file)
-                                #print(self.areas_of_interest)
-                        #else:
-                        #    print("Project tasks dows not interserct polygon: " + file)
+                    self.find_areas_of_interest(project_tasks, shapely_polygons)
 
         max_dir_level = -1
 
@@ -254,6 +196,15 @@ class MapathonStatistics(object):
         print('areas_for_osc_file_retrieval', self.areas_for_osc_file_retrieval)
 
         return True
+
+    def find_areas_of_interest(self, project_tasks, shapely_polygons):
+        for index, project_task in project_tasks.iterrows():
+            if project_task['geometry'].intersects(shapely_polygons) and file not in self.areas_of_interest:
+                self.areas_of_interest[file] = {
+                    'subdir': subdir,
+                    'file': file
+                }
+                print("Project tasks intersercing polygon: " + file)
 
     def create_mapathon_changes(self):
         # find changes for the mapathon area during the mapathon
