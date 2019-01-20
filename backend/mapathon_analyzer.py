@@ -126,15 +126,15 @@ class MapathonChangeCreator(object):
                 feature_node['lon'] = float(lon)
                 feature_nodes.append(feature_node)
 
-        if len(feature_nodes) == 0: # do not store a way that does not have any new nodes
-            count_ways_with_no_nodes += 1
-            continue
-        else:
-            center = self.calculate_center(feature_nodes)
-            if not self.is_inside_any_of_polygons(center, project_polygons):
+            if len(feature_nodes) == 0: # do not store a way that does not have any new nodes
+                count_ways_with_no_nodes += 1
                 continue
-            if feature_version == 1: # store only nodes for created features to save memory & bandwidth
-                feature["nodes"] = feature_nodes
+            else:
+                center = self.calculate_center(feature_nodes)
+                if not self.is_inside_any_of_polygons(center, project_polygons):
+                    continue
+                if feature_version == 1: # store only nodes for created features to save memory & bandwidth
+                    feature["nodes"] = feature_nodes
 
         return feature
 
