@@ -10,6 +10,7 @@ import mapathon_analyzer
 from mapathons_storage import MapathonsStorage
 from mapathon_webpage import MapathonWebPage
 from osmosis_postgis import OsmosisPostgis
+from project_postgis import ProjectPostgis
 
 
 class StatsTaskTest(unittest.TestCase):
@@ -143,6 +144,11 @@ class StatsTaskTest(unittest.TestCase):
     #     osmosis_postgis.prepare_db(db_name)
     #     ret = osmosis_postgis.write_osc_to_pg_using_osmosis(db_name, 'africa_algeria_updates_000_000_910.osc.gz')
     #     self.assertEqual(ret, 0)
+
+    def test_find_changes_postgis(self):
+        project_postgis = ProjectPostgis()
+        db_name = 'africa_tanzania_updates_000_002_119'
+        buildings = project_postgis.find_changes(db_name, '2019-01-14', 8, 'building')
 
 if __name__ == '__main__':
     unittest.main()

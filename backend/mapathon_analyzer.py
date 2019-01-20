@@ -126,17 +126,52 @@ class MapathonChangeCreator(object):
                 feature_node['lon'] = float(lon)
                 feature_nodes.append(feature_node)
 
-            if len(feature_nodes) == 0: # do not store a way that does not have any new nodes
-                count_ways_with_no_nodes += 1
-                continue
-            else:
-                center = self.calculate_center(feature_nodes)
-                if not self.is_inside_any_of_polygons(center, project_polygons):
-                    continue
-                if feature_version == 1: # store only nodes for created features to save memory & bandwidth
-                    feature["nodes"] = feature_nodes
+        if len(feature_nodes) == 0: # do not store a way that does not have any new nodes
+            self.count_ways_with_no_nodes += 1
+            return None
+        else:
+            center = self.calculate_center(feature_nodes)
+            if not self.is_inside_any_of_polygons(center, project_polygons):
+                return None
+            if feature_version == 1: # store only nodes for created features to save memory & bandwidth
+                feature["nodes"] = feature_nodes
 
         return feature
+
+    def create_mapathon_changes_with_db(self, date, min_hour_utz):
+        buildings = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'building')
+        residential_areas = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'landuse', ['residential'])
+        landuse_farmlands = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'landuse', ['farmland'])
+        landuse_orchards = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'landuse', ['orchard'])
+        landuse_any_other = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'landuse', None, ['residential', 'farmland', 'orchard'])
+        highways_path = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'highway', ['path'])
+        highways_primary = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'highway', ['primary'])
+        highways_residential = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'highway', ['residential'])
+        highways_secondary = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'highway', ['secondary'])
+        highways_service = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'highway', ['service'])
+        highways_tertiary = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'highway', ['tertiary'])
+        highways_track = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'highway', ['track'])
+        highways_unclassified = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'highway', ['unclassified'])
+        highways_road = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'highway', ['road'])
+        highways_footway = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'highway', ['footway'])
+
+        return {
+            "building": buildings,
+            "landuse_residential": residential_areas,
+            "landuse_farmland": landuse_farmlands,
+            "landuse_orchard": landuse_orchards,
+            "landuse_any_other": landuse_any_other,
+            "highway_path": highways_path,
+            "highway_primary": highways_primary,
+            "highway_residential": highways_residential,
+            "highway_secondary": highways_secondary,
+            "highway_service": highways_service,
+            "highway_tertiary": highways_tertiary,
+            "highway_track": highways_track,
+            "highway_unclassified": highways_unclassified,
+            "highway_road": highways_road,
+            "highway_footway": highways_footway
+        }
 
     def create_mapathon_changes(self, project_polygons, osc_root_element, date, min_hour_utz):
 
@@ -160,7 +195,7 @@ class MapathonChangeCreator(object):
         highways_road = []
         highways_footway = []
 
-        count_ways_with_no_nodes = 0
+        self.count_ways_with_no_nodes = 0
 
         for i, way in enumerate(ways):
 
@@ -172,6 +207,8 @@ class MapathonChangeCreator(object):
 
             if timestamp.hour >= int(min_hour_utz):
                 feature = self.create_feature(way)
+                if feature is None: # Version of the way > 1 or the way has no nodes
+                    continue
 
                 tags = way.xpath("tag")
 
@@ -230,7 +267,7 @@ class MapathonChangeCreator(object):
                         else:
                             print(feature_type_value)
 
-        print("count_ways_with_no_nodes: ", count_ways_with_no_nodes)
+        print("self.count_ways_with_no_nodes: ", self.count_ways_with_no_nodes)
 
         return {
             "building": buildings,
@@ -329,13 +366,12 @@ class MapathonChangeCreator(object):
         
         file_name = self.save_osc_to_file(osc_file_download_url, osc_gz_response)
         self.insert_data_to_db(file_name, project_polygon_feature_collection)
-        # TODO analyze in PostGIS db
 
         # osc_data = zlib.decompress(osc_gz_response.content, 16 + zlib.MAX_WBITS)
         # osc_root_element = etree.fromstring(osc_data)
 
         # project_polygons = self.create_polygons_from_feature_collection(project_polygon_feature_collection)
-        # return self.create_mapathon_changes(project_polygons, osc_root_element, date, min_hour_utz)
+        return self.create_mapathon_changes_with_db(date, min_hour_utz)
 
 
     def insert_data_to_db(self, file_name, project_polygon_feature_collection):
