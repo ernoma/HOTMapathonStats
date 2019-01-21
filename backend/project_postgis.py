@@ -46,7 +46,7 @@ class ProjectPostgis:
         connection = psycopg2.connect(database=db_name, user=os.environ['HOTOSM_DB_USER'], host='localhost', password=os.environ['HOTOSM_DB_PASS'])
         cursor = connection.cursor()
 
-        query = "SELECT version, ST_AsGeoJSON(linestring), hstore_to_json(tags) " \
+        query = "SELECT ways.id, version, ST_AsGeoJSON(linestring), hstore_to_json(tags) " \
             "FROM ways, project_tasks " \
             "WHERE ST_Intersects(linestring, project_tasks.geom) AND " \
             "tstamp >= '{} {}'::timestamp".format(date, str(min_hour_utz) + ":00:00")
@@ -65,14 +65,33 @@ class ProjectPostgis:
                     query += "tags -> '{}' <> '{}' AND ".format(osm_key, value)
                 query = query[:-5] + ")"
         
-        print(query)
+        #print(query)
         cursor.execute(query)
+
+        features = []
 
         row = cursor.fetchone()
         while row:
-            # do something with row
-            pprint(row)
+            #pprint(row)
+            feature = self.create_feature(row)
+            #pprint(feature)
+            features.append(feature)
             row = cursor.fetchone()
-            break
 
-        return None
+        return features
+
+    def create_feature(self, row):
+        feature = {}
+        feature['type'] = 'Feature'
+        feature_version = row[1]
+        if feature_version == 1: # store only nodes for created features to save memory & bandwidth
+            feature["geometry"] = row[2]
+
+        feature['properties'] = {}
+
+        feature['properties']['id'] = row[0]
+        feature['properties']['version'] = feature_version
+        feature['properties']['tags'] = row[3]
+
+        return feature
+        
