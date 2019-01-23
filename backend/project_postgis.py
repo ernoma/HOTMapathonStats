@@ -41,15 +41,22 @@ class ProjectPostgis:
         cursor.close()
         connection.close()
 
-    def find_changes(self, db_name, date, min_hour_utz, osm_key, osm_values=None, osm_exclude_values=None):
+    def find_changes(self, db_name, date, min_hour_utz, osm_key, osm_values=None, osm_exclude_values=None, geomtype=None):
         # TODO find created features that matches the provided date, time, OSM key and possible specifiers for the OSM tag values to include and / or exlude
         connection = psycopg2.connect(database=db_name, user=os.environ['HOTOSM_DB_USER'], host='localhost', password=os.environ['HOTOSM_DB_PASS'])
         cursor = connection.cursor()
 
-        query = "SELECT ways.id, version, ST_AsGeoJSON(linestring), hstore_to_json(tags) " \
-            "FROM ways, project_tasks " \
-            "WHERE ST_Intersects(linestring, project_tasks.geom) AND " \
-            "tstamp >= '{} {}'::timestamp".format(date, str(min_hour_utz) + ":00:00")
+        query = ""
+        if geomtype == 'polygon':
+            query = "SELECT ways.id, version, ST_AsGeoJSON(ST_MakePolygon(linestring)), hstore_to_json(tags) "
+            query += "FROM ways, project_tasks " \
+                "WHERE ST_Intersects(linestring, project_tasks.geom) AND ST_NumPoints(linestring) >= 4 AND "
+        else:
+            query = "SELECT ways.id, version, ST_AsGeoJSON(linestring), hstore_to_json(tags) "
+            query += "FROM ways, project_tasks " \
+                "WHERE ST_Intersects(linestring, project_tasks.geom) AND "
+        
+        query += "tstamp >= '{} {}'::timestamp".format(date, str(min_hour_utz) + ":00:00")
 
         if osm_values is None and osm_exclude_values is None:
             query += " AND tags ? '{}'".format(osm_key)

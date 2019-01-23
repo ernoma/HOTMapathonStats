@@ -148,7 +148,7 @@ class StatsTaskTest(unittest.TestCase):
     def test_find_changes_postgis(self):
         project_postgis = ProjectPostgis()
         db_name = 'africa_tanzania_updates_000_002_119'
-        buildings = project_postgis.find_changes(db_name, '2019-01-14', 8, 'building')
+        buildings = project_postgis.find_changes(db_name, '2019-01-14', 8, 'building', geomtype='polygon')
 
 if __name__ == '__main__':
     unittest.main()

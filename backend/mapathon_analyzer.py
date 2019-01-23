@@ -139,11 +139,11 @@ class MapathonChangeCreator(object):
         return feature
 
     def create_mapathon_changes_with_db(self, date, min_hour_utz):
-        buildings = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'building')
-        residential_areas = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'landuse', ['residential'])
-        landuse_farmlands = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'landuse', ['farmland'])
-        landuse_orchards = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'landuse', ['orchard'])
-        landuse_any_other = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'landuse', None, ['residential', 'farmland', 'orchard'])
+        buildings = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'building', geomtype='polygon')
+        residential_areas = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'landuse', ['residential'], geomtype='polygon')
+        landuse_farmlands = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'landuse', ['farmland'], geomtype='polygon')
+        landuse_orchards = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'landuse', ['orchard'], geomtype='polygon')
+        landuse_any_other = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'landuse', None, ['residential', 'farmland', 'orchard'], geomtype='polygon')
         highways_path = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'highway', ['path'])
         highways_primary = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'highway', ['primary'])
         highways_residential = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'highway', ['residential'])
