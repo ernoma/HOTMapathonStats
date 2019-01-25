@@ -427,7 +427,7 @@ function createBuildingStatistics() {
 		else {
 			elements = arguments[0];
 		}
-			
+		console.log(elements);
 		calculateBuildingStatistics(elements);
     });
 }
@@ -440,28 +440,52 @@ function calculateBuildingStatistics(elements) {
 
     var buildingsCount = 0;
     var modifiedCount = 0;
-    
-    for (var i = 0; i < elements.length; i++) {
+	
+	var geoJSONFeatures = [];
+
+	for (var i = 0; i < elements.length; i++) {
         var building = elements[i];
 
-	if(building.version != 1) {
-	    modifiedCount++;
+		if (building.type != undefined && building.type == 'Feature') { // GeoJSON
+			if(building.properties.version != 1) {
+				modifiedCount++;
+			}
+			else {
+				geoJSONFeatures.push(building);
+				buildingsCount++;
+			}
+		}
+		else {
+			if(building.version != 1) {
+				modifiedCount++;
+			}
+			else {
+				var latLngs = [];
+				buildingsCount++;
+				for (var j = 0; j < building.nodes.length; j++) {
+					latLngs.push(L.latLng(building.nodes[j].lat, building.nodes[j].lon));
+				}
+				if (latLngs.length > 2) {
+					var polygon = L.polygon(latLngs, {color: '#FF0000', weight: 2 });
+					var linkText = 'Building, id: ' + building.id;
+					//var linkText = '<a href="http://www.openstreetmap.org/way/' + building.id + '" target="_blank">View on openstreetmap.org</a>';
+					polygon.bindPopup(linkText);
+					polygon.addTo(map);
+				}
+			}
+		}
 	}
-	else {
-            var latLngs = [];
-	    buildingsCount++;
-            for (var j = 0; j < building.nodes.length; j++) {
-		latLngs.push(L.latLng(building.nodes[j].lat, building.nodes[j].lon));
-            }
-            if (latLngs.length > 2) {
-		var polygon = L.polygon(latLngs, {color: '#FF0000', weight: 2 });
-		var linkText = 'Building, id: ' + building.id;
-		//var linkText = '<a href="http://www.openstreetmap.org/way/' + building.id + '" target="_blank">View on openstreetmap.org</a>';
-		polygon.bindPopup(linkText);
-		polygon.addTo(map);
-            }
+	
+	if (geoJSONFeatures.length >= 0) {
+		console.log(geoJSONFeatures);
+		var geojsonLayer = L.geoJSON(geoJSONFeatures, {
+			style: {color: '#FF0000', weight: 2 }
+		});
+		// var linkText = 'Building, id: ' + building.properties.id;
+		// geojsonLayer.bindPopup(linkText);
+		geojsonLayer.addTo(map);
+		// console.log("added");
 	}
-    }
 
     var modifiedPercentage = elements.length == 0 ? 0 : modifiedCount / elements.length * 100;
     var text = "" + buildingsCount + ", +" + modifiedCount + " modified" + " (" + modifiedPercentage.toFixed(1) + "%)";

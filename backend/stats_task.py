@@ -97,19 +97,19 @@ class MapathonStatistics(object):
 
         self.create_mapathon_changes()
 
-        # self.store_changes()
+        self.store_changes()
 
-        # self.state = {
-        #     'name': 'storing_to_page_list',
-        #     'state_progress': 0
-        # }
+        self.state = {
+            'name': 'storing_to_page_list',
+            'state_progress': 0
+        }
 
-        # self.store_to_page_list()
+        self.store_to_page_list()
 
-        # self.state = {
-        #     'name': 'storing_to_page_list',
-        #     'state_progress': 0
-        # }
+        self.state = {
+            'name': 'storing_to_page_list',
+            'state_progress': 0
+        }
 
     def get_project_data(self):
         resp = requests.get('https://tasks.hotosm.org/api/v1/project/' + self.client_data['project_number'])
