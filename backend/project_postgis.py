@@ -92,7 +92,7 @@ class ProjectPostgis:
         feature['type'] = 'Feature'
         feature_version = row[1]
         if feature_version == 1: # store only nodes for created features to save memory & bandwidth
-            feature["geometry"] = row[2]
+            feature["geometry"] = json.loads(row[2])
 
         feature['properties'] = {}
 
