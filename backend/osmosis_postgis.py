@@ -16,32 +16,44 @@ class OsmosisPostgis:
         self.connection.autocommit = True
 
     def prepare_db(self, db_name):
+
+        ret = ''
+
         cursor = self.connection.cursor()
         
-        # TODO what if the database already exists?
+        # Check if the database already exists
+        sql_query = "SELECT 1 AS exists FROM pg_database WHERE datname='{}'".format(db_name)
+        cursor.execute(sql_query)
+        row = cursor.fetchone()
+        #print(row)
+        if not row:
+            sql_query = 'CREATE DATABASE {}'.format(db_name)
+            cursor.execute(sql_query)
+            
+            connection = psycopg2.connect(database=db_name, user=os.environ['HOTOSM_DB_USER'], host='localhost', password=os.environ['HOTOSM_DB_PASS'])
+            connection.autocommit = True
+            
+            cursor_osmosis_db = connection.cursor()
 
-        sql_query = 'CREATE DATABASE {}'.format(db_name)
-        cursor.execute(sql_query, (db_name,))
-        
-        connection = psycopg2.connect(database=db_name, user=os.environ['HOTOSM_DB_USER'], host='localhost', password=os.environ['HOTOSM_DB_PASS'])
-        connection.autocommit = True
-        
-        cursor = connection.cursor()
+            cursor_osmosis_db.execute('CREATE EXTENSION POSTGIS')
+            cursor_osmosis_db.execute('CREATE EXTENSION HSTORE')
 
-        cursor.execute('CREATE EXTENSION POSTGIS')
-        cursor.execute('CREATE EXTENSION HSTORE')
-
-        with open(os.path.join(OsmosisPostgis.OSMOSIS_PG_FILES_PATH, "pgsnapshot_schema_0.6.sql"), "r") as f:
-            cursor.execute(f.read())
-        with open(os.path.join(OsmosisPostgis.OSMOSIS_PG_FILES_PATH, "pgsnapshot_schema_0.6_action.sql"), "r") as f:
-            cursor.execute(f.read())
-        with open(os.path.join(OsmosisPostgis.OSMOSIS_PG_FILES_PATH, "pgsnapshot_schema_0.6_bbox.sql"), "r") as f:
-            cursor.execute(f.read())
-        with open(os.path.join(OsmosisPostgis.OSMOSIS_PG_FILES_PATH, "pgsnapshot_schema_0.6_linestring.sql"), "r") as f:
-            cursor.execute(f.read())
+            with open(os.path.join(OsmosisPostgis.OSMOSIS_PG_FILES_PATH, "pgsnapshot_schema_0.6.sql"), "r") as f:
+                cursor_osmosis_db.execute(f.read())
+            with open(os.path.join(OsmosisPostgis.OSMOSIS_PG_FILES_PATH, "pgsnapshot_schema_0.6_action.sql"), "r") as f:
+                cursor_osmosis_db.execute(f.read())
+            with open(os.path.join(OsmosisPostgis.OSMOSIS_PG_FILES_PATH, "pgsnapshot_schema_0.6_bbox.sql"), "r") as f:
+                cursor_osmosis_db.execute(f.read())
+            with open(os.path.join(OsmosisPostgis.OSMOSIS_PG_FILES_PATH, "pgsnapshot_schema_0.6_linestring.sql"), "r") as f:
+                cursor_osmosis_db.execute(f.read())
         
+            connection.close()
+
+            ret = 'created'
+
         cursor.close()
-        connection.close()
+           
+        return ret
 
     def write_osc_to_pg_using_osmosis(self, db_name, osc_file_name):
         file_param = 'file={}'.format(os.path.join(OsmosisPostgis.INPUT_BASE_PATH, osc_file_name))

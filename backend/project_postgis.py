@@ -19,24 +19,30 @@ class ProjectPostgis:
 
         cursor = connection.cursor()
 
-        # TODO what if the table already exists?
+        # Check if the table already exists
+        sql_query = "SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'project_tasks')"
+        cursor.execute(sql_query)
+        row = cursor.fetchone()
+        
+        #print(row[0])
 
-        create_table_query = """ CREATE TABLE project_tasks
-                        (
-                            id SERIAL PRIMARY KEY,
-                            geom GEOMETRY NOT NULL
-                        );
-                        """
-        cursor.execute(create_table_query)
+        if not row[0]:
+            create_table_query = """ CREATE TABLE project_tasks
+                            (
+                                id SERIAL PRIMARY KEY,
+                                geom GEOMETRY NOT NULL
+                            );
+                            """
+            cursor.execute(create_table_query)
 
-        geoJSON_features = project_polygon_feature_collection['features']
-        for feature in geoJSON_features:
-            print (feature)
-            insert_query = "INSERT INTO project_tasks (geom) VALUES (ST_SetSRID(ST_GeomFromGeoJSON('{}'), 4326))".format(json.dumps(feature['geometry']))
-            cursor.execute(insert_query)
+            geoJSON_features = project_polygon_feature_collection['features']
+            for feature in geoJSON_features:
+                print (feature)
+                insert_query = "INSERT INTO project_tasks (geom) VALUES (ST_SetSRID(ST_GeomFromGeoJSON('{}'), 4326))".format(json.dumps(feature['geometry']))
+                cursor.execute(insert_query)
 
-        create_spatial_index_query = "CREATE INDEX project_tasks_gix ON project_tasks USING GIST (geom);"
-        cursor.execute(create_spatial_index_query)
+            create_spatial_index_query = "CREATE INDEX project_tasks_gix ON project_tasks USING GIST (geom);"
+            cursor.execute(create_spatial_index_query)
 
         cursor.close()
         connection.close()
@@ -50,7 +56,8 @@ class ProjectPostgis:
         if geomtype == 'polygon':
             query = "SELECT ways.id, version, ST_AsGeoJSON(ST_MakePolygon(linestring)), hstore_to_json(tags) "
             query += "FROM ways, project_tasks " \
-                "WHERE ST_Intersects(linestring, project_tasks.geom) AND ST_NumPoints(linestring) >= 4 AND "
+                "WHERE ST_Intersects(linestring, project_tasks.geom) AND ST_NumPoints(linestring) >= 4 AND " \
+                "ST_IsClosed(linestring) AND "
         else:
             query = "SELECT ways.id, version, ST_AsGeoJSON(linestring), hstore_to_json(tags) "
             query += "FROM ways, project_tasks " \

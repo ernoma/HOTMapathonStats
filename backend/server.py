@@ -51,9 +51,7 @@ def create_mapathon_stats():
     new_stat_task.start_task()
 
     result = {
-        'status': 'OK',
-        'stat_task_uuid': stat_task_uuid,
-        'client_data': client_data
+        'stat_task_uuid': stat_task_uuid
     }
     
     return jsonify(result)
@@ -79,7 +77,7 @@ def get_stats_state():
 
 @app.route('/mapathon/list', methods=['GET'])
 def get_mapathon_list():
-    # TODO return list of the created mapathon statistics and pages
+    # Returns list of the created mapathon statistics and pages
     mapathons_storage = MapathonsStorage()
     mapathons = mapathons_storage.get_all_mapathons()
     return dumps(mapathons)

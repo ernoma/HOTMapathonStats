@@ -377,14 +377,14 @@ class MapathonChangeCreator(object):
     def insert_data_to_db(self, file_name, project_polygon_feature_collection):
         
         self.db_name = file_name.split('.')[0]
-        self.osmosis_postgis.prepare_db(self.db_name)
-        ret = self.osmosis_postgis.write_osc_to_pg_using_osmosis(self.db_name, file_name)
-
-        if ret == 0:
-            pass
-        else:
-            pass
-             # TODO
+        ret = self.osmosis_postgis.prepare_db(self.db_name)
+        if ret == 'created':
+            ret = self.osmosis_postgis.write_osc_to_pg_using_osmosis(self.db_name, file_name)
+            if ret == 0:
+                pass
+            else:
+                pass
+                # TODO
 
         self.project_postgis.write_project_features_to_pg(self.db_name, project_polygon_feature_collection)
 

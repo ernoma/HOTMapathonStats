@@ -100,7 +100,7 @@ class MapathonStatistics(object):
         self.store_changes()
 
         self.state = {
-            'name': 'storing_to_page_list',
+            'name': 'storing_osm_changes',
             'state_progress': 0
         }
 
