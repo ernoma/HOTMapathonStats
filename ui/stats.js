@@ -427,7 +427,7 @@ function createBuildingStatistics() {
 		else {
 			elements = arguments[0];
 		}
-		console.log(elements);
+		//console.log(elements);
 		calculateBuildingStatistics(elements);
     });
 }
@@ -447,7 +447,7 @@ function calculateBuildingStatistics(elements) {
         var building = elements[i];
 
 		if (building.type != undefined && building.type == 'Feature') { // GeoJSON
-			if(building.properties.version != 1) {
+			if (building.properties.version != 1) {
 				modifiedCount++;
 			}
 			else {
@@ -456,7 +456,7 @@ function calculateBuildingStatistics(elements) {
 			}
 		}
 		else {
-			if(building.version != 1) {
+			if (building.version != 1) {
 				modifiedCount++;
 			}
 			else {
@@ -477,14 +477,15 @@ function calculateBuildingStatistics(elements) {
 	}
 	
 	if (geoJSONFeatures.length >= 0) {
-		console.log(geoJSONFeatures);
+		//console.log(geoJSONFeatures);
 		var geojsonLayer = L.geoJSON(geoJSONFeatures, {
-			style: {color: '#FF0000', weight: 2 }
+			style: {color: '#FF0000', weight: 2 },
+			onEachFeature: function (feature, layer) {
+				linkText = 'Building, id: ' + feature.properties.id;
+				layer.bindPopup(linkText);
+			}
 		});
-		// var linkText = 'Building, id: ' + building.properties.id;
-		// geojsonLayer.bindPopup(linkText);
 		geojsonLayer.addTo(map);
-		// console.log("added");
 	}
 
     var modifiedPercentage = elements.length == 0 ? 0 : modifiedCount / elements.length * 100;
@@ -499,31 +500,59 @@ function calculateResidentialAreaStatistics(elements) {
     var totalArea = 0;
     var modifiedCount = 0;
 
+	var geoJSONFeatures = [];
+
     for (var i = 0; i < elements.length; i++) {
         var residentialArea = elements[i];
 
-		if(residentialArea.version != 1) {
-			modifiedCount++;
-		}
-		else {	    
-			var area = 0;
-			var latLngs = [];
-			residentialAreaCount++;
-			for (var j = 0; j < residentialArea.nodes.length; j++) {
-				latLngs.push(L.latLng(residentialArea.nodes[j].lat, residentialArea.nodes[j].lon));
+		if (residentialArea.type != undefined && residentialArea.type == 'Feature') { // GeoJSON
+			if (residentialArea.properties.version != 1) {
+				modifiedCount++;
 			}
-			if (latLngs.length > 2) {
+			else {
+				geoJSONFeatures.push(residentialArea);
+				residentialAreaCount++;
 				residentialAreaNonEmptyCount++;
-				var polygon = L.polygon(latLngs, {color: '#FFFF00', weight: 2 });
-				var linkText = 'Residental area, id: ' + residentialArea.id;
-				//var linkText = '<a href="http://www.openstreetmap.org/way/' + residentialArea.id + '" target="_blank">View on openstreetmap.org</a>';
-				polygon.bindPopup(linkText);
-				polygon.addTo(map);
-				area = L.GeometryUtil.geodesicArea(latLngs); // in squaremeters
+				var area = turf.area(residentialArea.geometry);
 				totalArea += area;
 			}
 		}
+		else {
+			if (residentialArea.version != 1) {
+				modifiedCount++;
+			}
+			else {	    
+				var area = 0;
+				var latLngs = [];
+				residentialAreaCount++;
+				for (var j = 0; j < residentialArea.nodes.length; j++) {
+					latLngs.push(L.latLng(residentialArea.nodes[j].lat, residentialArea.nodes[j].lon));
+				}
+				if (latLngs.length > 2) {
+					residentialAreaNonEmptyCount++;
+					var polygon = L.polygon(latLngs, {color: '#FFFF00', weight: 2 });
+					var linkText = 'Residental area, id: ' + residentialArea.id;
+					//var linkText = '<a href="http://www.openstreetmap.org/way/' + residentialArea.id + '" target="_blank">View on openstreetmap.org</a>';
+					polygon.bindPopup(linkText);
+					polygon.addTo(map);
+					area = L.GeometryUtil.geodesicArea(latLngs); // in squaremeters
+					totalArea += area;
+				}
+			}
+		}
     }
+
+	if (geoJSONFeatures.length >= 0) {
+		//console.log(geoJSONFeatures);
+		var geojsonLayer = L.geoJSON(geoJSONFeatures, {
+			style: {color: '#FFFF00', weight: 2 },
+			onEachFeature: function (feature, layer) {
+				linkText = 'Residental area, id: ' + feature.properties.id;
+				layer.bindPopup(linkText);
+			}
+		});
+		geojsonLayer.addTo(map);
+	}
 
     var modifiedPercentage = elements.length == 0 ? 0 : modifiedCount / elements.length * 100;
     var text = "" + residentialAreaCount + ", +" + modifiedCount + " modified" + " (" + modifiedPercentage.toFixed(1) + "%)";
@@ -545,48 +574,89 @@ function calculateWayStatistics(elements, lengthHtmlElementID, countHtmlElementI
     var waysCount = 0;
     var totalWayLength = 0;
     var modifiedCount = 0;
-    
-    for (var i = 0; i < elements.length; i++) {
-	if(elements[i].version != 1) {
-	    modifiedCount++;
-	}
-	else {
-	    var wayDistance = 0;
-	    var latLngs = [];
-	    waysCount++;
-	    for (var j = 0; j < elements[i].nodes.length; j++) {
-		latLngs.push(L.latLng(elements[i].nodes[j].lat, elements[i].nodes[j].lon));
-	    }
-	    var polyLine = L.polyline(latLngs, {weight: weight, color: mapLineColor, dashArray: dashArray });
-	    var wayTextSuffix = "";
-	    var linkText = "";
-	    if (elements[i].tags.highway != undefined) {
-		if (elements[i].tags.highway != "track" && elements[i].tags.highway != "path"
-		    && elements[i].tags.highway != "road" && elements[i].tags.highway != "footway") {
-		    wayTextSuffix = " road";
-		}
-		linkText = elements[i].tags.highway + wayTextSuffix + ', id: ' + elements[i].id;
-		//var linkText = '<a href="http://www.openstreetmap.org/way/' + elements[i].id + '" target="_blank">View on openstreetmap.org</a>';
-	    }
-	    else if (elements[i].tags.waterway != undefined) {
-		linkText = elements[i].tags.waterway + wayTextSuffix + ', id: ' + elements[i].id;
-		//console.log(linkText);
-	    }
-	    polyLine.bindPopup(linkText);
-	    polyLine.addTo(map);
 	
-	    for (var j = 0; j < latLngs.length - 1; j++) {
-		var lat1 = latLngs[j].lat;
-		var lon1 = latLngs[j].lng;
-		var lat2 = latLngs[j+1].lat;
-		var lon2 = latLngs[j+1].lng;
-		wayDistance += distance(lat1,lon1,lat2,lon2) * 1000;
-	    }
+	var geoJSONFeatures = [];
 
-	    totalWayLength += wayDistance;
-	}
+    for (var i = 0; i < elements.length; i++) {
+
+		if (elements[i].type != undefined && elements[i].type == 'Feature') { // GeoJSON
+			if (elements[i].properties.version != 1) {
+				modifiedCount++;
+			}
+			else {
+				geoJSONFeatures.push(elements[i]);
+				waysCount++;
+				var wayDistance = turf.length(elements[i].geometry) * 1000;
+				totalWayLength += wayDistance;
+			}
+		}
+		else {
+			if (elements[i].version != 1) {
+				modifiedCount++;
+			}
+			else {
+				var wayDistance = 0;
+				var latLngs = [];
+				waysCount++;
+				for (var j = 0; j < elements[i].nodes.length; j++) {
+					latLngs.push(L.latLng(elements[i].nodes[j].lat, elements[i].nodes[j].lon));
+				}
+				var polyLine = L.polyline(latLngs, {weight: weight, color: mapLineColor, dashArray: dashArray });
+				var wayTextSuffix = "";
+				var linkText = "";
+				if (elements[i].tags.highway != undefined) {
+					if (elements[i].tags.highway != "track" && elements[i].tags.highway != "path"
+						&& elements[i].tags.highway != "road" && elements[i].tags.highway != "footway") {
+						wayTextSuffix = " road";
+					}
+					linkText = elements[i].tags.highway + wayTextSuffix + ', id: ' + elements[i].id;
+					//var linkText = '<a href="http://www.openstreetmap.org/way/' + elements[i].id + '" target="_blank">View on openstreetmap.org</a>';
+				}
+				else if (elements[i].tags.waterway != undefined) {
+					linkText = elements[i].tags.waterway + wayTextSuffix + ', id: ' + elements[i].id;
+					//console.log(linkText);
+				}
+				polyLine.bindPopup(linkText);
+				polyLine.addTo(map);
+			
+				for (var j = 0; j < latLngs.length - 1; j++) {
+					var lat1 = latLngs[j].lat;
+					var lon1 = latLngs[j].lng;
+					var lat2 = latLngs[j+1].lat;
+					var lon2 = latLngs[j+1].lng;
+					wayDistance += distance(lat1,lon1,lat2,lon2) * 1000;
+				}
+
+				totalWayLength += wayDistance;
+			}
+		}
     }
-    
+	
+	if (geoJSONFeatures.length >= 0) {
+		//console.log(geoJSONFeatures);
+		var geojsonLayer = L.geoJSON(geoJSONFeatures, {
+			style: {color: mapLineColor, weight: weight, dashArray: dashArray },
+			onEachFeature: function (feature, layer) {
+				var wayTextSuffix = "";
+				var linkText = "";
+				if (feature.properties.tags.highway != undefined) {
+					if (feature.properties.tags.highway != "track" && feature.properties.tags.highway != "path"
+						&& feature.properties.tags.highway != "road" && feature.properties.tags.highway != "footway") {
+						wayTextSuffix = " road";
+					}
+					linkText = feature.properties.tags.highway + wayTextSuffix + ', id: ' + feature.properties.id;
+					//var linkText = '<a href="http://www.openstreetmap.org/way/' + elements[i].id + '" target="_blank">View on openstreetmap.org</a>';
+				}
+				else if (feature.properties.tags.waterway != undefined) {
+					linkText = feature.properties.tags.waterway + wayTextSuffix + ', id: ' + feature.properties.id;
+					//console.log(linkText);
+				}
+				layer.bindPopup(linkText);
+			}
+		});
+		geojsonLayer.addTo(map);
+	}
+
     var length = totalWayLength / 1000;
     var text = "" + length.toFixed(1) + " km";
     $(lengthHtmlElementID).text(text);
@@ -655,33 +725,61 @@ function calculateLanduseStatistics(elements, userFriendlyName, typeHtmlElementP
     var totalArea = 0;
     var modifiedCount = 0;
 
-	console.log("calculateLanduseStatistics", userFriendlyName, typeHtmlElementPrefix, color, weight);
+	var geoJSONFeatures = [];
+
+	//console.log("calculateLanduseStatistics", userFriendlyName, typeHtmlElementPrefix, color, weight);
 
     for (var i = 0; i < elements.length; i++) {
         var landuseArea = elements[i];
 
-		if(landuseArea.version != 1) {
-			modifiedCount++;
-		}
-		else {	    
-			var area = 0;
-			var latLngs = [];
-			landuseAreaCount++;
-			for (var j = 0; j < landuseArea.nodes.length; j++) {
-				latLngs.push(L.latLng(landuseArea.nodes[j].lat, landuseArea.nodes[j].lon));
+		if (landuseArea.type != undefined && landuseArea.type == 'Feature') { // GeoJSON
+			if (landuseArea.properties.version != 1) {
+				modifiedCount++;
 			}
-			if (latLngs.length > 2) {
+			else {
+				geoJSONFeatures.push(landuseArea);
+				landuseAreaCount++;
 				landuseAreaNonEmptyCount++;
-				var polygon = L.polygon(latLngs, {color: color, weight: weight });
-				var linkText = userFriendlyName + ', id: ' + landuseArea.id;
-				//var linkText = '<a href="http://www.openstreetmap.org/way/' + residentialArea.id + '" target="_blank">View on openstreetmap.org</a>';
-				polygon.bindPopup(linkText);
-				polygon.addTo(map);
-				area = L.GeometryUtil.geodesicArea(latLngs); // in squaremeters
+				var area = turf.area(landuseArea.geometry);
 				totalArea += area;
 			}
 		}
+		else {
+			if(landuseArea.version != 1) {
+				modifiedCount++;
+			}
+			else {	    
+				var area = 0;
+				var latLngs = [];
+				landuseAreaCount++;
+				for (var j = 0; j < landuseArea.nodes.length; j++) {
+					latLngs.push(L.latLng(landuseArea.nodes[j].lat, landuseArea.nodes[j].lon));
+				}
+				if (latLngs.length > 2) {
+					landuseAreaNonEmptyCount++;
+					var polygon = L.polygon(latLngs, {color: color, weight: weight });
+					var linkText = userFriendlyName + ', id: ' + landuseArea.id;
+					//var linkText = '<a href="http://www.openstreetmap.org/way/' + residentialArea.id + '" target="_blank">View on openstreetmap.org</a>';
+					polygon.bindPopup(linkText);
+					polygon.addTo(map);
+					area = L.GeometryUtil.geodesicArea(latLngs); // in squaremeters
+					totalArea += area;
+				}
+			}
+		}
     }
+
+	if (geoJSONFeatures.length >= 0) {
+		//console.log(geoJSONFeatures);
+		var geojsonLayer = L.geoJSON(geoJSONFeatures, {
+			style: {color: color, weight: weight },
+			onEachFeature: function (feature, layer) {
+				linkText = userFriendlyName + ', id: ' + feature.properties.id;
+				layer.bindPopup(linkText);
+			}
+		});
+		geojsonLayer.addTo(map);
+	}
 
     var modifiedPercentage = elements.length == 0 ? 0 : modifiedCount / elements.length * 100;
     var text = "" + landuseAreaCount + ", +" + modifiedCount + " modified" + " (" + modifiedPercentage.toFixed(1) + "%)";

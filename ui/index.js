@@ -26,7 +26,7 @@ function getMapathons() {
 }
 
 function handleMapathonsData(data) {
-    console.log(data);
+    //console.log(data);
     data.forEach(item => {
         var html = '<div class="card"><div class="card-body"><h5 class="card-title">' + item.mapathon_info.mapathon_title + '</h5>' +
             '<p class="card-text">Mapathon held on ' +
@@ -82,19 +82,12 @@ function createStatistics(event) {
         data: $("#createStatisticsForm").serialize(),
         timeout: 10000,
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             hideAlerts();
-            if (data.status == 'OK') {
-                $("#serverSuccessAlert").html(
-                    "Processing the data...");
-                $("#serverSuccessAlert").show();
+            $("#serverSuccessAlert").html("Processing the data...");
+            $("#serverSuccessAlert").show();
 
-                setTimeout(updateStatsCreationState, 5000, data.stat_task_uuid);
-            }
-            else {
-                $("#serverErrorAlert").text("Error on starting processing the data");
-                $("#serverErrorAlert").show();
-            }
+            setTimeout(updateStatsCreationState, 5000, data.stat_task_uuid);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
@@ -142,7 +135,7 @@ function updateStatsCreationState(stat_task_uuid) {
         data: params,
         timeout: 10000,
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             hideAlerts();
             if (data.state != null) {
                 switch (data.state.name) {
@@ -297,7 +290,7 @@ function checkFormDataGiven(data) {
 }
 
 function createMapathonStatPageQueryParamsFromFormData(data) {
-    console.log(data);
+    //console.log(data);
     var html = "";
     var title = "";
     var date = "";
