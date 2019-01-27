@@ -11,7 +11,7 @@ from shapely.geometry import MultiPolygon as ShapelyMultiPolygon
 import os
 from lxml import html, etree
 import dateutil
-
+import traceback
 from pprint import pprint
 
 from mapathon_analyzer import MapathonChangeCreator
@@ -129,6 +129,7 @@ class MapathonStatistics(object):
                 'name': 'error',
                 'state_progress': 0
             }
+            print("Unexpected error: {}".format(traceback.format_exc()))
 
     def get_project_data(self):
         resp = requests.get('https://tasks.hotosm.org/api/v1/project/' + self.client_data['project_number'])

@@ -365,7 +365,7 @@ class MapathonChangeCreator(object):
             # TODO handle all possible error conditions
         
         file_name = self.save_osc_to_file(osc_file_download_url, osc_gz_response)
-        self.insert_data_to_db(file_name, project_polygon_feature_collection)
+        self.insert_data_to_db(file_name, project_polygon_feature_collection, date)
 
         # osc_data = zlib.decompress(osc_gz_response.content, 16 + zlib.MAX_WBITS)
         # osc_root_element = etree.fromstring(osc_data)
@@ -374,9 +374,9 @@ class MapathonChangeCreator(object):
         return self.create_mapathon_changes_with_db(date, min_hour_utz)
 
 
-    def insert_data_to_db(self, file_name, project_polygon_feature_collection):
+    def insert_data_to_db(self, file_name, project_polygon_feature_collection, date):
         
-        self.db_name = file_name.split('.')[0]
+        self.db_name = file_name.split('.')[0] + '_' + date.replace('-', '_')
         ret = self.osmosis_postgis.prepare_db(self.db_name)
         if ret == 'created':
             ret = self.osmosis_postgis.write_osc_to_pg_using_osmosis(self.db_name, file_name)
