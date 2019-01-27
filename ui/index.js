@@ -169,7 +169,7 @@ function updateStatsCreationState(stat_task_uuid) {
                         break;
                     case "creating_mapathon_changes":
                         $("#serverSuccessAlert").html(
-                            "Extracting mapathon changes... Done " + data.state.state_progress + "%.<br>" +
+                            "Extracting mapathon changes...<br>" +
                             getStatsURLCopyInfo(stat_task_uuid)
                             );
                         
@@ -203,7 +203,7 @@ function updateStatsCreationState(stat_task_uuid) {
                         break;
                     case "error":
                         // TODO more specific errors
-                        $("#serverErrorAlert").text("An error happened during statics creation... You can try later again / let Erno Mäkinen, ernoma (at) gmail.com know about the problem.");
+                        $("#serverErrorAlert").text("An error happened during statistics creation... You can try later again / let Erno Mäkinen, ernoma (at) gmail.com know about the problem.");
                         $("#serverErrorAlert").show();
                         break;
                     default:

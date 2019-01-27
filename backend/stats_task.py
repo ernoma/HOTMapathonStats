@@ -54,62 +54,81 @@ class MapathonStatistics(object):
         #self.run_stats_creation()
 
     def run_stats_creation(self):
-        print(self.stat_task_uuid)
-        print(self.client_data)
+        try:
+            print(self.stat_task_uuid)
+            print(self.client_data)
 
-        self.state = {
-            'name': 'getting_project_data',
-            'state_progress': 0
-        }
+            self.state = {
+                'name': 'getting_project_data',
+                'state_progress': 0
+            }
 
-        status_code = self.get_project_data()
+            status_code = self.get_project_data()
 
-        if status_code != 200:
-            self.state = 'error'
-            return
+            if status_code != 200:
+                self.state = {
+                    'name': 'error',
+                    'state_progress': 0
+                }
+                return
 
-        self.state = {
-            'name': 'finding_project_countries',
-            'state_progress': 0
-        }
+            self.state = {
+                'name': 'finding_project_countries',
+                'state_progress': 0
+            }
 
-        success = self.find_countries()
+            success = self.find_countries()
 
-        if not success:
-            self.state = 'error'
-            return
+            if not success:
+                self.state = {
+                    'name': 'error',
+                    'state_progress': 0
+                }
+                return
 
-        self.state = {
-            'name': 'finding_geofabrik_areas',
-            'state_progress': 0
-        }
+            self.state = {
+                'name': 'finding_geofabrik_areas',
+                'state_progress': 0
+            }
 
-        success = self.find_geofabrik_areas()
+            success = self.find_geofabrik_areas()
 
-        if not success:
-            self.state = 'error'
-            return
+            if not success:
+                self.state = {
+                    'name': 'error',
+                    'state_progress': 0
+                }
+                return
 
-        self.state = {
-            'name': 'creating_mapathon_changes',
-            'state_progress': 0
-        }
+            self.state = {
+                'name': 'creating_mapathon_changes',
+                'state_progress': 0
+            }
 
-        self.create_mapathon_changes()
+            self.create_mapathon_changes()
 
-        self.store_changes()
+            self.store_changes()
 
-        self.state = {
-            'name': 'storing_osm_changes',
-            'state_progress': 0
-        }
+            self.state = {
+                'name': 'storing_osm_changes',
+                'state_progress': 0
+            }
 
-        self.store_to_page_list()
+            self.store_to_page_list()
 
-        self.state = {
-            'name': 'storing_to_page_list',
-            'state_progress': 0
-        }
+            self.state = {
+                'name': 'storing_to_page_list',
+                'state_progress': 0
+            }
+        except KeyboardInterrupt:
+            raise
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except:
+            self.state = {
+                'name': 'error',
+                'state_progress': 0
+            }
 
     def get_project_data(self):
         resp = requests.get('https://tasks.hotosm.org/api/v1/project/' + self.client_data['project_number'])
