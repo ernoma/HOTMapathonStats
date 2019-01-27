@@ -54,12 +54,12 @@ class ProjectPostgis:
 
         query = ""
         if geomtype == 'polygon':
-            query = "SELECT ways.id, version, ST_AsGeoJSON(ST_MakePolygon(linestring)), hstore_to_json(tags) "
+            query = "SELECT ways.id, version, ST_AsGeoJSON(ST_MakePolygon(linestring)), tstamp, hstore_to_json(tags) "
             query += "FROM ways, project_tasks " \
                 "WHERE ST_Intersects(linestring, project_tasks.geom) AND ST_NumPoints(linestring) >= 4 AND " \
                 "ST_IsClosed(linestring) AND "
         else:
-            query = "SELECT ways.id, version, ST_AsGeoJSON(linestring), hstore_to_json(tags) "
+            query = "SELECT ways.id, version, ST_AsGeoJSON(linestring), tstamp, hstore_to_json(tags) "
             query += "FROM ways, project_tasks " \
                 "WHERE ST_Intersects(linestring, project_tasks.geom) AND "
         
@@ -105,7 +105,8 @@ class ProjectPostgis:
 
         feature['properties']['id'] = row[0]
         feature['properties']['version'] = feature_version
-        feature['properties']['tags'] = row[3]
+        feature['properties']['tstamp'] = row[3].isoformat()
+        feature['properties']['tags'] = row[4]
 
         return feature
         
