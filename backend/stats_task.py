@@ -221,17 +221,17 @@ class MapathonStatistics(object):
             self.osc_file_download_urls.append(osc_file_download_url)
             
             ######
-            self.mapathon_changes = self.mapathon_change_creator.create_mapathon_changes_from_URL(self.project_feature_collection, osc_file_download_url, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc'])
+            #self.mapathon_changes = self.mapathon_change_creator.create_mapathon_changes_from_URL(self.project_feature_collection, osc_file_download_url, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc'])
             #print(self.mapathon_changes)
             #####
 
-        #     result = self.mapathon_change_creator.create_mapathon_changes_from_URL(self.project_feature_collection, osc_file_download_url, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc'])
+            mapathon_changes_for_all_areas.append(self.mapathon_change_creator.create_mapathon_changes_from_URL(self.project_feature_collection, osc_file_download_url, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc']))
         #     for types_key in self.client_data['types_of_mapping']:
         #         for result_key, result_json in result.items():
         #             if result_key.startswith(types_key):
         #                 mapathon_changes_for_all_areas.append(result_json)
 
-        # self.mapathon_changes = self.mapathon_change_creator.filter_same_changes(mapathon_changes_for_all_areas)
+        self.mapathon_changes = self.mapathon_change_creator.filter_same_changes(mapathon_changes_for_all_areas)
 
     def create_project_polygon_feature_collection(self):
         #pprint(shape(self.project_data['areaOfInterest']).buffer(0))

@@ -427,7 +427,7 @@ class MapathonChangeCreator(object):
                     for area_change in area_changes:
                         found_change = False
                         for filtered_change in filtered_mapathon_changes[key]:
-                            if filtered_change['id'] == area_change['id']:
+                            if filtered_change['properties']['id'] == area_change['properties']['id']:
                                 found_change = True
                                 break
                         if not found_change:
@@ -435,7 +435,7 @@ class MapathonChangeCreator(object):
 
             return filtered_mapathon_changes
         else:
-            return mapathon_changes_for_multiple_areas
+            return mapathon_changes_for_multiple_areas[0]
 
 
 if __name__ == '__main__':
