@@ -3,6 +3,22 @@ html,body {
     height: 100%;
 }
 
+.users {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.user {
+    flex: 1 1 auto;
+    margin: auto;
+    padding-right: 15px;
+}
+
+.userSectionAcknowledgements {
+    margin-top: 10px;
+}
+
 #map_canvas {
   height: 400px;
 }

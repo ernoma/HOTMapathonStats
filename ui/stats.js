@@ -832,6 +832,11 @@ function showMapathonBasicData() {
 		var tagString = "";
 		for (var i = 0; i < tags.length; i++) {
 			tagString += tags[i].substr(1).toLowerCase() + ","
+
+			console.log(tags[i]);
+			if (tags[i].startsWith('#hotosm-project-')) {
+				getProjectUsers(tags[i].substr(1).toLowerCase());
+			}
 		}
 
 		tagString = tagString.slice(0, -1);
@@ -856,4 +861,42 @@ function showMapathonBasicData() {
 
 		$("#projectLeaderboardSpan").html(html);
 	}
+
+	function getProjectUsers(tag) {
+		// https://osm-stats-production-api.azurewebsites.net/hashtags/hotosm-project-3160/users?order_by=edits&order_direction=ASC&page=1
+		$.getJSON("https://osm-stats-production-api.azurewebsites.net/hashtags/" + tag + "/users?order_by=edits&order_direction=ASC&page=1", function (users) {
+			console.log(users);
+			if (users.length > 0) {
+				var html = '';
+				if (users.length < 500) {
+					html += '<h2>Project Contributions by ' + users.length + ' Persons</h2>';
+
+					html += '<div class="users">';
+					
+					for (var i = 0; i < users.length; i++) {
+						html += '<div class="user">' +
+							'<a href="http://tasks.hotosm.org/user/' + users[i].name + '">' + 
+							users[i].name + 
+							'</a>' +
+							'</div>';
+					}
+					html += '</div>';
+				}
+				else {
+					html += '<p>project contributions by over 500 persons</p>';
+				}
+
+				html += '<div class="userSectionAcknowledgements">The user list via Missing Maps (technical details: <a href="https://github.com/AmericanRedCross/osm-stats-api">github.com/AmericanRedCross/osm-stats-api</a>)<hr>';
+
+				$("#usersSection").html(html);
+			}
+		});
+	}
+}
+
+if (!String.prototype.startsWith) {
+	String.prototype.startsWith = function(searchString, position) {
+		position = position || 0;
+		return this.indexOf(searchString, position) === position;
+	};
 }
