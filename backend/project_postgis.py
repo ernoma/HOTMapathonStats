@@ -4,6 +4,10 @@ import json
 from pprint import pprint
 
 class ProjectPostgis:
+    """
+    Functionality for creating database table for a mapathon project tasks
+    as well as for inserting the task GeoJSONs to the table. 
+    """
 
     def __init__(self):
         self.connect_to_pg()

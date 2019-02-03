@@ -4,6 +4,11 @@ import os
 from subprocess import call
 
 class OsmosisPostgis:
+    """
+    Functionality for creating a database for osc data that is then added with Osmosis to the database. 
+    The osc data is from the GeoFabrik download service that contains the changes for the mapathon area (country) on the mapathon day.
+    The data is used together with the project task data in the same database for finding the mapathon changes.
+    """
 
     OSMOSIS_PG_FILES_PATH = os.path.join(os.getcwd(), 'osmosis_scripts')
     INPUT_BASE_PATH = os.path.join(os.getcwd(), 'osc_data')
