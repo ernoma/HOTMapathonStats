@@ -39,11 +39,18 @@ var projectHOTOSMData = null;
 
 const serverURL = "http://" + window.location.hostname + ":5000";
 
+var timeDimension = null;
+var timePlayer = null;
+
 $(document).ready(function () {
 	
-    map = L.map('map_canvas', {layers: [osmLayer]});
+    map = L.map('map_canvas', {
+		layers: [osmLayer]
+	});
     L.control.layers(baseMaps).addTo(map);
     L.control.scale().addTo(map);
+
+	initTimeDimensions();
 
 	$.getJSON("https://tasks.hotosm.org/api/v1/project/" + urlParams.get("project"), function (projectData) {
 
@@ -63,9 +70,44 @@ $(document).ready(function () {
 
 		//showPriorityAreas();
 
+		showMissingMapsData();
+
 		showStatistics();
     });
 });
+
+function initTimeDimensions() {
+
+	var minTime = "2018-01-01T00:00:00";
+	var maxTime = "2020-01-01T00:00:00";
+
+	timeDimension = new L.TimeDimension({
+		timeInterval: minTime + "/" + maxTime,
+		period: "PT5M"
+	});
+
+	map.timeDimension = timeDimension;
+
+	timePlayer = new L.TimeDimension.Player({
+		transitionTime: 200, 
+		loop: false,
+		startOver:true
+	}, timeDimension);
+
+	var timeDimensionControlOptions = {
+		player:        timePlayer,
+		timeDimension: timeDimension,
+		position:      'bottomleft',
+		autoPlay:      false,
+		minSpeed:      1,
+		speedStep:     0.5,
+		maxSpeed:      15,
+		timeSliderDragUpdate: true
+	};
+
+	var timeDimensionControl = new L.Control.TimeDimension(timeDimensionControlOptions);
+	map.addControl(timeDimensionControl);
+}
 
 function showStatistics() {
 
@@ -478,6 +520,7 @@ function calculateBuildingStatistics(elements) {
 	
 	if (geoJSONFeatures.length >= 0) {
 		//console.log(geoJSONFeatures);
+
 		var geojsonLayer = L.geoJSON(geoJSONFeatures, {
 			style: {color: '#FF0000', weight: 2 },
 			onEachFeature: function (feature, layer) {
@@ -485,7 +528,15 @@ function calculateBuildingStatistics(elements) {
 				layer.bindPopup(linkText);
 			}
 		});
-		geojsonLayer.addTo(map);
+
+		var timeDimensionLayer = L.timeDimension.layer.geoJson(geojsonLayer, {
+			addlastPoint: false,
+			updateTimeDimension: true
+		});
+
+		timeDimensionLayer.addTo(map);
+		var times = timeDimension.getAvailableTimes();
+		timeDimension.setCurrentTime(times[times.length - 1]);
 	}
 
     var modifiedPercentage = elements.length == 0 ? 0 : modifiedCount / elements.length * 100;
@@ -551,7 +602,15 @@ function calculateResidentialAreaStatistics(elements) {
 				layer.bindPopup(linkText);
 			}
 		});
-		geojsonLayer.addTo(map);
+		
+		var timeDimensionLayer = L.timeDimension.layer.geoJson(geojsonLayer, {
+			addlastPoint: false,
+			updateTimeDimension: true
+		});
+
+		timeDimensionLayer.addTo(map);
+		var times = timeDimension.getAvailableTimes();
+		timeDimension.setCurrentTime(times[times.length - 1]);
 	}
 
     var modifiedPercentage = elements.length == 0 ? 0 : modifiedCount / elements.length * 100;
@@ -654,7 +713,15 @@ function calculateWayStatistics(elements, lengthHtmlElementID, countHtmlElementI
 				layer.bindPopup(linkText);
 			}
 		});
-		geojsonLayer.addTo(map);
+		
+		var timeDimensionLayer = L.timeDimension.layer.wayLayer(geojsonLayer, {
+			addlastPoint: false,
+			updateTimeDimension: true
+		});
+
+		timeDimensionLayer.addTo(map);
+		var times = timeDimension.getAvailableTimes();
+		timeDimension.setCurrentTime(times[times.length - 1]);
 	}
 
     var length = totalWayLength / 1000;
@@ -778,7 +845,15 @@ function calculateLanduseStatistics(elements, userFriendlyName, typeHtmlElementP
 				layer.bindPopup(linkText);
 			}
 		});
-		geojsonLayer.addTo(map);
+		
+		var timeDimensionLayer = L.timeDimension.layer.geoJson(geojsonLayer, {
+			addlastPoint: false,
+			updateTimeDimension: true
+		});
+
+		timeDimensionLayer.addTo(map);
+		var times = timeDimension.getAvailableTimes();
+		timeDimension.setCurrentTime(times[times.length - 1]);
 	}
 
     var modifiedPercentage = elements.length == 0 ? 0 : modifiedCount / elements.length * 100;
@@ -825,7 +900,9 @@ function showMapathonBasicData() {
 		'<p>Some statistics for our contributions on the <a href="https://tasks.hotosm.org/project/' + urlParams.get("project") + '">#' + urlParams.get("project") + ' - ' + projectHOTOSMData.projectInfo.name + ' task</a>' +
 		'.</p>'
 	);
+}
 
+function showMissingMapsData() {
 	var tags = projectHOTOSMData.changesetComment.split(" ");
 	
 	if (tags.length > 0) {
@@ -833,7 +910,7 @@ function showMapathonBasicData() {
 		for (var i = 0; i < tags.length; i++) {
 			tagString += tags[i].substr(1).toLowerCase() + ","
 
-			console.log(tags[i]);
+			//console.log(tags[i]);
 			if (tags[i].startsWith('#hotosm-project-')) {
 				getProjectUsers(tags[i].substr(1).toLowerCase());
 			}
@@ -861,37 +938,37 @@ function showMapathonBasicData() {
 
 		$("#projectLeaderboardSpan").html(html);
 	}
+}
 
-	function getProjectUsers(tag) {
-		// https://osm-stats-production-api.azurewebsites.net/hashtags/hotosm-project-3160/users?order_by=edits&order_direction=ASC&page=1
-		$.getJSON("https://osm-stats-production-api.azurewebsites.net/hashtags/" + tag + "/users?order_by=edits&order_direction=ASC&page=1", function (users) {
-			console.log(users);
-			if (users.length > 0) {
-				var html = '';
-				if (users.length < 500) {
-					html += '<h2>Project Contributions by ' + users.length + ' Persons</h2>';
+function getProjectUsers(tag) {
+	// https://osm-stats-production-api.azurewebsites.net/hashtags/hotosm-project-3160/users?order_by=edits&order_direction=ASC&page=1
+	$.getJSON("https://osm-stats-production-api.azurewebsites.net/hashtags/" + tag + "/users?order_by=edits&order_direction=ASC&page=1", function (users) {
+		//console.log(users);
+		if (users.length > 0) {
+			var html = '';
+			if (users.length < 500) {
+				html += '<h2>Project Contributions by ' + users.length + ' Persons</h2>';
 
-					html += '<div class="users">';
-					
-					for (var i = 0; i < users.length; i++) {
-						html += '<div class="user">' +
-							'<a href="http://tasks.hotosm.org/user/' + users[i].name + '">' + 
-							users[i].name + 
-							'</a>' +
-							'</div>';
-					}
-					html += '</div>';
+				html += '<div class="users">';
+				
+				for (var i = 0; i < users.length; i++) {
+					html += '<div class="user">' +
+						'<a href="http://tasks.hotosm.org/user/' + users[i].name + '">' + 
+						users[i].name + 
+						'</a>' +
+						'</div>';
 				}
-				else {
-					html += '<p>project contributions by over 500 persons</p>';
-				}
-
-				html += '<div class="userSectionAcknowledgements">The user list via Missing Maps (technical details: <a href="https://github.com/AmericanRedCross/osm-stats-api">github.com/AmericanRedCross/osm-stats-api</a>)<hr>';
-
-				$("#usersSection").html(html);
+				html += '</div>';
 			}
-		});
-	}
+			else {
+				html += '<p>project contributions by over 500 persons</p>';
+			}
+
+			html += '<div class="userSectionAcknowledgements">The user list via Missing Maps (technical details: <a href="https://github.com/AmericanRedCross/osm-stats-api">github.com/AmericanRedCross/osm-stats-api</a>)<hr>';
+
+			$("#usersSection").html(html);
+		}
+	});
 }
 
 if (!String.prototype.startsWith) {
@@ -900,3 +977,34 @@ if (!String.prototype.startsWith) {
 		return this.indexOf(searchString, position) === position;
 	};
 }
+
+
+L.TimeDimension.Layer.WayLayer = L.TimeDimension.Layer.GeoJson.extend({
+
+    // Do not modify features. Just return the feature if it intersects
+    // the time interval
+    _getFeatureBetweenDates: function(feature, minTime, maxTime) {
+        var featureStringTimes = this._getFeatureTimes(feature);
+        if (featureStringTimes.length == 0) {
+            return feature;
+        }
+        var featureTimes = [];
+        for (var i = 0, l = featureStringTimes.length; i < l; i++) {
+            var time = featureStringTimes[i]
+            if (typeof time == 'string' || time instanceof String) {
+                time = Date.parse(time.trim());
+            }
+            featureTimes.push(time);
+        }
+
+        if (featureTimes[0] > maxTime || featureTimes[l - 1] < minTime) {
+            return null;
+        }
+        return feature;
+    },
+
+});
+
+L.timeDimension.layer.wayLayer = function(layer, options) {
+    return new L.TimeDimension.Layer.WayLayer(layer, options);
+};

@@ -6,7 +6,8 @@ from pprint import pprint
 class ProjectPostgis:
     """
     Functionality for creating database table for a mapathon project tasks
-    as well as for inserting the task GeoJSONs to the table. 
+    as well as for inserting the task GeoJSONs to the table.
+    The data is used together with the osc data in the same database for finding the mapathon
     """
 
     def __init__(self):
@@ -109,7 +110,7 @@ class ProjectPostgis:
 
         feature['properties']['id'] = row[0]
         feature['properties']['version'] = feature_version
-        feature['properties']['tstamp'] = row[3].isoformat()
+        feature['properties']['time'] = row[3].isoformat()
         feature['properties']['tags'] = row[4]
 
         return feature

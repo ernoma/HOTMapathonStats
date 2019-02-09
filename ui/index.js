@@ -22,7 +22,7 @@ $(document).ready(function () {
 //
 
 function getMapathons() {
-    return $.getJSON("http://" + window.location.hostname + ":5000/mapathon/list", handleMapathonsData);
+    return $.getJSON(serverURL + "/mapathon/list", handleMapathonsData);
 }
 
 function handleMapathonsData(data) {
@@ -47,7 +47,7 @@ function handleMapathonsData(data) {
 
 function showMapathon(event) {
     // TODO use event.target.id to show mapathon statistics page
-    console.log(event);
+    //console.log(event);
 }
 
 //
