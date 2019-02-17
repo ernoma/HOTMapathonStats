@@ -164,15 +164,14 @@ function updateStatsCreationState(stat_task_uuid) {
                         $("#serverSuccessAlert").html(
                             "Finding the project areas...<br>" +
                             getStatsURLCopyInfo(stat_task_uuid)
-                            );
+                        );
                         $("#serverSuccessAlert").show();
                         break;
                     case "creating_mapathon_changes":
                         $("#serverSuccessAlert").html(
                             "Extracting mapathon changes...<br>" +
                             getStatsURLCopyInfo(stat_task_uuid)
-                            );
-                        
+                        );
                         $("#serverSuccessAlert").show();
                         break;
                     case "creating_users_list":
@@ -356,9 +355,11 @@ function getProjectSearchPage(page) {
             projectNumberAwesomplete.list = awesompleteList;
         }
         else {
-            projectNumberAwesomplete = new Awesomplete(input, {
+            projectNumberAwesomplete = new Awesomplete(input, { // http://leaverou.github.io/awesomplete/
                 list: awesompleteList,
                 minChars: 1,
+                filter: filterProject,
+                replace: replaceProjectInputText
             });
         }
 
@@ -382,4 +383,31 @@ function getProjectSearchPage(page) {
             }, 100);
         }
     });
+}
+
+/**
+ * Awesomplete filter
+ * @param {string} text 
+ * @param {string} input 
+ */
+function filterProject(text, input) {
+    var parts = input.split(',');
+    for (var i = 0; i < parts.length; i++) {
+        if (text.indexOf(parts[i].trim()) >= 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function replaceProjectInputText(selectedOptionText) {
+
+    var parts = $("#projectNumber").val().split(',');
+    var text = "";
+    for (var i = 0; i < parts.length - 1; i++) {
+        text += parts[i] + ",";
+    }
+    text += selectedOptionText.slice(1, selectedOptionText.indexOf(' ', 1));
+
+    $("#projectNumber").val(text);
 }
