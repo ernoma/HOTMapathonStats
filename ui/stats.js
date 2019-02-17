@@ -42,6 +42,8 @@ const serverURL = "http://" + window.location.hostname + ":5000";
 var timeDimension = null;
 var timePlayer = null;
 
+var tagStatistics = {}
+
 $(document).ready(function () {
 	
     map = L.map('map_canvas', {
@@ -489,6 +491,8 @@ function calculateBuildingStatistics(elements) {
         var building = elements[i];
 
 		if (building.type != undefined && building.type == 'Feature') { // GeoJSON
+			createTagStatistics(elements[i]);
+			//console.log(elements[i].properties.tags);
 			if (building.properties.version != 1) {
 				modifiedCount++;
 			}
@@ -537,6 +541,8 @@ function calculateBuildingStatistics(elements) {
 		timeDimensionLayer.addTo(map);
 		var times = timeDimension.getAvailableTimes();
 		timeDimension.setCurrentTime(times[times.length - 1]);
+
+		console.log(tagStatistics);
 	}
 
     var modifiedPercentage = elements.length == 0 ? 0 : modifiedCount / elements.length * 100;
@@ -555,8 +561,9 @@ function calculateResidentialAreaStatistics(elements) {
 
     for (var i = 0; i < elements.length; i++) {
         var residentialArea = elements[i];
-
 		if (residentialArea.type != undefined && residentialArea.type == 'Feature') { // GeoJSON
+			createTagStatistics(elements[i]);
+			//console.log(elements[i].properties.tags);
 			if (residentialArea.properties.version != 1) {
 				modifiedCount++;
 			}
@@ -611,6 +618,8 @@ function calculateResidentialAreaStatistics(elements) {
 		timeDimensionLayer.addTo(map);
 		var times = timeDimension.getAvailableTimes();
 		timeDimension.setCurrentTime(times[times.length - 1]);
+
+		console.log(tagStatistics);
 	}
 
     var modifiedPercentage = elements.length == 0 ? 0 : modifiedCount / elements.length * 100;
@@ -639,6 +648,8 @@ function calculateWayStatistics(elements, lengthHtmlElementID, countHtmlElementI
     for (var i = 0; i < elements.length; i++) {
 
 		if (elements[i].type != undefined && elements[i].type == 'Feature') { // GeoJSON
+			createTagStatistics(elements[i]);
+			//console.log(elements[i].properties.tags);
 			if (elements[i].properties.version != 1) {
 				modifiedCount++;
 			}
@@ -722,6 +733,8 @@ function calculateWayStatistics(elements, lengthHtmlElementID, countHtmlElementI
 		timeDimensionLayer.addTo(map);
 		var times = timeDimension.getAvailableTimes();
 		timeDimension.setCurrentTime(times[times.length - 1]);
+
+		console.log(tagStatistics);
 	}
 
     var length = totalWayLength / 1000;
@@ -798,7 +811,8 @@ function calculateLanduseStatistics(elements, userFriendlyName, typeHtmlElementP
 
     for (var i = 0; i < elements.length; i++) {
         var landuseArea = elements[i];
-
+		createTagStatistics(elements[i]);
+		console.log(elements[i].properties.tags);
 		if (landuseArea.type != undefined && landuseArea.type == 'Feature') { // GeoJSON
 			if (landuseArea.properties.version != 1) {
 				modifiedCount++;
@@ -854,6 +868,8 @@ function calculateLanduseStatistics(elements, userFriendlyName, typeHtmlElementP
 		timeDimensionLayer.addTo(map);
 		var times = timeDimension.getAvailableTimes();
 		timeDimension.setCurrentTime(times[times.length - 1]);
+
+		console.log(tagStatistics);
 	}
 
     var modifiedPercentage = elements.length == 0 ? 0 : modifiedCount / elements.length * 100;
@@ -969,6 +985,17 @@ function getProjectUsers(tag) {
 			$("#usersSection").html(html);
 		}
 	});
+}
+
+function createTagStatistics(element) {
+	for (var key in element.properties.tags) {
+		if (tagStatistics[key + '=' + element.properties.tags[key]] == undefined) {
+			tagStatistics[key + '=' + element.properties.tags[key]] = 1;
+		}
+		else {
+			tagStatistics[key + '=' + element.properties.tags[key]]++;
+		}
+	}
 }
 
 if (!String.prototype.startsWith) {
