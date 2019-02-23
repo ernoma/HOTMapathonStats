@@ -17,7 +17,6 @@ from pprint import pprint
 from mapathon_analyzer import MapathonChangeCreator
 from user_list import UserList
 from mapathons_storage import MapathonsStorage
-from mapathon_webpage import MapathonWebPage
 
 class MapathonStatistics(object):
     """
@@ -26,7 +25,6 @@ class MapathonStatistics(object):
 
     def __init__(self, stat_task_uuid, client_data):
         self.mapathons_storage = MapathonsStorage()
-        self.mapathon_webpage = MapathonWebPage(self.mapathons_storage)
         self.stat_task_uuid = stat_task_uuid
         self.client_data = client_data
         self.mapathon_change_creator = MapathonChangeCreator()
@@ -58,54 +56,60 @@ class MapathonStatistics(object):
             print(self.stat_task_uuid)
             print(self.client_data)
 
-            self.state = {
-                'name': 'getting_project_data',
-                'state_progress': 0
-            }
+            for project_number in self.client_data['project_numbers']:
 
-            status_code = self.get_project_data()
+                print(project_number)
 
-            if status_code != 200:
                 self.state = {
-                    'name': 'error',
+                    'name': 'getting_project_data',
                     'state_progress': 0
                 }
-                return
 
-            self.state = {
-                'name': 'finding_project_countries',
-                'state_progress': 0
-            }
+                status_code = self.get_project_data(project_number)
 
-            success = self.find_countries()
+                if status_code != 200:
+                    self.state = {
+                        'name': 'error',
+                        'state_progress': 0
+                    }
+                    return
 
-            if not success:
                 self.state = {
-                    'name': 'error',
+                    'name': 'finding_project_countries',
                     'state_progress': 0
                 }
-                return
 
-            self.state = {
-                'name': 'finding_geofabrik_areas',
-                'state_progress': 0
-            }
+                success = self.find_countries()
 
-            success = self.find_geofabrik_areas()
+                if not success:
+                    self.state = {
+                        'name': 'error',
+                        'state_progress': 0
+                    }
+                    return
 
-            if not success:
                 self.state = {
-                    'name': 'error',
+                    'name': 'finding_geofabrik_areas',
                     'state_progress': 0
                 }
-                return
 
-            self.state = {
-                'name': 'creating_mapathon_changes',
-                'state_progress': 0
-            }
+                success = self.find_geofabrik_areas()
 
-            self.create_mapathon_changes()
+                if not success:
+                    self.state = {
+                        'name': 'error',
+                        'state_progress': 0
+                    }
+                    return
+
+                self.state = {
+                    'name': 'creating_mapathon_changes',
+                    'state_progress': 0
+                }
+
+                project_changes = self.create_project_changes()
+
+                self.mapathon_changes.append(project_changes)
 
             self.store_changes()
 
@@ -131,8 +135,8 @@ class MapathonStatistics(object):
             }
             print("Unexpected error: {}".format(traceback.format_exc()))
 
-    def get_project_data(self):
-        resp = requests.get('https://tasks.hotosm.org/api/v1/project/' + self.client_data['project_number'])
+    def get_project_data(self, project_number):
+        resp = requests.get('https://tasks.hotosm.org/api/v1/project/' + str(project_number))
 
         if resp.status_code == 200:
             self.project_data = resp.json()
@@ -226,14 +230,14 @@ class MapathonStatistics(object):
                 }
                 print("Project tasks intersercing polygon: " + file)
 
-    def create_mapathon_changes(self):
+    def create_project_changes(self):
         # find changes for the mapathon area during the mapathon
 
         self.project_feature_collection = self.create_project_polygon_feature_collection()
 
         self.osc_file_download_urls = []
 
-        mapathon_changes_for_all_areas = []
+        project_changes_for_all_areas = []
 
         for osc_area in self.areas_for_osc_file_retrieval:
             osc_file_download_url = self.find_osc_file(osc_area)
@@ -245,13 +249,13 @@ class MapathonStatistics(object):
             #print(self.mapathon_changes)
             #####
 
-            mapathon_changes_for_all_areas.append(self.mapathon_change_creator.create_mapathon_changes_from_URL(self.project_feature_collection, osc_file_download_url, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc']))
+            project_changes_for_all_areas.append(self.mapathon_change_creator.create_mapathon_changes_from_URL(self.project_feature_collection, osc_file_download_url, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc']))
         #     for types_key in self.client_data['types_of_mapping']:
         #         for result_key, result_json in result.items():
         #             if result_key.startswith(types_key):
         #                 mapathon_changes_for_all_areas.append(result_json)
 
-        self.mapathon_changes = self.mapathon_change_creator.filter_same_changes(mapathon_changes_for_all_areas)
+        return self.mapathon_change_creator.filter_same_changes(project_changes_for_all_areas)
 
     def create_project_polygon_feature_collection(self):
         #pprint(shape(self.project_data['areaOfInterest']).buffer(0))

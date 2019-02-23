@@ -26,13 +26,34 @@ function getMapathons() {
 }
 
 function handleMapathonsData(data) {
-    //console.log(data);
+    console.log(data);
     data.forEach(item => {
         var html = '<div class="card"><div class="card-body"><h5 class="card-title">' + item.mapathon_info.mapathon_title + '</h5>' +
             '<p class="card-text">Mapathon held on ' +
             item.mapathon_info.mapathon_date + ' at ' +
-            item.mapathon_info.mapathon_time_utc + ' (UTC) for project ' +
-            '<a target="_blank" href="https://tasks.hotosm.org/project/' + item.mapathon_info.project_number + '">' + item.mapathon_info.project_number + '</a>.</p>' +
+            item.mapathon_info.mapathon_time_utc + ' (UTC) for the ';
+
+            if (item.mapathon_info.project_numbers == undefined) {
+                html += ' project ';
+                html += '<a target="_blank" href="https://tasks.hotosm.org/project/' + item.mapathon_info.project_number + '">' + item.mapathon_info.project_number + '</a>';
+            }
+            else {
+                if (item.mapathon_info.project_numbers.length == 1) {
+                    html += ' project ';
+                }
+                else {
+                    html += ' projects ';
+                    for (var i = 0; i < item.mapathon_info.project_numbers.length - 1; i++) {
+                        var project_number = item.mapathon_info.project_numbers[i];
+                        html += '<a target="_blank" href="https://tasks.hotosm.org/project/' + project_number + '">' + project_number + '</a>' + ', ';
+                    }
+                    html = html.slice(0, -2) + ' and ';
+                    var project_number = item.mapathon_info.project_numbers[item.mapathon_info.project_numbers.length - 1];
+                    html += '<a target="_blank" href="https://tasks.hotosm.org/project/' + project_number + '">' + project_number + '</a>';
+                }
+            }
+
+            html += '</p>' +
             // item.mapathon_users.length + ' <i class="fa fa-user" aria-hidden="true"></i></p>' +
             '<p><a target="_blank" href="stats?' +
             createMapathonStatPageQueryParamsForItem(item);
@@ -250,8 +271,18 @@ function createMapathonStatPageQueryParamsForItem(item) {
     html += 'title=' + encodeURIComponent(item.mapathon_info.mapathon_title) +
     '&date=' + item.mapathon_info.mapathon_date +
     '&time=' + item.mapathon_info.mapathon_time_utc +
-    '&project=' + item.mapathon_info.project_number +
-    '&types=';
+    '&projects=';
+
+    if (item.mapathon_info.project_numbers == undefined) {
+        html += item.mapathon_info.project_number;
+    }
+    else {
+        item.mapathon_info.project_numbers.forEach(project_number => {
+            html += project_number + ',';
+        });
+        html = html.slice(0, -1);
+    }
+    html += '&types=';
     item.mapathon_info.types_of_mapping.forEach(type => {
         html += type + ','
     });
@@ -277,7 +308,7 @@ function checkFormDataGiven(data) {
         else if (data[i].name == 'mapathonTime' && data[i].value != "") {
             time = true;
         }
-        else if (data[i].name == 'projectNumber' && data[i].value != "") {
+        else if (data[i].name == 'projectNumbers' && data[i].value != "") {
             project = true;
         }
         else if (data[i].name == 'typesOfMapping') {
@@ -306,8 +337,8 @@ function createMapathonStatPageQueryParamsFromFormData(data) {
         if (data[i].name == 'mapathonTime') {
             time += '&time=' + data[i].value;
         }
-        if (data[i].name == 'projectNumber') {
-            project += '&project=' + data[i].value;
+        if (data[i].name == 'projectNumbers') {
+            project += '&projects=' + data[i].value.replace(/ /g,'');
         }
     }
     html += title + date + time + project;
@@ -339,7 +370,7 @@ function getProjectSearchPage(page) {
         //console.log(data);
         //console.log(projects);
 
-        var input = document.getElementById("projectNumber");
+        var input = document.getElementById("projectNumbers");
 
         var awesompleteList = [];
 
@@ -363,12 +394,12 @@ function getProjectSearchPage(page) {
             });
         }
 
-        Awesomplete.$('#projectNumber').addEventListener("awesomplete-selectcomplete", function() {
-            projectSelectedNumber = $('#projectNumber').val();
+        Awesomplete.$('#projectNumbers').addEventListener("awesomplete-selectcomplete", function() {
+            projectSelectedNumber = $('#projectNumbers').val();
             projectNumberAwesomplete.close();
         });
-        Awesomplete.$('#projectNumber').addEventListener("awesomplete-open", function () {
-            if (projectSelectedNumber == $('#projectNumber').val()) {
+        Awesomplete.$('#projectNumbers').addEventListener("awesomplete-open", function () {
+            if (projectSelectedNumber == $('#projectNumbers').val()) {
                 projectNumberAwesomplete.close(); // This is because if user has not changed selection
                                                   // it is just distracting to show the list...
             }
@@ -402,12 +433,12 @@ function filterProject(text, input) {
 
 function replaceProjectInputText(selectedOptionText) {
 
-    var parts = $("#projectNumber").val().split(',');
+    var parts = $("#projectNumbers").val().split(',');
     var text = "";
     for (var i = 0; i < parts.length - 1; i++) {
         text += parts[i] + ",";
     }
     text += selectedOptionText.slice(1, selectedOptionText.indexOf(' ', 1));
 
-    $("#projectNumber").val(text);
+    $("#projectNumbers").val(text);
 }

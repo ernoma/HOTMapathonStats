@@ -28,7 +28,9 @@ def create_mapathon_stats():
     # Called from the web client when the user has filled and selected the form inputs and
     # submits the form. Starts a background task for creating the mapathon statistics and page.
     # Returns uuid that identifies the mapathon creation task.
-    project_number = request.form['projectNumber']
+    project_number_tokens = request.form['projectNumbers'].split(',')
+    project_numbers_as_strings = list(map(str.strip, project_number_tokens))
+    project_numbers = list(map(int, project_numbers_as_strings))
     mapathon_date = request.form['mapathonDate']
     mapathon_time_utc = request.form['mapathonTime']
     types_of_mapping = request.form.getlist('typesOfMapping')
@@ -36,7 +38,7 @@ def create_mapathon_stats():
     print(types_of_mapping)
 
     client_data = {
-        'project_number': project_number,
+        'project_numbers': project_numbers,
         'mapathon_date': mapathon_date,
         'mapathon_time_utc': mapathon_time_utc,
         'types_of_mapping': types_of_mapping,
@@ -70,7 +72,7 @@ def get_stats_state():
         'state': None
     }
 
-    if stats_task is not None:
+    if stat_task is not None:
         result['state'] = stat_task.get_state()
 
     return jsonify(result)

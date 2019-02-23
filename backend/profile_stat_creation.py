@@ -5,7 +5,7 @@ import stats_task
 
 if __name__ == '__main__':
     client_data = {
-        'project_number': '3160',
+        'project_numbers': '3160,4323',
         'mapathon_date': '2018-10-29',
         'mapathon_time_utc': 11,
         'mapathon_title': 'HOT Mapathon, Turku October 2018',

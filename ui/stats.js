@@ -1,5 +1,7 @@
 
-var map = undefined;
+var projectData = [];
+
+// var 
 
 var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
@@ -19,78 +21,84 @@ var baseMaps = {
     "Bing aerial": bingLayer
 }
 
-var roadStats = {
-    whenApplyCountRemaining: undefined,
-    lengthSum: 0,
-    count: 0,
-    modifiedCount: 0
-}
-
-var landuseStats = {
-	whenApplyCountRemaining: undefined,
-    lengthSum: 0,
-    count: 0,
-    modifiedCount: 0
-}
-
 const urlParams = new URLSearchParams(window.location.search);
-
-var projectHOTOSMData = null;
 
 const serverURL = "http://" + window.location.hostname + ":5000";
 
-var timeDimension = null;
-var timePlayer = null;
-
-var tagStatistics = {}
+var projectNumbers = [];
 
 $(document).ready(function () {
-	
-    map = L.map('map_canvas', {
-		layers: [osmLayer]
-	});
-    L.control.layers(baseMaps).addTo(map);
-    L.control.scale().addTo(map);
 
-	initTimeDimensions();
+	projectNumbers = urlParams.get("projects").split(',');
 
-	$.getJSON("https://tasks.hotosm.org/api/v1/project/" + urlParams.get("project"), function (projectData) {
+	for (var i = 0; i < projectNumbers.length; i++) { 
+		var projectNumber = projectNumbers[i];
 
-		projectHOTOSMData = projectData;
-
-		showMapathonBasicData();
-
-		//console.log(data);
-
-		var areaGEOJSON = L.geoJSON(projectData.tasks, {
-			style: function (feature) {
-				return {color: '#999999', weight: 1, fill: false }
-			}
+		projectData[projectNumber] = {
+			map: null,
+			roadStats: {
+				whenApplyCountRemaining: undefined,
+				lengthSum: 0,
+				count: 0,
+				modifiedCount: 0
+			},
+			landuseStats: {
+				whenApplyCountRemaining: undefined,
+				lengthSum: 0,
+				count: 0,
+				modifiedCount: 0
+			},
+			projectHOTOSMData: null,
+			timeDimension: null,
+			timePlayer: null,
+			tagStatistics: {}
+		}
+		projectData[projectNumber].map = L.map('map_canvas', {
+			layers: [osmLayer]
 		});
-		areaGEOJSON.addTo(map);
-		map.fitBounds(areaGEOJSON.getBounds());
+		L.control.layers(baseMaps).addTo(projectData[projectNumber].map);
+		L.control.scale().addTo(projectData[projectNumber].map);
+	
+		initTimeDimensions(projectNumber);
 
-		//showPriorityAreas();
+		$.getJSON("https://tasks.hotosm.org/api/v1/project/" + projectNumber, function (projectData) {
 
-		showMissingMapsData();
+			projectData[projectNumber].projectHOTOSMData = projectData;
 
-		showStatistics();
-    });
+			showMapathonBasicData(projectNumber);
+
+			//console.log(data);
+
+			var areaGEOJSON = L.geoJSON(projectData.tasks, {
+				style: function (feature) {
+					return {color: '#999999', weight: 1, fill: false }
+				}
+			});
+			areaGEOJSON.addTo(projectData[projectNumber].map);
+			map.fitBounds(areaGEOJSON.getBounds());
+
+			//showPriorityAreas();
+
+			showMissingMapsData(projectNumber);
+
+			showStatistics(projectNumber);
+		});
+	}
 });
 
-function initTimeDimensions() {
+function initTimeDimensions(projectNumber) {
 
 	var minTime = "2018-01-01T00:00:00";
 	var maxTime = "2020-01-01T00:00:00";
 
-	timeDimension = new L.TimeDimension({
+	projectData[projectNumber].timeDimension = new L.TimeDimension({
 		timeInterval: minTime + "/" + maxTime,
 		period: "PT5M"
 	});
 
-	map.timeDimension = timeDimension;
+	projectData[projectNumber].map.timeDimension = timeDimension;
 
-	timePlayer = new L.TimeDimension.Player({
+	projectData[projectNumber].timePlayer = new L.TimeDimension.Player({
 		transitionTime: 200, 
 		loop: false,
 		startOver:true
@@ -108,10 +116,10 @@ function initTimeDimensions() {
 	};
 
 	var timeDimensionControl = new L.Control.TimeDimension(timeDimensionControlOptions);
-	map.addControl(timeDimensionControl);
+	projectData[projectNumber].map.addControl(timeDimensionControl);
 }
 
-function showStatistics() {
+function showStatistics(projectNumber) {
 
 	//console.log(urlParams.get("types"));
 
@@ -471,7 +479,7 @@ function createBuildingStatistics() {
 		else {
 			elements = arguments[0];
 		}
-		//console.log(elements);
+		console.log(elements);
 		calculateBuildingStatistics(elements);
     });
 }
@@ -902,7 +910,7 @@ function isInElements(element, elements) {
     return false;
 }
 
-function showMapathonBasicData() {
+function showMapathonBasicData(projectNumber) {
 	$("head title").text(urlParams.get("title"));
 	// console.log(window.location.search);
 	// console.log(urlParams.get("title"));
@@ -913,13 +921,13 @@ function showMapathonBasicData() {
 	$("#mapathonIntro").html(
 		'<p>Data created on ' + moment(urlParams.get("date"), "YYYY-MM-DD").format("Do [of] MMM YYYY") +
 		' from ' + urlParams.get("time") + ' ' + time_zone_info + '.</p>' +
-		'<p>Some statistics for our contributions on the <a href="https://tasks.hotosm.org/project/' + urlParams.get("project") + '">#' + urlParams.get("project") + ' - ' + projectHOTOSMData.projectInfo.name + ' task</a>' +
+		'<p>Some statistics for our contributions on the <a href="https://tasks.hotosm.org/project/' + projectNumber + '">#' + projectNumber + ' - ' + projectData[projectNumber].projectHOTOSMData.projectInfo.name + ' task</a>' +
 		'.</p>'
 	);
 }
 
-function showMissingMapsData() {
-	var tags = projectHOTOSMData.changesetComment.split(" ");
+function showMissingMapsData(projectNumber) {
+	var tags = projectData[projectNumber].projectHOTOSMData.changesetComment.split(" ");
 	
 	if (tags.length > 0) {
 		var tagString = "";
@@ -938,7 +946,7 @@ function showMissingMapsData() {
 		tagString +
 		'">Missing Maps &uml;' +
 		'project tags' +
-		//projectHOTOSMData.changesetComment +
+		//projectData[projectNumber].projectHOTOSMData.changesetComment +
 		'&uml; leaderboard</a> or ';
 
 		html += 'the <ul>';
