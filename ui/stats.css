@@ -19,7 +19,7 @@ html,body {
     margin-top: 10px;
 }
 
-#map_canvas {
+.map_canvas {
   height: 400px;
 }
 
@@ -31,12 +31,15 @@ h3 {
     font-size: large;
 }
 
+h4 {
+    font-size: medium;
+}
 
 .top-buffer { margin-top:20px; }
 
 .bottom-buffer { margin-bottom:20px; }
 
-#data_note {
+.data_note {
     margin-top: 20px;
 }
 

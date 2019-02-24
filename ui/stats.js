@@ -1,35 +1,19 @@
 
-var projectData = [];
-
-// var 
-
-var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
-    maxZoom: 18
-});
-
-var hotLayer = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/">Humanitarian OpenStreetMap Team</a>',
-    maxZoom: 18
-});
-
-var bingLayer = new L.BingLayer('AuJOP1AQnHgJ50Co_d_mnn8ZSyoCN71Mcv6Ve3S_xOQqyyrBFaWnNIcy-6GX-nX_', {type: 'AerialWithLabels'});
-
-var baseMaps = {
-    "OpenStreetMap": osmLayer,
-    "Humanitarian": hotLayer,
-    "Bing aerial": bingLayer
-}
+const serverURL = "http://" + window.location.hostname + ":5000";
 
 const urlParams = new URLSearchParams(window.location.search);
 
-const serverURL = "http://" + window.location.hostname + ":5000";
-
 var projectNumbers = [];
+var projectData = {};
+
 
 $(document).ready(function () {
 
 	projectNumbers = urlParams.get("projects").split(',');
+
+	showMapathonBasicData();
+
+	createProjectsHTML();
 
 	for (var i = 0; i < projectNumbers.length; i++) { 
 		var projectNumber = projectNumbers[i];
@@ -51,38 +35,86 @@ $(document).ready(function () {
 			projectHOTOSMData: null,
 			timeDimension: null,
 			timePlayer: null,
+			timeDimensionControl: null,
 			tagStatistics: {}
+		};
+		
+		var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+			maxZoom: 18
+		});
+
+		var hotLayer = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/">Humanitarian OpenStreetMap Team</a>',
+			maxZoom: 18
+		});
+
+		var bingLayer = new L.BingLayer('AuJOP1AQnHgJ50Co_d_mnn8ZSyoCN71Mcv6Ve3S_xOQqyyrBFaWnNIcy-6GX-nX_', {type: 'AerialWithLabels'});
+
+		var baseMaps = {
+			"OpenStreetMap": osmLayer,
+			"Humanitarian": hotLayer,
+			"Bing aerial": bingLayer
 		}
-		projectData[projectNumber].map = L.map('map_canvas', {
+
+		projectData[projectNumber].map = L.map('map_canvas_' + projectNumber, {
 			layers: [osmLayer]
 		});
 		L.control.layers(baseMaps).addTo(projectData[projectNumber].map);
 		L.control.scale().addTo(projectData[projectNumber].map);
-	
+
+		$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+			//console.log(e.target); // newly activated tab
+			//console.log(e.relatedTarget); // previous active tab
+
+			for (var j = 0; j < projectNumbers.length; j++) {
+				(function(n){
+					setTimeout(function(){
+						// console.log(projectData);
+						// console.log(projectNumbers);
+						// console.log(n);
+						projectData[projectNumbers[n]].map.invalidateSize();
+						projectData[projectNumbers[n]].map.fitBounds(projectData[projectNumbers[n]].areaGEOJSON.getBounds());
+						
+						// to ensure Time Control UI update
+						projectData[projectNumber].timePlayer.start(1);
+						projectData[projectNumber].timePlayer.stop();
+						var times = projectData[projectNumber].timeDimension.getAvailableTimes();
+						projectData[projectNumber].timeDimension.setCurrentTime(times[times.length - 1]);
+						
+					}, 0)
+				})(j);
+			}
+		});
+
 		initTimeDimensions(projectNumber);
 
-		$.getJSON("https://tasks.hotosm.org/api/v1/project/" + projectNumber, function (projectData) {
+		(function(number){
+			$.getJSON("https://tasks.hotosm.org/api/v1/project/" + number, function (projectHOTOSMData) {
+				//console.log(projectHOTOSMData);
+				//console.log(number);
 
-			projectData[projectNumber].projectHOTOSMData = projectData;
+				projectData[number].projectHOTOSMData = projectHOTOSMData;
 
-			showMapathonBasicData(projectNumber);
+				showProjectBasicData(number);
 
-			//console.log(data);
+				//console.log(data);
 
-			var areaGEOJSON = L.geoJSON(projectData.tasks, {
-				style: function (feature) {
-					return {color: '#999999', weight: 1, fill: false }
-				}
+				projectData[number].areaGEOJSON = L.geoJSON(projectHOTOSMData.tasks, {
+					style: function (feature) {
+						return {color: '#999999', weight: 1, fill: false }
+					}
+				});
+				projectData[number].areaGEOJSON.addTo(projectData[number].map);
+				projectData[number].map.fitBounds(projectData[number].areaGEOJSON.getBounds());
+
+				//showPriorityAreas(number);
+
+				showMissingMapsData(number);
+
+				showStatistics(number);
 			});
-			areaGEOJSON.addTo(projectData[projectNumber].map);
-			map.fitBounds(areaGEOJSON.getBounds());
-
-			//showPriorityAreas();
-
-			showMissingMapsData(projectNumber);
-
-			showStatistics(projectNumber);
-		});
+		})(projectNumber);
 	}
 });
 
@@ -96,17 +128,17 @@ function initTimeDimensions(projectNumber) {
 		period: "PT5M"
 	});
 
-	projectData[projectNumber].map.timeDimension = timeDimension;
+	projectData[projectNumber].map.timeDimension = projectData[projectNumber].timeDimension;
 
 	projectData[projectNumber].timePlayer = new L.TimeDimension.Player({
 		transitionTime: 200, 
 		loop: false,
 		startOver:true
-	}, timeDimension);
+	}, projectData[projectNumber].timeDimension);
 
 	var timeDimensionControlOptions = {
-		player:        timePlayer,
-		timeDimension: timeDimension,
+		player:        projectData[projectNumber].timePlayer,
+		timeDimension: projectData[projectNumber].timeDimension,
 		position:      'bottomleft',
 		autoPlay:      false,
 		minSpeed:      1,
@@ -116,6 +148,7 @@ function initTimeDimensions(projectNumber) {
 	};
 
 	var timeDimensionControl = new L.Control.TimeDimension(timeDimensionControlOptions);
+	//projectData[projectNumber].timeDimensionControl = timeDimensionControl;
 	projectData[projectNumber].map.addControl(timeDimensionControl);
 }
 
@@ -127,20 +160,20 @@ function showStatistics(projectNumber) {
 
 	types.forEach((type) => {
 		if (type == 'building') {
-			createBuildingSectionElements();
-			createBuildingStatistics();
+			createBuildingSectionElements(projectNumber);
+			createBuildingStatistics(projectNumber);
 		}
 		else if (type == 'landuse_residential') {
-			createResidentialAreaSectionElements();
-			createResidentialAreaStatistics();
+			createResidentialAreaSectionElements(projectNumber);
+			createResidentialAreaStatistics(projectNumber);
 		}
 		else if(type == 'landuse_any_other') {
-			createLanduseAnyOtherSectionElements();
-			createLanduseAnyOtherSectionStatistics();
+			createLanduseAnyOtherSectionElements(projectNumber);
+			createLanduseAnyOtherSectionStatistics(projectNumber);
 		}
 		else { // type == 'highway'
-			createRoadSectionElements();
-			createRoadStatistics();
+			createRoadSectionElements(projectNumber);
+			createRoadStatistics(projectNumber);
 		}
 	});
 
@@ -152,160 +185,160 @@ function showStatistics(projectNumber) {
 
 }
 
-function createBuildingSectionElements() {
+function createBuildingSectionElements(projectNumber) {
 	var buildingsSectionHTML =
-		'<h3>Buildings</h3>' +
+		'<h4>Buildings</h4>' +
 		'<div class="row top-buffer bottom-buffer">' +
 	  	'<div class="col-sm-3">Buildings, total count</div>' +
-		'<div class="col-sm-9" id="building_count_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-9" id="building_count_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>';
 
-	$("#buildingsSection").html(buildingsSectionHTML);
+	$("#buildingsSection_" + projectNumber).html(buildingsSectionHTML);
 }
 
-function createResidentialAreaSectionElements() {
+function createResidentialAreaSectionElements(projectNumber) {
 	var residentialAreasSectionHTML =
-		'<h3>Residential Areas</h3>' +
+		'<h4>Residential Areas</h4>' +
 		'<div class="row top-buffer">' +
 		'<div class="col-sm-3">Residential areas, total count</div>' +
-		'<div class="col-sm-9"id="res_area_count_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-9"id="res_area_count_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'<div class="row">' +
 		'<div class="col-sm-3">Residential areas, total area</div>' +
-		'<div class="col-sm-9" id="res_area_total_area_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-9" id="res_area_total_area_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'<div class="row bottom-buffer">' +
 		'<div class="col-sm-3">Residential areas, average area</div>' +
-		'<div class="col-sm-9" id="res_area_avg_area_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-9" id="res_area_avg_area_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>';
 		
-	$("#residentialAreasSection").html(residentialAreasSectionHTML);
+	$("#residentialAreasSection_" + projectNumber).html(residentialAreasSectionHTML);
 }
 
-function createLanduseAnyOtherSectionElements() {
+function createLanduseAnyOtherSectionElements(projectNumber) {
 	var landuseAnyOtherSectionHTML =
-		'<h3>Other landuse</h3>' +
+		'<h4>Other landuse</h4>' +
 		'<div class="row top-buffer">' +
 		'<div class="col-sm-3">Farmlands, total count</div>' +
-		'<div class="col-sm-9"id="landuse_farmland_count_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-9"id="landuse_farmland_count_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'<div class="row">' +
 		'<div class="col-sm-3">Farmlands, total area</div>' +
-		'<div class="col-sm-9" id="landuse_farmland_total_area_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-9" id="landuse_farmland_total_area_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'<div class="row">' +
 		'<div class="col-sm-3">Farmlands, average area</div>' +
-		'<div class="col-sm-9" id="landuse_farmland_avg_area_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-9" id="landuse_farmland_avg_area_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'<div class="row top-buffer">' +
 		'<div class="col-sm-3">Orchards, total count</div>' +
-		'<div class="col-sm-9"id="landuse_orchard_count_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-9"id="landuse_orchard_count_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'<div class="row">' +
 		'<div class="col-sm-3">Orchards, total area</div>' +
-		'<div class="col-sm-9" id="landuse_orchard_total_area_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-9" id="landuse_orchard_total_area_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'<div class="row">' +
 		'<div class="col-sm-3">Orchards, average area</div>' +
-		'<div class="col-sm-9" id="landuse_orchard_avg_area_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-9" id="landuse_orchard_avg_area_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'<div class="row top-buffer">' +
 		'<div class="col-sm-3">Other, total count</div>' +
-		'<div class="col-sm-9"id="landuse_any_other_count_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-9"id="landuse_any_other_count_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'<div class="row">' +
 		'<div class="col-sm-3">Other, total area</div>' +
-		'<div class="col-sm-9" id="landuse_any_other_total_area_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-9" id="landuse_any_other_total_area_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'<div class="row">' +
 		'<div class="col-sm-3">Other, average area</div>' +
-		'<div class="col-sm-9" id="landuse_any_other_avg_area_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-9" id="landuse_any_other_avg_area_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>';
 		
-	$("#landuseAnyOtherSection").html(landuseAnyOtherSectionHTML);
+	$("#landuseAnyOtherSection_" + projectNumber).html(landuseAnyOtherSectionHTML);
 }
 
-function createRoadSectionElements() {
+function createRoadSectionElements(projectNumber) {
 	
 	var highwaysSectionHTML =
-		'<h3>Roads and Paths</h3>' +
+		'<h4>Roads and Paths</h4>' +
 		'<div class="row">' +
 		'<div class="col-sm-3">Primary roads created, length</div>' +
-		'<div class="col-sm-3" id="primary_road_length_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-3" id="primary_road_length_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'<div class="col-sm-3">Secondary roads created, length</div>' +
-		'<div class="col-sm-3" id="secondary_road_length_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-3" id="secondary_road_length_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'<div class="row">' +
 		'<div class="col-sm-3">Tertiary roads created, length</div>' +
-		'<div class="col-sm-3" id="tertiary_road_length_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-3" id="tertiary_road_length_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'<div class="col-sm-3">Unclassified roads created, length</div>' +
-		'<div class="col-sm-3" id="un_road_length_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-3" id="un_road_length_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'<div class="row">' +
 		'<div class="col-sm-3">Residential roads created, length</div>' +
-		'<div class="col-sm-3" id="res_road_length_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-3" id="res_road_length_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'<div class="col-sm-3">Service roads created, length</div>' +
-		'<div class="col-sm-3" id="service_road_length_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-3" id="service_road_length_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'<div class="row">' +
 		'<div class="col-sm-3">Tracks created, length</div>' +
-		'<div class="col-sm-3" id="tracks_length_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-3" id="tracks_length_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'<div class="col-sm-3">Paths created, length</div>' +
-		'<div class="col-sm-3" id="paths_length_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-3" id="paths_length_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'<div class="row">' +
 		'<div class="col-sm-3">Footways created, length</div>' +
-		'<div class="col-sm-3" id="footway_length_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-3" id="footway_length_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'<div class="col-sm-3">(*) Other roads created, length</div>' +
-		'<div class="col-sm-3" id="highway_road_length_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-3" id="highway_road_length_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'<div class="row top-buffer">' +
 		'<div class="col-sm-3">Roads created, total length</div>' +
-		'<div class="col-sm-9" id="roads_total_length_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-9" id="roads_total_length_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'<div class="row top-buffer">' +
 		'<div class="col-sm-3">Primary roads, count</div>' +
-		'<div class="col-sm-3" id="primary_road_count_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-3" id="primary_road_count_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'<div class="col-sm-3">Secondary roads, count</div>' +
-		'<div class="col-sm-3" id="secondary_road_count_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-3" id="secondary_road_count_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'<div class="row">' +
 		'<div class="col-sm-3">Tertiary roads, count</div>' +
-		'<div class="col-sm-3" id="tertiary_road_count_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-3" id="tertiary_road_count_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'<div class="col-sm-3">Unclassified roads, count</div>' +
-		'<div class="col-sm-3" id="un_road_count_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-3" id="un_road_count_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'<div class="row">' +
 		'<div class="col-sm-3">Residential roads, count</div>' +
-		'<div class="col-sm-3" id="res_road_count_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-3" id="res_road_count_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'<div class="col-sm-3">Service roads, count</div>' +
-		'<div class="col-sm-3" id="service_road_count_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-3" id="service_road_count_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'<div class="row">' +
 		'<div class="col-sm-3">Tracks, count</div>' +
-		'<div class="col-sm-3" id="tracks_count_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-3" id="tracks_count_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'<div class="col-sm-3">Paths, count</div>' +
-		'<div class="col-sm-3" id="paths_count_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-3" id="paths_count_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'<div class="row">' +
 		'<div class="col-sm-3">Footways created, count</div>' +
-		'<div class="col-sm-3" id="footway_count_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-3" id="footway_count_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'<div class="col-sm-3">(*) Other roads created, count</div>' +
-		'<div class="col-sm-3" id="highway_road_count_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-3" id="highway_road_count_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'<div class="row top-buffer bottom-buffer">' +
 		'<div class="col-sm-3">Roads and paths, total count</div>' +
-		'<div class="col-sm-3" id="roads_total_count_div"><i class="fa fa-spinner fa-pulse"></i></div>' +
+		'<div class="col-sm-3" id="roads_total_count_div_' + projectNumber + '"><i class="fa fa-spinner fa-pulse"></i></div>' +
 		'</div>' +
 		'</div>	' +
 		'<hr>' +
-		'<p id="data_note">(*) Other roads means ways that were tagged highway=road, highway=motorway, highway=trunk or highway=living_street. See the OSM <a href="http://wiki.openstreetmap.org/wiki/Key:highway">highway tagging wiki</a> page (and in Africa <a href="https://wiki.openstreetmap.org/wiki/Highway_Tag_Africa">Highway Tag Africa wiki page</a>) for more information on the types.' +
+		'<p class="data_note">(*) Other roads means ways that were tagged highway=road, highway=motorway, highway=trunk or highway=living_street. See the OSM <a href="http://wiki.openstreetmap.org/wiki/Key:highway">highway tagging wiki</a> page (and in Africa <a href="https://wiki.openstreetmap.org/wiki/Highway_Tag_Africa">Highway Tag Africa wiki page</a>) for more information on the types.' +
 		'</p>';
 
-	  $("#highwaysSection").html(highwaysSectionHTML);
+	  $("#highwaysSection_" + projectNumber).html(highwaysSectionHTML);
 }
 
-function showPriorityAreas() {
+function showPriorityAreas(projectNumber) {
     
     var priority_areas = {
 	
@@ -315,10 +348,10 @@ function showPriorityAreas() {
 	style: function (feature) {
             return {color: "#F00", fill: false, weight: 2, opacity: 0.8};
 	}
-    }).addTo(map);
+    }).addTo(projectData[projectNumber].map);
 }
 
-function createRoadStatistics() {
+function createRoadStatistics(projectNumber) {
     
     var parameters = [
 		{
@@ -376,7 +409,7 @@ function createRoadStatistics() {
 		road: []
 	};	
 
-    roadStats.whenApplyCountRemaining = 10;
+    projectData[projectNumber].roadStats.whenApplyCountRemaining = 10;
     
 	highwayJSONCalls.primary.push(readJSONData(serverURL + '/mapathon/data', parameters[0]));
 	highwayJSONCalls.secondary.push(readJSONData(serverURL + '/mapathon/data', parameters[1]));
@@ -389,19 +422,19 @@ function createRoadStatistics() {
 	highwayJSONCalls.footway.push(readJSONData(serverURL + '/mapathon/data', parameters[8]));
 	highwayJSONCalls.road.push(readJSONData(serverURL + '/mapathon/data', parameters[9]));
 
-    $.when.apply($, highwayJSONCalls.primary).done(handleRoadStatisicsData("#primary_road_length_div", "#primary_road_count_div", '#F00', 4, null));
-    $.when.apply($, highwayJSONCalls.secondary).done(handleRoadStatisicsData("#secondary_road_length_div", "#secondary_road_count_div", '#FFA500', 3, null));
-    $.when.apply($, highwayJSONCalls.tertiary).done(handleRoadStatisicsData("#tertiary_road_length_div", "#tertiary_road_count_div", '#FFFF00', 3, null));
-    $.when.apply($, highwayJSONCalls.unclassified).done(handleRoadStatisicsData("#un_road_length_div", "#un_road_count_div", '#000', 2, null));
-    $.when.apply($, highwayJSONCalls.residential).done(handleRoadStatisicsData("#res_road_length_div", "#res_road_count_div", '#FFF', 2, null));
-    $.when.apply($, highwayJSONCalls.service).done(handleRoadStatisicsData("#service_road_length_div", "#service_road_count_div", '#FFF', 2, null));
-    $.when.apply($, highwayJSONCalls.track).done(handleRoadStatisicsData("#tracks_length_div", "#tracks_count_div", '#D27259', 2, "5 2"));
-    $.when.apply($, highwayJSONCalls.path).done(handleRoadStatisicsData("#paths_length_div", "#paths_count_div", '#D29259', 2, "5 5"));
-    $.when.apply($, highwayJSONCalls.footway).done(handleRoadStatisicsData("#footway_length_div", "#footway_count_div", '#D29200', 2, "3 5"));
-    $.when.apply($, highwayJSONCalls.road).done(handleRoadStatisicsData("#highway_road_length_div", "#highway_road_count_div", '#FFA', 2, null));
+	$.when.apply($, highwayJSONCalls.primary).done(handleRoadStatisicsData(projectNumber, "#primary_road_length_div_" + projectNumber, "#primary_road_count_div_" + projectNumber, '#F00', 4, null));
+    $.when.apply($, highwayJSONCalls.secondary).done(handleRoadStatisicsData(projectNumber, "#secondary_road_length_div_" + projectNumber, "#secondary_road_count_div_" + projectNumber, '#FFA500', 3, null));
+    $.when.apply($, highwayJSONCalls.tertiary).done(handleRoadStatisicsData(projectNumber, "#tertiary_road_length_div_" + projectNumber, "#tertiary_road_count_div_" + projectNumber, '#FFFF00', 3, null));
+    $.when.apply($, highwayJSONCalls.unclassified).done(handleRoadStatisicsData(projectNumber, "#un_road_length_div_" + projectNumber, "#un_road_count_div_" + projectNumber, '#000', 2, null));
+    $.when.apply($, highwayJSONCalls.residential).done(handleRoadStatisicsData(projectNumber, "#res_road_length_div_" + projectNumber, "#res_road_count_div_" + projectNumber, '#FFF', 2, null));
+    $.when.apply($, highwayJSONCalls.service).done(handleRoadStatisicsData(projectNumber, "#service_road_length_div_" + projectNumber, "#service_road_count_div_" + projectNumber, '#FFF', 2, null));
+    $.when.apply($, highwayJSONCalls.track).done(handleRoadStatisicsData(projectNumber, "#tracks_length_div_" + projectNumber, "#tracks_count_div_" + projectNumber, '#D27259', 2, "5 2"));
+    $.when.apply($, highwayJSONCalls.path).done(handleRoadStatisicsData(projectNumber, "#paths_length_div_" + projectNumber, "#paths_count_div_" + projectNumber, '#D29259', 2, "5 5"));
+    $.when.apply($, highwayJSONCalls.footway).done(handleRoadStatisicsData(projectNumber, "#footway_length_div_" + projectNumber, "#footway_count_div_" + projectNumber, '#D29200', 2, "3 5"));
+    $.when.apply($, highwayJSONCalls.road).done(handleRoadStatisicsData(projectNumber, "#highway_road_length_div_" + projectNumber, "#highway_road_count_div_" + projectNumber, '#FFA', 2, null));
 }
 
-function createResidentialAreaStatistics(data_dirs) {
+function createResidentialAreaStatistics(projectNumber) {
     var ajaxCalls = [];
 	
 	parameters = {
@@ -422,11 +455,11 @@ function createResidentialAreaStatistics(data_dirs) {
 			elements = arguments[0];
 		}
 		
-		calculateResidentialAreaStatistics(elements);
+		calculateResidentialAreaStatistics(projectNumber, elements);
     });
 }
 
-function createLanduseAnyOtherSectionStatistics(data_dirs) {
+function createLanduseAnyOtherSectionStatistics(projectNumber) {
 	var parameters = [
 		{
 			id: urlParams.get("id") != null ? urlParams.get("id") : urlParams.get("uid"),
@@ -448,18 +481,18 @@ function createLanduseAnyOtherSectionStatistics(data_dirs) {
 		any_other: []
 	};	
 
-    landuseStats.whenApplyCountRemaining = 3;
+    projectData[projectNumber].landuseStats.whenApplyCountRemaining = 3;
     
 	landuseJSONCalls.farmland.push(readJSONData(serverURL + '/mapathon/data', parameters[0]));
 	landuseJSONCalls.orchard.push(readJSONData(serverURL + '/mapathon/data', parameters[1]));
 	landuseJSONCalls.any_other.push(readJSONData(serverURL + '/mapathon/data', parameters[2]));
 
-    $.when.apply($, landuseJSONCalls.farmland).done(handleLandusetatisicsData("Farmland", "landuse_farmland", '#9b6a25', 2));
-    $.when.apply($, landuseJSONCalls.orchard).done(handleLandusetatisicsData("Orchard", "landuse_orchard", '#1a420b', 2));
-    $.when.apply($, landuseJSONCalls.any_other).done(handleLandusetatisicsData("Other landuse", "landuse_any_other", '#9cb3bf', 2));
+    $.when.apply($, landuseJSONCalls.farmland).done(handleLandusetatisicsData(projectNumber, "Farmland", "landuse_farmland", '#9b6a25', 2));
+    $.when.apply($, landuseJSONCalls.orchard).done(handleLandusetatisicsData(projectNumber, "Orchard", "landuse_orchard", '#1a420b', 2));
+    $.when.apply($, landuseJSONCalls.any_other).done(handleLandusetatisicsData(projectNumber, "Other landuse", "landuse_any_other", '#9cb3bf', 2));
 }
 
-function createBuildingStatistics() {
+function createBuildingStatistics(projectNumber) {
     var ajaxCalls = [];
 
 	parameters = {
@@ -479,8 +512,8 @@ function createBuildingStatistics() {
 		else {
 			elements = arguments[0];
 		}
-		console.log(elements);
-		calculateBuildingStatistics(elements);
+		//console.log(elements);
+		calculateBuildingStatistics(projectNumber, elements);
     });
 }
 
@@ -488,18 +521,26 @@ function readJSONData(dataURL, parameters) {
     return $.getJSON(dataURL, parameters);
 }   
 
-function calculateBuildingStatistics(elements) {
+function calculateBuildingStatistics(projectNumber, allElements) {
 
     var buildingsCount = 0;
     var modifiedCount = 0;
 	
 	var geoJSONFeatures = [];
 
+	var elements = [];
+	if (projectNumbers.length > 1) {
+		elements = allElements[projectNumber];
+	}
+	else {
+		elements = allElements;
+	}
+
 	for (var i = 0; i < elements.length; i++) {
         var building = elements[i];
 
 		if (building.type != undefined && building.type == 'Feature') { // GeoJSON
-			createTagStatistics(elements[i]);
+			createTagStatistics(projectNumber, elements[i]);
 			//console.log(elements[i].properties.tags);
 			if (building.properties.version != 1) {
 				modifiedCount++;
@@ -546,20 +587,20 @@ function calculateBuildingStatistics(elements) {
 			updateTimeDimension: true
 		});
 
-		timeDimensionLayer.addTo(map);
-		var times = timeDimension.getAvailableTimes();
-		timeDimension.setCurrentTime(times[times.length - 1]);
+		timeDimensionLayer.addTo(projectData[projectNumber].map);
+		var times = projectData[projectNumber].timeDimension.getAvailableTimes();
+		projectData[projectNumber].timeDimension.setCurrentTime(times[times.length - 1]);
 
-		console.log(tagStatistics);
+		//console.log(projectData[projectNumber].tagStatistics);
 	}
 
     var modifiedPercentage = elements.length == 0 ? 0 : modifiedCount / elements.length * 100;
     var text = "" + buildingsCount + ", +" + modifiedCount + " modified" + " (" + modifiedPercentage.toFixed(1) + "%)";
 
-    $("#building_count_div").text(text);
+    $("#building_count_div_" + projectNumber).text(text);
 }
 
-function calculateResidentialAreaStatistics(elements) {
+function calculateResidentialAreaStatistics(projectNumber, allElements) {
     var residentialAreaCount = 0;
     var residentialAreaNonEmptyCount = 0;
     var totalArea = 0;
@@ -567,10 +608,18 @@ function calculateResidentialAreaStatistics(elements) {
 
 	var geoJSONFeatures = [];
 
+	var elements = [];
+	if (projectNumbers.length > 1) {
+		elements = allElements[projectNumber];
+	}
+	else {
+		elements = allElements;
+	}
+
     for (var i = 0; i < elements.length; i++) {
         var residentialArea = elements[i];
 		if (residentialArea.type != undefined && residentialArea.type == 'Feature') { // GeoJSON
-			createTagStatistics(elements[i]);
+			createTagStatistics(projectNumber, elements[i]);
 			//console.log(elements[i].properties.tags);
 			if (residentialArea.properties.version != 1) {
 				modifiedCount++;
@@ -600,7 +649,7 @@ function calculateResidentialAreaStatistics(elements) {
 					var linkText = 'Residental area, id: ' + residentialArea.id;
 					//var linkText = '<a href="http://www.openstreetmap.org/way/' + residentialArea.id + '" target="_blank">View on openstreetmap.org</a>';
 					polygon.bindPopup(linkText);
-					polygon.addTo(map);
+					polygon.addTo(projectData[projectNumber].map);
 					area = L.GeometryUtil.geodesicArea(latLngs); // in squaremeters
 					totalArea += area;
 				}
@@ -623,40 +672,48 @@ function calculateResidentialAreaStatistics(elements) {
 			updateTimeDimension: true
 		});
 
-		timeDimensionLayer.addTo(map);
-		var times = timeDimension.getAvailableTimes();
-		timeDimension.setCurrentTime(times[times.length - 1]);
+		timeDimensionLayer.addTo(projectData[projectNumber].map);
+		var times = projectData[projectNumber].timeDimension.getAvailableTimes();
+		projectData[projectNumber].timeDimension.setCurrentTime(times[times.length - 1]);
 
-		console.log(tagStatistics);
+		//console.log(projectData[projectNumber].tagStatistics);
 	}
 
     var modifiedPercentage = elements.length == 0 ? 0 : modifiedCount / elements.length * 100;
     var text = "" + residentialAreaCount + ", +" + modifiedCount + " modified" + " (" + modifiedPercentage.toFixed(1) + "%)";
 	
-	$("#res_area_count_div").text(text);
-    $("#res_area_total_area_div").html(Math.round(totalArea) + " m<sup>2</sup>");
-    $("#res_area_avg_area_div").html(Math.round(totalArea / residentialAreaNonEmptyCount) + " m<sup>2</sup>");
+	$("#res_area_count_div_" + projectNumber).text(text);
+    $("#res_area_total_area_div_" + projectNumber).html(Math.round(totalArea) + " m<sup>2</sup>");
+    $("#res_area_avg_area_div_" + projectNumber).html(Math.round(totalArea / residentialAreaNonEmptyCount) + " m<sup>2</sup>");
 }
 
-function calculateWaterwayStatistics(elements, lengthHtmlElementID, countHtmlElementID, mapLineColor, weight, dashArray) {
-    return calculateWayStatistics(elements, lengthHtmlElementID, countHtmlElementID, mapLineColor, weight, dashArray);
+function calculateWaterwayStatistics(projectNumber, elements, lengthHtmlElementID, countHtmlElementID, mapLineColor, weight, dashArray) {
+    return calculateWayStatistics(projectNumber, elements, lengthHtmlElementID, countHtmlElementID, mapLineColor, weight, dashArray);
 }
 
-function calculateRoadStatistics(elements, lengthHtmlElementID, countHtmlElementID, mapLineColor, weight, dashArray) {
-    return calculateWayStatistics(elements, lengthHtmlElementID, countHtmlElementID, mapLineColor, weight, dashArray);
+function calculateRoadStatistics(projectNumber, elements, lengthHtmlElementID, countHtmlElementID, mapLineColor, weight, dashArray) {
+    return calculateWayStatistics(projectNumber, elements, lengthHtmlElementID, countHtmlElementID, mapLineColor, weight, dashArray);
 }
 
-function calculateWayStatistics(elements, lengthHtmlElementID, countHtmlElementID, mapLineColor, weight, dashArray) {
+function calculateWayStatistics(projectNumber, allElements, lengthHtmlElementID, countHtmlElementID, mapLineColor, weight, dashArray) {
     var waysCount = 0;
     var totalWayLength = 0;
     var modifiedCount = 0;
 	
 	var geoJSONFeatures = [];
 
+	var elements = [];
+	if (projectNumbers.length > 1) {
+		elements = allElements[projectNumber];
+	}
+	else {
+		elements = allElements;
+	}
+
     for (var i = 0; i < elements.length; i++) {
 
 		if (elements[i].type != undefined && elements[i].type == 'Feature') { // GeoJSON
-			createTagStatistics(elements[i]);
+			createTagStatistics(projectNumber, elements[i]);
 			//console.log(elements[i].properties.tags);
 			if (elements[i].properties.version != 1) {
 				modifiedCount++;
@@ -695,7 +752,7 @@ function calculateWayStatistics(elements, lengthHtmlElementID, countHtmlElementI
 					//console.log(linkText);
 				}
 				polyLine.bindPopup(linkText);
-				polyLine.addTo(map);
+				polyLine.addTo(projectData[projectNumber].map);
 			
 				for (var j = 0; j < latLngs.length - 1; j++) {
 					var lat1 = latLngs[j].lat;
@@ -738,11 +795,11 @@ function calculateWayStatistics(elements, lengthHtmlElementID, countHtmlElementI
 			updateTimeDimension: true
 		});
 
-		timeDimensionLayer.addTo(map);
-		var times = timeDimension.getAvailableTimes();
-		timeDimension.setCurrentTime(times[times.length - 1]);
+		timeDimensionLayer.addTo(projectData[projectNumber].map);
+		var times = projectData[projectNumber].timeDimension.getAvailableTimes();
+		projectData[projectNumber].timeDimension.setCurrentTime(times[times.length - 1]);
 
-		console.log(tagStatistics);
+		//console.log(projectData[projectNumber].tagStatistics);
 	}
 
     var length = totalWayLength / 1000;
@@ -767,7 +824,7 @@ function distance(lat1, lon1, lat2, lon2) {
   return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
 }
 
-function handleRoadStatisicsData(lengthHtmlElementID, countHtmlElementID, mapLineColor, weight, dashArray) {
+function handleRoadStatisicsData(projectNumber, lengthHtmlElementID, countHtmlElementID, mapLineColor, weight, dashArray) {
     return function(data, textStatus, jqXHR) {
 		//console.log(arguments);
 		var elements = null;
@@ -778,21 +835,21 @@ function handleRoadStatisicsData(lengthHtmlElementID, countHtmlElementID, mapLin
 		else {
 			elements = arguments[0];
 		}
-		var result = calculateRoadStatistics(elements, lengthHtmlElementID, countHtmlElementID, mapLineColor, weight, dashArray);
-		roadStats.lengthSum += result.length;
-		roadStats.count += result.createdCount;
-		roadStats.modifiedCount += result.modifiedCount;
+		var result = calculateRoadStatistics(projectNumber, elements, lengthHtmlElementID, countHtmlElementID, mapLineColor, weight, dashArray);
+		projectData[projectNumber].roadStats.lengthSum += result.length;
+		projectData[projectNumber].roadStats.count += result.createdCount;
+		projectData[projectNumber].roadStats.modifiedCount += result.modifiedCount;
 		
-		roadStats.whenApplyCountRemaining--;
-		if (roadStats.whenApplyCountRemaining == 0) {
-			$("#roads_total_length_div").text("" + Math.round(roadStats.lengthSum / 1000) + " km");
-			var modifiedPercentage = roadStats.modifiedCount / (roadStats.modifiedCount + roadStats.count) * 100;
-			$("#roads_total_count_div").text("" + roadStats.count + ", +" + roadStats.modifiedCount + " modified (" + modifiedPercentage.toFixed(1) + "%)");
+		projectData[projectNumber].roadStats.whenApplyCountRemaining--;
+		if (projectData[projectNumber].roadStats.whenApplyCountRemaining == 0) {
+			$("#roads_total_length_div_" + projectNumber).text("" + Math.round(projectData[projectNumber].roadStats.lengthSum / 1000) + " km");
+			var modifiedPercentage = projectData[projectNumber].roadStats.modifiedCount / (projectData[projectNumber].roadStats.modifiedCount + projectData[projectNumber].roadStats.count) * 100;
+			$("#roads_total_count_div_" + projectNumber).text("" + projectData[projectNumber].roadStats.count + ", +" + projectData[projectNumber].roadStats.modifiedCount + " modified (" + modifiedPercentage.toFixed(1) + "%)");
 		}
     };
 }
 
-function handleLandusetatisicsData(userFriendlyName, typeHtmlElementPrefix, color, weight) {
+function handleLandusetatisicsData(projectNumber, userFriendlyName, typeHtmlElementPrefix, color, weight) {
 	return function(data, textStatus, jqXHR) {
 		var elements = null;
 		if (arguments.length > 1 && arguments[1].constructor === Array) {
@@ -803,11 +860,11 @@ function handleLandusetatisicsData(userFriendlyName, typeHtmlElementPrefix, colo
 			elements = arguments[0];
 		}
 
-		calculateLanduseStatistics(elements, userFriendlyName, typeHtmlElementPrefix, color, weight);
+		calculateLanduseStatistics(projectNumber, elements, userFriendlyName, typeHtmlElementPrefix, color, weight);
 	};
 }
 
-function calculateLanduseStatistics(elements, userFriendlyName, typeHtmlElementPrefix, color, weight) {
+function calculateLanduseStatistics(projectNumber, allElements, userFriendlyName, typeHtmlElementPrefix, color, weight) {
 	var landuseAreaCount = 0;
     var landuseAreaNonEmptyCount = 0;
     var totalArea = 0;
@@ -817,10 +874,18 @@ function calculateLanduseStatistics(elements, userFriendlyName, typeHtmlElementP
 
 	//console.log("calculateLanduseStatistics", userFriendlyName, typeHtmlElementPrefix, color, weight);
 
+	var elements = [];
+	if (projectNumbers.length > 1) {
+		elements = allElements[projectNumber];
+	}
+	else {
+		elements = allElements;
+	}
+
     for (var i = 0; i < elements.length; i++) {
         var landuseArea = elements[i];
-		createTagStatistics(elements[i]);
-		console.log(elements[i].properties.tags);
+		createTagStatistics(projectNumber, elements[i]);
+		//console.log(elements[i].properties.tags);
 		if (landuseArea.type != undefined && landuseArea.type == 'Feature') { // GeoJSON
 			if (landuseArea.properties.version != 1) {
 				modifiedCount++;
@@ -850,7 +915,7 @@ function calculateLanduseStatistics(elements, userFriendlyName, typeHtmlElementP
 					var linkText = userFriendlyName + ', id: ' + landuseArea.id;
 					//var linkText = '<a href="http://www.openstreetmap.org/way/' + residentialArea.id + '" target="_blank">View on openstreetmap.org</a>';
 					polygon.bindPopup(linkText);
-					polygon.addTo(map);
+					polygon.addTo(projectData[projectNumber].map);
 					area = L.GeometryUtil.geodesicArea(latLngs); // in squaremeters
 					totalArea += area;
 				}
@@ -873,19 +938,19 @@ function calculateLanduseStatistics(elements, userFriendlyName, typeHtmlElementP
 			updateTimeDimension: true
 		});
 
-		timeDimensionLayer.addTo(map);
-		var times = timeDimension.getAvailableTimes();
-		timeDimension.setCurrentTime(times[times.length - 1]);
+		timeDimensionLayer.addTo(projectData[projectNumber].map);
+		var times = projectData[projectNumber].timeDimension.getAvailableTimes();
+		projectData[projectNumber].timeDimension.setCurrentTime(times[times.length - 1]);
 
-		console.log(tagStatistics);
+		//console.log(projectData[projectNumber].tagStatistics);
 	}
 
     var modifiedPercentage = elements.length == 0 ? 0 : modifiedCount / elements.length * 100;
     var text = "" + landuseAreaCount + ", +" + modifiedCount + " modified" + " (" + modifiedPercentage.toFixed(1) + "%)";
 	
-	$("#" + typeHtmlElementPrefix + "_count_div").text(text);
-    $("#" + typeHtmlElementPrefix + "_total_area_div").html(Math.round(totalArea) + " m<sup>2</sup>");
-    $("#" + typeHtmlElementPrefix + "_avg_area_div").html(Math.round(totalArea / landuseAreaNonEmptyCount) + " m<sup>2</sup>");
+	$("#" + typeHtmlElementPrefix + "_count_div_" + projectNumber).text(text);
+    $("#" + typeHtmlElementPrefix + "_total_area_div_" + projectNumber).html(Math.round(totalArea) + " m<sup>2</sup>");
+    $("#" + typeHtmlElementPrefix + "_avg_area_div_" + projectNumber).html(Math.round(totalArea / landuseAreaNonEmptyCount) + " m<sup>2</sup>");
 }
 
 function combineElements(elements, elementArrays) {
@@ -910,7 +975,7 @@ function isInElements(element, elements) {
     return false;
 }
 
-function showMapathonBasicData(projectNumber) {
+function showMapathonBasicData() {
 	$("head title").text(urlParams.get("title"));
 	// console.log(window.location.search);
 	// console.log(urlParams.get("title"));
@@ -920,10 +985,15 @@ function showMapathonBasicData(projectNumber) {
 
 	$("#mapathonIntro").html(
 		'<p>Data created on ' + moment(urlParams.get("date"), "YYYY-MM-DD").format("Do [of] MMM YYYY") +
-		' from ' + urlParams.get("time") + ' ' + time_zone_info + '.</p>' +
-		'<p>Some statistics for our contributions on the <a href="https://tasks.hotosm.org/project/' + projectNumber + '">#' + projectNumber + ' - ' + projectData[projectNumber].projectHOTOSMData.projectInfo.name + ' task</a>' +
-		'.</p>'
+		' from ' + urlParams.get("time") + ' ' + time_zone_info + '.</p>'
 	);
+}
+
+function showProjectBasicData(projectNumber) {
+	var html = '<h2><a href="https://tasks.hotosm.org/project/' +
+		projectNumber + '" target="_blank">#' + projectNumber + ' - ' + projectData[projectNumber].projectHOTOSMData.projectInfo.name + ' task</a>' +
+		'</h2>';
+	$("#project_info_" + projectNumber).html(html);
 }
 
 function showMissingMapsData(projectNumber) {
@@ -936,7 +1006,7 @@ function showMissingMapsData(projectNumber) {
 
 			//console.log(tags[i]);
 			if (tags[i].startsWith('#hotosm-project-')) {
-				getProjectUsers(tags[i].substr(1).toLowerCase());
+				getProjectUsers(projectNumber, tags[i].substr(1).toLowerCase());
 			}
 		}
 
@@ -960,18 +1030,18 @@ function showMissingMapsData(projectNumber) {
 
 		html += '</ul> or ';
 
-		$("#projectLeaderboardSpan").html(html);
+		$("#projectLeaderboardSpan_" + projectNumber).html(html);
 	}
 }
 
-function getProjectUsers(tag) {
+function getProjectUsers(projectNumber, tag) {
 	// https://osm-stats-production-api.azurewebsites.net/hashtags/hotosm-project-3160/users?order_by=edits&order_direction=ASC&page=1
 	$.getJSON("https://osm-stats-production-api.azurewebsites.net/hashtags/" + tag + "/users?order_by=edits&order_direction=ASC&page=1", function (users) {
 		//console.log(users);
 		if (users.length > 0) {
 			var html = '';
 			if (users.length < 500) {
-				html += '<h2>Project Contributions by ' + users.length + ' Persons</h2>';
+				html += '<h3>Project Contributions by ' + users.length + ' Persons</h3>';
 
 				html += '<div class="users">';
 				
@@ -990,21 +1060,80 @@ function getProjectUsers(tag) {
 
 			html += '<div class="userSectionAcknowledgements">The user list via Missing Maps (technical details: <a href="https://github.com/AmericanRedCross/osm-stats-api">github.com/AmericanRedCross/osm-stats-api</a>)<hr>';
 
-			$("#usersSection").html(html);
+			$("#usersSection_" + projectNumber).html(html);
 		}
 	});
 }
 
-function createTagStatistics(element) {
+function createTagStatistics(projectNumber, element) {
 	for (var key in element.properties.tags) {
-		if (tagStatistics[key + '=' + element.properties.tags[key]] == undefined) {
-			tagStatistics[key + '=' + element.properties.tags[key]] = 1;
+		if (projectData[projectNumber].tagStatistics[key + '=' + element.properties.tags[key]] == undefined) {
+			projectData[projectNumber].tagStatistics[key + '=' + element.properties.tags[key]] = 1;
 		}
 		else {
-			tagStatistics[key + '=' + element.properties.tags[key]]++;
+			projectData[projectNumber].tagStatistics[key + '=' + element.properties.tags[key]]++;
 		}
 	}
 }
+
+function createProjectsHTML() {
+
+	if (projectNumbers.length == 1) {
+		
+		var html = createProjectHTML(projectNumbers[0]);
+
+		$("#mapathonProjects").html(html);
+	}
+	else {
+		var html =
+			'<ul class="nav nav-tabs">';
+
+		html += '<li class="active"><a data-toggle="tab" href="#project_' + projectNumbers[0] + '">#' + projectNumbers[0] + '</a></li>';
+		for (var i = 1; i < projectNumbers.length; i++) {
+			html += '<li><a data-toggle="tab" href="#project_' + projectNumbers[i] + '">#' + projectNumbers[i] + '</a></li>';
+		}
+		html += '</ul>' +
+			'<div class="tab-content">';
+		
+		html += '<div id="project_' + projectNumbers[0] + '" class="tab-pane fade in active">';
+		html += createProjectHTML(projectNumbers[0]);
+		html += '</div>';
+
+		for (var i = 1; i < projectNumbers.length; i++) {
+			html += '<div id="project_' + projectNumbers[i] + '" class="tab-pane fade">';
+			html += createProjectHTML(projectNumbers[i]);
+			html += '</div>';
+		}
+
+		html += '</div>';
+
+		$("#mapathonProjects").html(html);
+	}
+}
+
+function createProjectHTML(projectNumber) {
+	var html = 
+	'<div id="project_info_' + projectNumber + '"></div>' +
+	'<h3>Map of the Created Objects</h3>' +
+	'<div id="map_canvas_' + projectNumber + '" class="map_canvas"></div>' +
+	'<div id="statistics_' + projectNumber + '">' +
+		'<h3>Mapathon Statistics</h3>' +
+		'<section id="buildingsSection_' + projectNumber + '"></section>' +
+		'<section id="residentialAreasSection_' + projectNumber + '"></section>' +
+		'<section id="landuseAnyOtherSection_' + projectNumber + '"></section>' +
+		'<section id="highwaysSection_' + projectNumber + '"></section>' +
+	'</div>' +
+	'<hr>' +
+	'<section id="usersSection_' + projectNumber + '"></section>' +
+	'<h3>Missing Maps Statistics</h3>' +
+	'If you are interested on mapathon leaderboars, you can take a look at' +
+	'<span id="projectLeaderboardSpan_' + projectNumber + '"></span>' +
+	'the <a href="http://www.missingmaps.org/leaderboards/#/">Missing Maps general leaderboad</a>.<br>' +
+	'If you are interested on your personal statistics, you can take a look at <a href="http://www.missingmaps.org/users/#/">your Missing Maps user profile</a>.';
+
+	return html;
+}
+
 
 if (!String.prototype.startsWith) {
 	String.prototype.startsWith = function(searchString, position) {
