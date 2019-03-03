@@ -5,7 +5,9 @@ var projectSelectedNumber = null;
 
 var submittedHOTOSMFormData = null;
 
-
+/*
+ * Called when the HTML page has been fully loaded to the web browser
+ */
 $(document).ready(function () {
 
     serverURL = "http://" + window.location.hostname + ":5000";
@@ -21,10 +23,20 @@ $(document).ready(function () {
 // Functions for listing and showing existing mapathon statistics
 //
 
+/**
+ * Gets the list of mapthon statitics from the server
+ * 
+ * @returns {array} The list of the mapathons
+ */
 function getMapathons() {
     return $.getJSON(serverURL + "/mapathon/list", handleMapathonsData);
 }
 
+/**
+ * Creates HTML for each mapathon list item and adds the items to a list in the UI
+ * 
+ * @param {array} data The list of the mapathons
+ */
 function handleMapathonsData(data) {
     console.log(data);
     data.forEach(item => {
@@ -62,19 +74,25 @@ function handleMapathonsData(data) {
             '" id="' + item._id.$oid + '" class="btn btn-primary">Show statistics page</a></p></div></div>';
         $("#mapathonList").append(html);
 
-        $("#" + item._id.$oid).on('click', showMapathon);
+        //$("#" + item._id.$oid).on('click', showMapathon);
     });
 }
 
-function showMapathon(event) {
-    // TODO use event.target.id to show mapathon statistics page
-    //console.log(event);
-}
+// function showMapathon(event) {
+//     // TODO use event.target.id to show mapathon statistics page
+//     //console.log(event);
+// }
 
 //
 // Functions for creating mapathon statistics
 //
 
+/**
+ * Handles the form submit event caused by the user.
+ * Starts the statistics creation on the server.
+ * 
+ * @param {Event} event The form submit event
+ */
 function createStatistics(event) {
     event.preventDefault();
     hideAlerts();
@@ -132,6 +150,12 @@ function createStatistics(event) {
     });
 }
 
+/**
+ * Creates HTML link with description for the statistics page that is being created. 
+ * 
+ * @param {string} stat_task_uuid UUID for the mapathon statistics received from the server. 
+ * @returns {string} HTML link with description
+ */
 function getStatsURLCopyInfo(stat_task_uuid) {
     return "Provided that the statistics are created succesfully, you can find the result page later on the created mapathon statistics list and at the address<br>" +
         "<input type='text' size='40' id='spanStatsURL' value='" +
@@ -142,6 +166,11 @@ function getStatsURLCopyInfo(stat_task_uuid) {
         "<br>You can safely close this page now."
 }
 
+/**
+ * Gets the current state of the mapathon statistics creation from the server and informs user via UI of the statistics creation progress.
+ * 
+ * @param {string} stat_task_uuid 
+ */
 function updateStatsCreationState(stat_task_uuid) {
 
     var method = "/stats/state"
@@ -266,6 +295,12 @@ function updateStatsCreationState(stat_task_uuid) {
 
 }
 
+/**
+ * Creates URL query parameter string using the item that contains information of the mapathon recevied from the server
+ * 
+ * @param {object} item mapathon item that contains the data that was recevied from the server
+ * @returns {string} URL query parameter string
+ */
 function createMapathonStatPageQueryParamsForItem(item) {
     var html = "";
     html += 'title=' + encodeURIComponent(item.mapathon_info.mapathon_title) +
@@ -291,6 +326,12 @@ function createMapathonStatPageQueryParamsForItem(item) {
     return html;
 }
 
+/**
+ * Does some basic sanity checks for the form data before trying to create mapathon statistics
+ * 
+ * @param {array} data The form data
+ * @returns {boolean} True if sanity check passes, otherwise false
+ */
 function checkFormDataGiven(data) {
     var title = false;
     var date = false;
@@ -319,6 +360,12 @@ function checkFormDataGiven(data) {
     return (title && date && time && project && types);
 }
 
+/**
+ * Creates URL query parameter string using the item that contains information of the mapathon inputted by user in the UI form
+ * 
+ * @param {object} data contains the mapathon data that user inputted to the form
+ * @returns {string} URL query parameter string
+ */
 function createMapathonStatPageQueryParamsFromFormData(data) {
     //console.log(data);
     var html = "";
@@ -354,11 +401,19 @@ function createMapathonStatPageQueryParamsFromFormData(data) {
     return html;
 }
 
+/**
+ * Hides possibly shown info alerts in the UI
+ */
 function hideAlerts() {
     $("#serverSuccessAlert").hide();
     $("#serverErrorAlert").hide();
 }
 
+/**
+ * Gets list of the HOT Tasking Manager projects on the specified page from the tasks.hotosm.org API
+ * 
+ * @param {integer} page The page URL query parameter used in the mapathon list REST call
+ */
 function getProjectSearchPage(page) {
 
     var params = {
@@ -417,9 +472,12 @@ function getProjectSearchPage(page) {
 }
 
 /**
- * Awesomplete filter
- * @param {string} text 
- * @param {string} input 
+ * Awesomplete filter that return true if the project number form input contains the text
+ * 
+ * @param {string} text item text provided by Awesomplete from the list of items it has been provided
+ * @param {string} input form input text for the Tasking manager project numbers
+ * @returns {boolean} True if the input contains the text, otherwise false
+ * 
  */
 function filterProject(text, input) {
     var parts = input.split(',');
@@ -431,6 +489,11 @@ function filterProject(text, input) {
     return false;
 }
 
+/**
+ * Updates the project number form input with the autocomplete selection
+ * 
+ * @param {string} selectedOptionText text of the Awesomplete item that the user chose from the autocompletion list
+ */
 function replaceProjectInputText(selectedOptionText) {
 
     var parts = $("#projectNumbers").val().split(',');
