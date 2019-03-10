@@ -591,7 +591,7 @@ function calculateBuildingStatistics(projectNumber, allElements) {
 		var times = projectData[projectNumber].timeDimension.getAvailableTimes();
 		projectData[projectNumber].timeDimension.setCurrentTime(times[times.length - 1]);
 
-		//console.log(projectData[projectNumber].tagStatistics);
+		console.log(projectData[projectNumber].tagStatistics);
 	}
 
     var modifiedPercentage = elements.length == 0 ? 0 : modifiedCount / elements.length * 100;
@@ -676,7 +676,7 @@ function calculateResidentialAreaStatistics(projectNumber, allElements) {
 		var times = projectData[projectNumber].timeDimension.getAvailableTimes();
 		projectData[projectNumber].timeDimension.setCurrentTime(times[times.length - 1]);
 
-		//console.log(projectData[projectNumber].tagStatistics);
+		console.log(projectData[projectNumber].tagStatistics);
 	}
 
     var modifiedPercentage = elements.length == 0 ? 0 : modifiedCount / elements.length * 100;
@@ -799,7 +799,7 @@ function calculateWayStatistics(projectNumber, allElements, lengthHtmlElementID,
 		var times = projectData[projectNumber].timeDimension.getAvailableTimes();
 		projectData[projectNumber].timeDimension.setCurrentTime(times[times.length - 1]);
 
-		//console.log(projectData[projectNumber].tagStatistics);
+		console.log(projectData[projectNumber].tagStatistics);
 	}
 
     var length = totalWayLength / 1000;
@@ -942,7 +942,7 @@ function calculateLanduseStatistics(projectNumber, allElements, userFriendlyName
 		var times = projectData[projectNumber].timeDimension.getAvailableTimes();
 		projectData[projectNumber].timeDimension.setCurrentTime(times[times.length - 1]);
 
-		//console.log(projectData[projectNumber].tagStatistics);
+		console.log(projectData[projectNumber].tagStatistics);
 	}
 
     var modifiedPercentage = elements.length == 0 ? 0 : modifiedCount / elements.length * 100;

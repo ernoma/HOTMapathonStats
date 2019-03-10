@@ -5,6 +5,9 @@ var projectSelectedNumber = null;
 
 var submittedHOTOSMFormData = null;
 
+var spinner = [];
+
+
 /*
  * Called when the HTML page has been fully loaded to the web browser
  */
@@ -29,6 +32,9 @@ $(document).ready(function () {
  * @returns {array} The list of the mapathons
  */
 function getMapathons() {
+
+    createListSpinner();
+
     return $.getJSON(serverURL + "/mapathon/list", handleMapathonsData);
 }
 
@@ -39,6 +45,9 @@ function getMapathons() {
  */
 function handleMapathonsData(data) {
     console.log(data);
+
+    removeListSpinner();
+
     data.forEach(item => {
         var html = '<div class="card"><div class="card-body"><h5 class="card-title">' + item.mapathon_info.mapathon_title + '</h5>' +
             '<p class="card-text">Mapathon held on ' +
@@ -504,4 +513,35 @@ function replaceProjectInputText(selectedOptionText) {
     text += selectedOptionText.slice(1, selectedOptionText.indexOf(' ', 1));
 
     $("#projectNumbers").val(text);
+}
+
+
+function createListSpinner() {
+    var opts = {
+        lines: 20, // The number of lines to draw
+        length: 13, // The length of each line
+        width: 8, // The line thickness
+        radius: 9, // The radius of the inner circle
+        scale: 1, // Scales overall size of the spinner
+        corners: 1, // Corner roundness (0..1)
+        color: '#7674e5', // CSS color or array of colors
+        fadeColor: 'transparent', // CSS color or array of colors
+        speed: 1, // Rounds per second
+        rotate: 0, // The rotation offset
+        animation: 'spinner-line-fade-more', // The CSS animation name for the lines
+        direction: 1, // 1: clockwise, -1: counterclockwise
+        zIndex: 2e9, // The z-index (defaults to 2000000000)
+        className: 'spinner', // The CSS class to assign to the spinner
+        top: '100px', // Top position relative to parent
+        left: '50%', // Left position relative to parent
+        shadow: '0 0 1px transparent', // Box-shadow for the lines
+        position: 'absolute' // Element positioning
+      };
+
+      var target = document.getElementById('listSpinner');
+      spinner = new Spinner(opts).spin(target);
+}
+
+function removeListSpinner() {
+    spinner.stop();
 }
