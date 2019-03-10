@@ -107,7 +107,7 @@ class MapathonStatistics(object):
                     'state_progress': 0
                 }
 
-                project_changes = self.create_project_changes()
+                project_changes = self.create_project_changes(project_number)
 
                 self.mapathon_changes.append(project_changes)
 
@@ -230,7 +230,7 @@ class MapathonStatistics(object):
                 }
                 print("Project tasks intersercing polygon: " + file)
 
-    def create_project_changes(self):
+    def create_project_changes(self, project_number):
         # find changes for the mapathon area during the mapathon
 
         self.project_feature_collection = self.create_project_polygon_feature_collection()
@@ -249,7 +249,7 @@ class MapathonStatistics(object):
             #print(self.mapathon_changes)
             #####
 
-            project_changes_for_all_areas.append(self.mapathon_change_creator.create_mapathon_changes_from_URL(self.project_feature_collection, osc_file_download_url, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc']))
+            project_changes_for_all_areas.append(self.mapathon_change_creator.create_mapathon_changes_from_URL(project_number, self.project_feature_collection, osc_file_download_url, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc']))
         #     for types_key in self.client_data['types_of_mapping']:
         #         for result_key, result_json in result.items():
         #             if result_key.startswith(types_key):
