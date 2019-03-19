@@ -37,3 +37,6 @@ class TagAnalyzer:
                             self.results['projects'][project_number]['areas'][area_name]['tags'][key][value] += 1
 
         pprint(self.results)
+
+    def get_analysis_results(self, project_number):
+        return self.results['projects'][project_number]

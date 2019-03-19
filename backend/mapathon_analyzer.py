@@ -179,6 +179,11 @@ class MapathonChangeCreator(object):
 
         return data
 
+
+    def get_analysis_results(self, project_number):
+        return self.tag_analyzer.get_analysis_results(project_number)
+
+
     def create_mapathon_changes(self, project_polygons, osc_root_element, date, min_hour_utz):
 
         self.analysis_percentage = 0

@@ -108,6 +108,9 @@ class MapathonStatistics(object):
                 }
 
                 project_changes = self.create_project_changes(project_number)
+                analysis_results = self.get_analysis_results(project_number)
+
+                # TODO store analysis results
 
                 self.mapathon_changes.append(project_changes)
 
@@ -283,6 +286,9 @@ class MapathonStatistics(object):
         #print(feature_collection)
 
         return feature_collection
+
+    def get_analysis_results(self, project_number):
+        return self.mapathon_change_creator.get_analysis_results(project_number)
 
     def create_users_list(self):
         # find users who made changes for the mapathon area during the mapathon
