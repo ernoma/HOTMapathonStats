@@ -249,7 +249,9 @@ class MapathonStatistics(object):
             #print(self.mapathon_changes)
             #####
 
-            project_changes_for_all_areas.append(self.mapathon_change_creator.create_mapathon_changes_from_URL(project_number, self.project_feature_collection, osc_file_download_url, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc']))
+            area_name = osc_area['file'].split('.')[0]
+
+            project_changes_for_all_areas.append(self.mapathon_change_creator.create_mapathon_changes_from_URL(area_name, project_number, self.project_feature_collection, osc_file_download_url, self.client_data['mapathon_date'], self.client_data['mapathon_time_utc']))
         #     for types_key in self.client_data['types_of_mapping']:
         #         for result_key, result_json in result.items():
         #             if result_key.startswith(types_key):

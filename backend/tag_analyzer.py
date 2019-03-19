@@ -6,26 +6,34 @@ class TagAnalyzer:
     """
 
     def __init__(self):
-        self.results = {}
-
-    def analyze_tags(self, project_number, date, min_hour_utz, data):
-
-        self.results[project_number] = {
-            'date': date,
-            'min_hour_utz': min_hour_utz,
-            'tags': {}
+        self.results = {
+            'projects': {}
         }
+
+    def analyze_tags(self, area_name, project_number, date, min_hour_utz, data):
+
+        if project_number not in self.results['projects']:
+            self.results['projects'][project_number] = {
+                'date': date,
+                'min_hour_utz': min_hour_utz,
+                'areas': {}
+            }
+
+        if area_name not in self.results['projects'][project_number]['areas']:
+            self.results['projects'][project_number]['areas'][area_name] = {
+                'tags': {}
+            }
 
         for key, features in data.items():
             for feature in features:
                 for key, value in feature['properties']['tags'].items():             
-                    if key not in self.results[project_number]['tags']:
-                        self.results[project_number]['tags'][key] = {}
-                        self.results[project_number]['tags'][key][value] = 1
+                    if key not in self.results['projects'][project_number]['areas'][area_name]['tags']:
+                        self.results['projects'][project_number]['areas'][area_name]['tags'][key] = {}
+                        self.results['projects'][project_number]['areas'][area_name]['tags'][key][value] = 1
                     else:
-                        if value not in self.results[project_number]['tags'][key]:
-                            self.results[project_number]['tags'][key][value] = 1
+                        if value not in self.results['projects'][project_number]['areas'][area_name]['tags'][key]:
+                            self.results['projects'][project_number]['areas'][area_name]['tags'][key][value] = 1
                         else:
-                            self.results[project_number]['tags'][key][value] += 1
+                            self.results['projects'][project_number]['areas'][area_name]['tags'][key][value] += 1
 
         pprint(self.results)

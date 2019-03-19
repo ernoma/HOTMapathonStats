@@ -140,7 +140,7 @@ class MapathonChangeCreator(object):
 
         return feature
 
-    def create_mapathon_changes_with_db(self, project_number, date, min_hour_utz):
+    def create_mapathon_changes_with_db(self, area_name, project_number, date, min_hour_utz):
         buildings = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'building', geomtype='polygon')
         residential_areas = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'landuse', ['residential'], geomtype='polygon')
         landuse_farmlands = self.project_postgis.find_changes(self.db_name, date, min_hour_utz, 'landuse', ['farmland'], geomtype='polygon')
@@ -175,7 +175,7 @@ class MapathonChangeCreator(object):
             "highway_footway": highways_footway
         }
 
-        self.tag_analyzer.analyze_tags(project_number, date, min_hour_utz, data)
+        self.tag_analyzer.analyze_tags(area_name, project_number, date, min_hour_utz, data)
 
         return data
 
@@ -361,7 +361,7 @@ class MapathonChangeCreator(object):
         with open(output_dir + '/' + 'highways_footway.json', 'w') as outfile:
             json.dump(results['highway_footway'], outfile)
 
-    def create_mapathon_changes_from_URL(self, project_number, project_polygon_feature_collection, osc_file_download_url, date, min_hour_utz):
+    def create_mapathon_changes_from_URL(self, area_name, project_number, project_polygon_feature_collection, osc_file_download_url, date, min_hour_utz):
         # project_polygons is a geojson featurecollection of polygons similarly to the contents of the project_json_file argument
         try:
             #osc_gz_response = requests.get(osc_file_download_url)
@@ -377,7 +377,7 @@ class MapathonChangeCreator(object):
         # osc_root_element = etree.fromstring(osc_data)
 
         # project_polygons = self.create_polygons_from_feature_collection(project_polygon_feature_collection)
-        return self.create_mapathon_changes_with_db(project_number, date, min_hour_utz)
+        return self.create_mapathon_changes_with_db(area_name, project_number, date, min_hour_utz)
 
 
     def insert_data_to_db(self, file_name, project_polygon_feature_collection, date):
