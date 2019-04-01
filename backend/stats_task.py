@@ -30,6 +30,7 @@ class MapathonStatistics(object):
         self.mapathon_change_creator = MapathonChangeCreator()
         self.mapathon_changes = []
         self.mapathon_users = []
+        self.mapathon_tags = None
 
 
         self.state = {
@@ -108,11 +109,10 @@ class MapathonStatistics(object):
                 }
 
                 project_changes = self.create_project_changes(project_number)
-                analysis_results = self.get_analysis_results(project_number)
-
-                # TODO store analysis results
 
                 self.mapathon_changes.append(project_changes)
+
+            self.mapathon_tags = self.get_mapathon_tags()
 
             self.store_changes()
 
@@ -290,6 +290,9 @@ class MapathonStatistics(object):
     def get_analysis_results(self, project_number):
         return self.mapathon_change_creator.get_analysis_results(project_number)
 
+    def get_mapathon_tags(self):
+        return self.mapathon_change_creator.get_all_tags()
+
     def create_users_list(self):
         # find users who made changes for the mapathon area during the mapathon
 
@@ -302,6 +305,7 @@ class MapathonStatistics(object):
             'stat_task_uuid': self.stat_task_uuid,
             'mapathon_info': self.client_data,
             'mapathon_changes': self.mapathon_changes,
+            'mapathon_tags': self.mapathon_tags
             #'mapathon_users': self.mapathon_users
         }
         self.mapathon_id = self.mapathons_storage.store_mapathon(mapathon_data)

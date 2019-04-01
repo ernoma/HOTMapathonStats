@@ -32,6 +32,7 @@ class MapathonsStorage(object):
         mapathon = {
             'stat_task_uuid': mapathon_data['stat_task_uuid'],
             'mapathon_info': mapathon_data['mapathon_info'],
+            'mapathon_tags': mapathon_data['mapathon_tags']
             #'mapathon_users': mapathon_data['mapathon_users'],
             # mapathon_info example:
             # mapathon_info = {
