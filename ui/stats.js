@@ -18,6 +18,8 @@ $(document).ready(function () {
 	for (var i = 0; i < projectNumbers.length; i++) { 
 		var projectNumber = projectNumbers[i];
 
+		showMapathonProjectTags(projectNumber, urlParams.get("id"), urlParams.get("uid"));
+
 		projectData[projectNumber] = {
 			map: null,
 			roadStats: {
@@ -591,7 +593,7 @@ function calculateBuildingStatistics(projectNumber, allElements) {
 		var times = projectData[projectNumber].timeDimension.getAvailableTimes();
 		projectData[projectNumber].timeDimension.setCurrentTime(times[times.length - 1]);
 
-		console.log(projectData[projectNumber].tagStatistics);
+		//console.log(projectData[projectNumber].tagStatistics);
 	}
 
     var modifiedPercentage = elements.length == 0 ? 0 : modifiedCount / elements.length * 100;
@@ -676,7 +678,7 @@ function calculateResidentialAreaStatistics(projectNumber, allElements) {
 		var times = projectData[projectNumber].timeDimension.getAvailableTimes();
 		projectData[projectNumber].timeDimension.setCurrentTime(times[times.length - 1]);
 
-		console.log(projectData[projectNumber].tagStatistics);
+		//console.log(projectData[projectNumber].tagStatistics);
 	}
 
     var modifiedPercentage = elements.length == 0 ? 0 : modifiedCount / elements.length * 100;
@@ -799,7 +801,7 @@ function calculateWayStatistics(projectNumber, allElements, lengthHtmlElementID,
 		var times = projectData[projectNumber].timeDimension.getAvailableTimes();
 		projectData[projectNumber].timeDimension.setCurrentTime(times[times.length - 1]);
 
-		console.log(projectData[projectNumber].tagStatistics);
+		//console.log(projectData[projectNumber].tagStatistics);
 	}
 
     var length = totalWayLength / 1000;
@@ -942,7 +944,7 @@ function calculateLanduseStatistics(projectNumber, allElements, userFriendlyName
 		var times = projectData[projectNumber].timeDimension.getAvailableTimes();
 		projectData[projectNumber].timeDimension.setCurrentTime(times[times.length - 1]);
 
-		console.log(projectData[projectNumber].tagStatistics);
+		//console.log(projectData[projectNumber].tagStatistics);
 	}
 
     var modifiedPercentage = elements.length == 0 ? 0 : modifiedCount / elements.length * 100;
@@ -1124,6 +1126,8 @@ function createProjectHTML(projectNumber) {
 		'<section id="highwaysSection_' + projectNumber + '"></section>' +
 	'</div>' +
 	'<hr>' +
+	'section id="tagsSection_' + projectNumber + '"></section>' +
+	'<hr>' +
 	'<section id="usersSection_' + projectNumber + '"></section>' +
 	'<h3>Missing Maps Statistics</h3>' +
 	'If you are interested on mapathon leaderboars, you can take a look at' +
@@ -1132,6 +1136,59 @@ function createProjectHTML(projectNumber) {
 	'If you are interested on your personal statistics, you can take a look at <a href="http://www.missingmaps.org/users/#/">your Missing Maps user profile</a>.';
 
 	return html;
+}
+
+function showMapathonProjectTags(projectNumber, id, uid) {
+
+	console.log(id, uid);
+
+	$.getJSON(serverURL + "/mapathon/list", function (data) {
+
+		var mapathon_project_tags = null;
+
+		for (var i = 0; i < data.length; i++) {
+			if (id != null) {
+				if (data[i]._id['$oid'] == id) {
+					//console.log(data[i]);
+					if (data[i].mapathon_tags != undefined) {
+						mapathon_project_tags = data[i].mapathon_tags.projects['p'+projectNumber];
+						break;
+					}
+					else {
+						return;
+					}
+				}
+			}
+			else {
+				var uuid = uid.replace(new RegExp('-', 'g'), '');
+				//console.log(uuid);
+				if (data[i].stat_task_uuid['$uuid'] == uuid) {
+					//console.log(data[i]);
+					if (data[i].mapathon_tags != undefined) {
+						mapathon_project_tags = data[i].mapathon_tags.projects['p'+projectNumber];
+						break;
+					}
+					else {
+						return;
+					}
+				}
+			}
+		}
+		console.log(mapathon_project_tags);
+
+		var html = '<h3>Tags used in mapathon day</h3>';
+
+		for (var areaKey in mapathon_project_tags.areas) {
+			for (var tagKey in mapathon_project_tags.areas[areaKey].tags) {
+				for (var valueKey in mapathon_project_tags.areas[areaKey].tags[tagKey]) {
+					console.log(tagKey + '=' +valueKey + ', count: ' + mapathon_project_tags.areas[areaKey].tags[tagKey][valueKey]);
+				}
+
+			}
+		}
+
+		$('#tagsSection_' + projectNumber).html();
+	});
 }
 
 
