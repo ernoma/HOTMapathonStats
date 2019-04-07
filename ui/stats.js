@@ -35,9 +35,9 @@ $(document).ready(function () {
 				modifiedCount: 0
 			},
 			projectHOTOSMData: null,
-			timeDimension: null,
 			timePlayer: null,
-			timeDimensionControl: null,
+			minTime: null,
+			maxTime: null,
 			tagStatistics: {}
 		};
 		
@@ -65,6 +65,8 @@ $(document).ready(function () {
 		L.control.layers(baseMaps).addTo(projectData[projectNumber].map);
 		L.control.scale().addTo(projectData[projectNumber].map);
 
+		initTimeDimensions(projectNumber);
+
 		$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 			//console.log(e.target); // newly activated tab
 			//console.log(e.relatedTarget); // previous active tab
@@ -79,17 +81,15 @@ $(document).ready(function () {
 						projectData[projectNumbers[n]].map.fitBounds(projectData[projectNumbers[n]].areaGEOJSON.getBounds());
 						
 						// to ensure Time Control UI update
-						projectData[projectNumber].timePlayer.start(1);
-						projectData[projectNumber].timePlayer.stop();
-						var times = projectData[projectNumber].timeDimension.getAvailableTimes();
-						projectData[projectNumber].timeDimension.setCurrentTime(times[times.length - 1]);
+						projectData[projectNumbers[n]].timePlayer.start(1);
+						projectData[projectNumbers[n]].timePlayer.stop();
+						var times = projectData[projectNumbers[n]].map.timeDimension.getAvailableTimes();
+						projectData[projectNumbers[n]].map.timeDimension.setCurrentTime(times[times.length - 1]);
 						
 					}, 0)
 				})(j);
 			}
 		});
-
-		initTimeDimensions(projectNumber);
 
 		(function(number){
 			$.getJSON("https://tasks.hotosm.org/api/v1/project/" + number, function (projectHOTOSMData) {
@@ -123,24 +123,24 @@ $(document).ready(function () {
 function initTimeDimensions(projectNumber) {
 
 	var minTime = "2018-01-01T00:00:00";
-	var maxTime = "2020-01-01T00:00:00";
+	var maxTime = "2030-01-01T00:00:00";
 
-	projectData[projectNumber].timeDimension = new L.TimeDimension({
+	var timeDimension = new L.TimeDimension({
 		timeInterval: minTime + "/" + maxTime,
 		period: "PT5M"
 	});
 
-	projectData[projectNumber].map.timeDimension = projectData[projectNumber].timeDimension;
+	projectData[projectNumber].map.timeDimension = timeDimension;
 
 	projectData[projectNumber].timePlayer = new L.TimeDimension.Player({
 		transitionTime: 200, 
 		loop: false,
 		startOver:true
-	}, projectData[projectNumber].timeDimension);
+	}, projectData[projectNumber].map.timeDimension);
 
 	var timeDimensionControlOptions = {
 		player:        projectData[projectNumber].timePlayer,
-		timeDimension: projectData[projectNumber].timeDimension,
+		timeDimension: projectData[projectNumber].map.timeDimension,
 		position:      'bottomleft',
 		autoPlay:      false,
 		minSpeed:      1,
@@ -573,7 +573,7 @@ function calculateBuildingStatistics(projectNumber, allElements) {
 		}
 	}
 	
-	if (geoJSONFeatures.length >= 0) {
+	if (geoJSONFeatures.length > 0) {
 		//console.log(geoJSONFeatures);
 
 		var geojsonLayer = L.geoJSON(geoJSONFeatures, {
@@ -586,13 +586,19 @@ function calculateBuildingStatistics(projectNumber, allElements) {
 
 		var timeDimensionLayer = L.timeDimension.layer.geoJson(geojsonLayer, {
 			addlastPoint: false,
-			updateTimeDimension: true
+			// updateTimeDimension: true,
+			// updateTimeDimensionMode: 'intersect'
 		});
 
 		timeDimensionLayer.addTo(projectData[projectNumber].map);
-		var times = projectData[projectNumber].timeDimension.getAvailableTimes();
-		projectData[projectNumber].timeDimension.setCurrentTime(times[times.length - 1]);
-
+		
+		updateProjectTimeExtremes(projectNumber, geoJSONFeatures);
+		projectData[projectNumber].map.timeDimension.setAvailableTimes([projectData[projectNumber].minTime, projectData[projectNumber].maxTime], "extremes");
+		var times = projectData[projectNumber].map.timeDimension.getAvailableTimes();
+		projectData[projectNumber].map.timeDimension.setCurrentTime(times[times.length - 1]);
+		// console.log(projectData[projectNumber].map.timeDimension);
+		// var times = projectData[projectNumber].map.timeDimension.getAvailableTimes();
+		// console.log(times);
 		//console.log(projectData[projectNumber].tagStatistics);
 	}
 
@@ -659,7 +665,7 @@ function calculateResidentialAreaStatistics(projectNumber, allElements) {
 		}
     }
 
-	if (geoJSONFeatures.length >= 0) {
+	if (geoJSONFeatures.length > 0) {
 		//console.log(geoJSONFeatures);
 		var geojsonLayer = L.geoJSON(geoJSONFeatures, {
 			style: {color: '#FFFF00', weight: 2 },
@@ -671,13 +677,18 @@ function calculateResidentialAreaStatistics(projectNumber, allElements) {
 		
 		var timeDimensionLayer = L.timeDimension.layer.geoJson(geojsonLayer, {
 			addlastPoint: false,
-			updateTimeDimension: true
+			// updateTimeDimension: true,
+			// updateTimeDimensionMode: 'intersect'
 		});
 
 		timeDimensionLayer.addTo(projectData[projectNumber].map);
-		var times = projectData[projectNumber].timeDimension.getAvailableTimes();
-		projectData[projectNumber].timeDimension.setCurrentTime(times[times.length - 1]);
 
+		updateProjectTimeExtremes(projectNumber, geoJSONFeatures);
+		projectData[projectNumber].map.timeDimension.setAvailableTimes([projectData[projectNumber].minTime, projectData[projectNumber].maxTime], "extremes");
+		var times = projectData[projectNumber].map.timeDimension.getAvailableTimes();
+		projectData[projectNumber].map.timeDimension.setCurrentTime(times[times.length - 1]);
+		// var times = projectData[projectNumber].map.timeDimension.getAvailableTimes();
+		//console.log(times);
 		//console.log(projectData[projectNumber].tagStatistics);
 	}
 
@@ -769,7 +780,7 @@ function calculateWayStatistics(projectNumber, allElements, lengthHtmlElementID,
 		}
     }
 	
-	if (geoJSONFeatures.length >= 0) {
+	if (geoJSONFeatures.length > 0) {
 		//console.log(geoJSONFeatures);
 		var geojsonLayer = L.geoJSON(geoJSONFeatures, {
 			style: {color: mapLineColor, weight: weight, dashArray: dashArray },
@@ -792,14 +803,27 @@ function calculateWayStatistics(projectNumber, allElements, lengthHtmlElementID,
 			}
 		});
 		
+		// console.log(geoJSONFeatures);
+		// console.log(geojsonLayer);
+
 		var timeDimensionLayer = L.timeDimension.layer.wayLayer(geojsonLayer, {
 			addlastPoint: false,
-			updateTimeDimension: true
+			// updateTimeDimension: true,
+			// updateTimeDimensionMode: 'intersect'
 		});
 
+		// console.log('---------------------------');
+		// var times = projectData[projectNumber].map.timeDimension.getAvailableTimes();
+		// console.log(times);
 		timeDimensionLayer.addTo(projectData[projectNumber].map);
-		var times = projectData[projectNumber].timeDimension.getAvailableTimes();
-		projectData[projectNumber].timeDimension.setCurrentTime(times[times.length - 1]);
+
+		updateProjectTimeExtremes(projectNumber, geoJSONFeatures);
+		projectData[projectNumber].map.timeDimension.setAvailableTimes([projectData[projectNumber].minTime, projectData[projectNumber].maxTime], "extremes");
+		var times = projectData[projectNumber].map.timeDimension.getAvailableTimes();
+		projectData[projectNumber].map.timeDimension.setCurrentTime(times[times.length - 1]);
+		// var times = projectData[projectNumber].map.timeDimension.getAvailableTimes();
+		// console.log(times);
+		// console.log('---------------------------');
 
 		//console.log(projectData[projectNumber].tagStatistics);
 	}
@@ -925,7 +949,7 @@ function calculateLanduseStatistics(projectNumber, allElements, userFriendlyName
 		}
     }
 
-	if (geoJSONFeatures.length >= 0) {
+	if (geoJSONFeatures.length > 0) {
 		//console.log(geoJSONFeatures);
 		var geojsonLayer = L.geoJSON(geoJSONFeatures, {
 			style: {color: color, weight: weight },
@@ -937,13 +961,18 @@ function calculateLanduseStatistics(projectNumber, allElements, userFriendlyName
 		
 		var timeDimensionLayer = L.timeDimension.layer.geoJson(geojsonLayer, {
 			addlastPoint: false,
-			updateTimeDimension: true
+			// updateTimeDimension: true,
+			// updateTimeDimensionMode: 'intersect'
 		});
 
 		timeDimensionLayer.addTo(projectData[projectNumber].map);
-		var times = projectData[projectNumber].timeDimension.getAvailableTimes();
-		projectData[projectNumber].timeDimension.setCurrentTime(times[times.length - 1]);
 
+		updateProjectTimeExtremes(projectNumber, geoJSONFeatures);
+		projectData[projectNumber].map.timeDimension.setAvailableTimes([projectData[projectNumber].minTime, projectData[projectNumber].maxTime], "extremes");
+		var times = projectData[projectNumber].map.timeDimension.getAvailableTimes();
+		projectData[projectNumber].map.timeDimension.setCurrentTime(times[times.length - 1]);
+		// var times = projectData[projectNumber].map.timeDimension.getAvailableTimes();
+		//console.log(times);
 		//console.log(projectData[projectNumber].tagStatistics);
 	}
 
@@ -1237,7 +1266,6 @@ function showMapathonProjectTags(projectNumber, id, uid) {
 	});
 }
 
-
 if (!String.prototype.startsWith) {
 	String.prototype.startsWith = function(searchString, position) {
 		position = position || 0;
@@ -1245,6 +1273,18 @@ if (!String.prototype.startsWith) {
 	};
 }
 
+function updateProjectTimeExtremes(projectNumber, geoJSONFeatures) {
+	for (var i = 0; i < geoJSONFeatures.length; i++) {
+		var time = moment(geoJSONFeatures[i].properties.time, "YYYY-MM-DDTHH:mm:ss").valueOf(); // 2019-02-07T17:51:08
+
+		if (projectData[projectNumber].minTime == null || projectData[projectNumber].minTime > time) {
+			projectData[projectNumber].minTime = time;
+		}
+		if (projectData[projectNumber].maxTime == null || projectData[projectNumber].maxTime < time) {
+			projectData[projectNumber].maxTime = time;
+		}
+	}
+}
 
 L.TimeDimension.Layer.WayLayer = L.TimeDimension.Layer.GeoJson.extend({
 
