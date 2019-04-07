@@ -1126,9 +1126,8 @@ function createProjectHTML(projectNumber) {
 		'<section id="highwaysSection_' + projectNumber + '"></section>' +
 	'</div>' +
 	'<hr>' +
-	'section id="tagsSection_' + projectNumber + '"></section>' +
-	'<hr>' +
 	'<section id="usersSection_' + projectNumber + '"></section>' +
+	'<section id="tagsSection_' + projectNumber + '"></section>' +
 	'<h3>Missing Maps Statistics</h3>' +
 	'If you are interested on mapathon leaderboars, you can take a look at' +
 	'<span id="projectLeaderboardSpan_' + projectNumber + '"></span>' +
@@ -1176,18 +1175,58 @@ function showMapathonProjectTags(projectNumber, id, uid) {
 		}
 		console.log(mapathon_project_tags);
 
-		var html = '<h3>Tags used in mapathon day</h3>';
+		var source = '<h3>Tags used during the mapathon day</h3>' +
+			'<div class="row">' +
+			'<div class="col-sm-3"><span class="tag-header">Key</span></div><div class="col-sm-3"><span class="tag-header">Value</span></div><div class="col-sm-3"><span class="tag-header">Count</span></div>' +
+			'</div>' +
+			'{{#tags}}<div class="row">' +
+			'<div class="col-sm-3">{{key}}</div><div class="col-sm-3">{{value}}</div><div class="col-sm-3">{{count}}</div>' +
+			'</div>{{/tags}}' +
+			'<hr>';
+		var template = Handlebars.compile(source);
+
+		var data = { tags: null };
+
+		var tags = [];
 
 		for (var areaKey in mapathon_project_tags.areas) {
 			for (var tagKey in mapathon_project_tags.areas[areaKey].tags) {
 				for (var valueKey in mapathon_project_tags.areas[areaKey].tags[tagKey]) {
-					console.log(tagKey + '=' +valueKey + ', count: ' + mapathon_project_tags.areas[areaKey].tags[tagKey][valueKey]);
+					console.log(tagKey + '=' + valueKey + ', count: ' + mapathon_project_tags.areas[areaKey].tags[tagKey][valueKey]);
+					var found = false;
+					for (var i = 0; i < tags.length; i++) {
+						if (tags[i].key == tagKey && tags[i].value == valueKey) {
+							tags[i].count += mapathon_project_tags.areas[areaKey].tags[tagKey][valueKey];
+							found = true;
+							break;
+						}
+					}
+					if (!found) {
+						tags.push({
+							key: tagKey,
+							value: valueKey,
+							count: mapathon_project_tags.areas[areaKey].tags[tagKey][valueKey]
+						});
+					}
 				}
-
 			}
 		}
 
-		$('#tagsSection_' + projectNumber).html();
+		var sortedTags = tags.sort(function(a, b){
+			if (a.key == b.key) {
+				return (a.count > b.count) ? -1 : (a.count < b.count) ? 1 : 0;
+			}
+			else {
+				return (a.key < b.key) ? - 1 : 1;
+			}
+		});
+
+		data.tags = sortedTags;
+
+		var resultHTML = template(data);
+		console.log(resultHTML);
+
+		$('#tagsSection_' + projectNumber).html(resultHTML);
 	});
 }
 

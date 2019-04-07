@@ -35,6 +35,13 @@ h4 {
     font-size: medium;
 }
 
+.tag-header {
+    font-size: medium;
+    /* padding-bottom: 5px; */
+    /* font-weight: 600; */
+    border-bottom: 1px dotted gray;
+}
+
 .top-buffer { margin-top:20px; }
 
 .bottom-buffer { margin-bottom:20px; }
