@@ -1043,14 +1043,21 @@ function getProjectUsers(projectNumber, tag) {
 		if (users.length > 0) {
 			var html = '';
 			if (users.length < 500) {
+
+				var sortedUsers = users.sort(function(a, b){
+					if(a.name.toLowerCase() < b.name.toLowerCase()) { return -1; }
+					if(a.name.toLowerCase() > b.name.toLowerCase()) { return 1; }
+					return 0;
+				});
+
 				html += '<h3>Project Contributions by ' + users.length + ' Persons</h3>';
 
 				html += '<div class="users">';
 				
-				for (var i = 0; i < users.length; i++) {
+				for (var i = 0; i < sortedUsers.length; i++) {
 					html += '<div class="user">' +
-						'<a href="http://tasks.hotosm.org/user/' + users[i].name + '">' + 
-						users[i].name + 
+						'<a href="http://tasks.hotosm.org/user/' + sortedUsers[i].name + '">' + 
+						sortedUsers[i].name + 
 						'</a>' +
 						'</div>';
 				}
@@ -1139,7 +1146,7 @@ function createProjectHTML(projectNumber) {
 
 function showMapathonProjectTags(projectNumber, id, uid) {
 
-	console.log(id, uid);
+	//console.log(id, uid);
 
 	$.getJSON(serverURL + "/mapathon/list", function (data) {
 
@@ -1173,7 +1180,7 @@ function showMapathonProjectTags(projectNumber, id, uid) {
 				}
 			}
 		}
-		console.log(mapathon_project_tags);
+		//console.log(mapathon_project_tags);
 
 		var source = '<h3>Tags used during the mapathon day</h3>' +
 			'<div class="row">' +
@@ -1192,7 +1199,7 @@ function showMapathonProjectTags(projectNumber, id, uid) {
 		for (var areaKey in mapathon_project_tags.areas) {
 			for (var tagKey in mapathon_project_tags.areas[areaKey].tags) {
 				for (var valueKey in mapathon_project_tags.areas[areaKey].tags[tagKey]) {
-					console.log(tagKey + '=' + valueKey + ', count: ' + mapathon_project_tags.areas[areaKey].tags[tagKey][valueKey]);
+					//console.log(tagKey + '=' + valueKey + ', count: ' + mapathon_project_tags.areas[areaKey].tags[tagKey][valueKey]);
 					var found = false;
 					for (var i = 0; i < tags.length; i++) {
 						if (tags[i].key == tagKey && tags[i].value == valueKey) {
@@ -1224,7 +1231,7 @@ function showMapathonProjectTags(projectNumber, id, uid) {
 		data.tags = sortedTags;
 
 		var resultHTML = template(data);
-		console.log(resultHTML);
+		//console.log(resultHTML);
 
 		$('#tagsSection_' + projectNumber).html(resultHTML);
 	});
