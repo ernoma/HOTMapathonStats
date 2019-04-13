@@ -68,7 +68,7 @@ class ProjectPostgis:
             query += "FROM ways, project_tasks " \
                 "WHERE ST_Intersects(linestring, project_tasks.geom) AND "
         
-        query += "tstamp >= '{} {}'::timestamp".format(date, str(min_hour_utz) + ":00:00")
+        query += "tstamp >= '{}T{}'::timestamptz".format(date, str(min_hour_utz) + ":00:00Z")
 
         if osm_values is None and osm_exclude_values is None:
             query += " AND tags ? '{}'".format(osm_key)

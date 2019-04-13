@@ -371,14 +371,18 @@ class MapathonChangeCreator(object):
 
     def create_mapathon_changes_from_URL(self, area_name, project_number, project_polygon_feature_collection, osc_file_download_url, date, min_hour_utz):
         # project_polygons is a geojson featurecollection of polygons similarly to the contents of the project_json_file argument
-        try:
-            #osc_gz_response = requests.get(osc_file_download_url)
-            osc_gz_response = requests.get(osc_file_download_url, stream=True)
-        except Exception as e:
-            print(e)
-            # TODO handle all possible error conditions
-        
-        file_name = self.save_osc_to_file(osc_file_download_url, osc_gz_response)
+
+        file_name = osc_file_download_url.split(':')[1][2:].replace('download.geofabrik.de/', '').replace('/', '_').replace('-', '_')
+        output_path = os.path.join(os.getcwd(), 'osc_data', file_name)
+        if not os.path.isfile(output_path):
+            try:
+                #osc_gz_response = requests.get(osc_file_download_url)
+                osc_gz_response = requests.get(osc_file_download_url, stream=True)
+            except Exception as e:
+                print(e)
+                # TODO handle all possible error conditions
+            file_name = self.save_osc_to_file(output_path, osc_gz_response)
+
         self.insert_data_to_db(file_name, project_polygon_feature_collection, date)
 
         # osc_data = zlib.decompress(osc_gz_response.content, 16 + zlib.MAX_WBITS)
@@ -402,9 +406,8 @@ class MapathonChangeCreator(object):
 
         self.project_postgis.write_project_features_to_pg(self.db_name, project_polygon_feature_collection)
 
-    def save_osc_to_file(self, osc_file_download_url, osc_gz_response):
-        file_name = osc_file_download_url.split(':')[1][2:].replace('download.geofabrik.de/', '').replace('/', '_').replace('-', '_')
-        output_path = os.path.join(os.getcwd(), 'osc_data', file_name)
+    def save_osc_to_file(self, output_path, osc_gz_response):
+
         with open(output_path, 'wb') as outfile:
             for chunk in osc_gz_response.iter_content(chunk_size=1024): 
                 if chunk:
