@@ -381,7 +381,7 @@ class MapathonChangeCreator(object):
             except Exception as e:
                 print(e)
                 # TODO handle all possible error conditions
-            file_name = self.save_osc_to_file(output_path, osc_gz_response)
+            self.save_osc_to_file(output_path, osc_gz_response)
 
         self.insert_data_to_db(file_name, project_polygon_feature_collection, date)
 
@@ -412,9 +412,6 @@ class MapathonChangeCreator(object):
             for chunk in osc_gz_response.iter_content(chunk_size=1024): 
                 if chunk:
                     outfile.write(chunk)
-
-        return file_name
-
 
     def get_analysis_progress(self):
         return self.analysis_percentage
