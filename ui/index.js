@@ -61,6 +61,7 @@ function handleMapathonsData(data) {
             else {
                 if (item.mapathon_info.project_numbers.length == 1) {
                     html += ' project ';
+                    html += '<a target="_blank" href="https://tasks.hotosm.org/project/' + item.mapathon_info.project_numbers[0] + '">' + item.mapathon_info.project_numbers[0] + '</a>';
                 }
                 else {
                     html += ' projects ';
