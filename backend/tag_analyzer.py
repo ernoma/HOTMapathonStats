@@ -28,15 +28,21 @@ class TagAnalyzer:
 
         for key, features in data.items():
             for feature in features:
-                for key, value in feature['properties']['tags'].items():             
-                    if key not in self.results['projects'][project_key]['areas'][area_name]['tags']:
-                        self.results['projects'][project_key]['areas'][area_name]['tags'][key] = {}
-                        self.results['projects'][project_key]['areas'][area_name]['tags'][key][value] = 1
+                for key, value in feature['properties']['tags'].items():
+                    key_for_mongodb = key.replace(".", "[dot]")
+                    key_for_mongodb = key_for_mongodb.replace("$", "[dollar]")
+                    if key_for_mongodb not in self.results['projects'][project_key]['areas'][area_name]['tags']:
+                        value_for_mongodb = value.replace(".", "[dot]")
+                        value_for_mongodb = value_for_mongodb.replace("$", "[dollar]")
+                        self.results['projects'][project_key]['areas'][area_name]['tags'][key_for_mongodb] = {}
+                        self.results['projects'][project_key]['areas'][area_name]['tags'][key_for_mongodb][value_for_mongodb] = 1
                     else:
-                        if value not in self.results['projects'][project_key]['areas'][area_name]['tags'][key]:
-                            self.results['projects'][project_key]['areas'][area_name]['tags'][key][value] = 1
+                        value_for_mongodb = value.replace(".", "[dot]")
+                        value_for_mongodb = value_for_mongodb.replace("$", "[dollar]")
+                        if value_for_mongodb not in self.results['projects'][project_key]['areas'][area_name]['tags'][key_for_mongodb]:
+                            self.results['projects'][project_key]['areas'][area_name]['tags'][key_for_mongodb][value_for_mongodb] = 1
                         else:
-                            self.results['projects'][project_key]['areas'][area_name]['tags'][key][value] += 1
+                            self.results['projects'][project_key]['areas'][area_name]['tags'][key_for_mongodb][value_for_mongodb] += 1
 
         pprint(self.results)
 

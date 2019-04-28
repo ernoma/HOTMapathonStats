@@ -1239,8 +1239,8 @@ function showMapathonProjectTags(projectNumber, id, uid) {
 					}
 					if (!found) {
 						tags.push({
-							key: tagKey,
-							value: valueKey,
+							key: tagKey.replace(/\[dot\]/g, ".").replace(/\[dollar\]/g, "$"),
+                            value: valueKey.replace(/\[dot\]/g, ".").replace(/\[dollar\]/g, "$"),
 							count: mapathon_project_tags.areas[areaKey].tags[tagKey][valueKey]
 						});
 					}
